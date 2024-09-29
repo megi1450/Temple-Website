@@ -40,3 +40,10 @@ function translateToEnglish(text) {
     };
     return translations[text] || text;
 }
+
+function link(){
+    window.location.href="https://1drv.ms/x/c/8269a612c72a1543/EWfQFYblxU1CgBfL6iHQUq8B-7zsqPWgb2cAjxvGPYxGGw?e=WhhCRs";
+}
+function link2(){
+    window.location.href="https://docs.google.com/spreadsheets/d/1CfJ0WdT2DBdFmr4u_Z6-xIhtt73yc_e48UgzFMnDHhk/edit?usp=sharing";
+}
