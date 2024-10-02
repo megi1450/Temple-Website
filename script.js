@@ -47,3 +47,12 @@ function link(){
 function link2(){
     window.location.href="https://docs.google.com/spreadsheets/d/1CfJ0WdT2DBdFmr4u_Z6-xIhtt73yc_e48UgzFMnDHhk/edit?usp=sharing";
 }
+function showOccasion(occasion) {
+    // Hide both occasion galleries initially
+    document.getElementById('occasion-1').style.display = 'none';
+    document.getElementById('occasion-2').style.display = 'none';
+    document.getElementById('occasion-3').style.display = 'none';
+
+    // Show the selected occasion gallery
+    document.getElementById(`occasion-${occasion}`).style.display = 'block';
+}
