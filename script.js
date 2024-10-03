@@ -58,14 +58,12 @@ function showOccasion(occasion) {
 }
 
 function redirectToUPI() {
-    const upiId = "0798062a0170493.bqr@kotak"; // UPI ID
-    const holderName = "ARVIND OASIS APARTMENTS OWNERS ASSOCIATION TEMPLE"; // Holder Name
-    const amount = prompt("Enter the amount you wish to donate:", ""); // Prompt for donation amount
+    const upiId = "0798062a0170493.bqr@kotak"; // Your UPI ID
+    const receiverName = "ARVIND OASIS APARTMENTS OWNERS ASSOCIATION TEMPLE"; // UPI holder name
 
-    if (amount) {
-        const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(holderName)}&mc=&tid=&tn=Donation%20to%20Temple&am=${amount}&cu=INR&url=`;
-        window.location.href = upiLink; // Redirect to UPI app
-    } else {
-        alert("Please enter a valid amount."); // Alert if amount is not entered
-    }
+    // Creating the UPI payment link without amount
+    const upiPaymentLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(receiverName)}`;
+
+    // Redirecting the user to their UPI app
+    window.location.href = upiPaymentLink;
 }
