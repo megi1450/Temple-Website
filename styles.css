@@ -74,7 +74,7 @@ h1, h2 {
 .hamburger {
     display: none; /* Hidden by default */
     font-size: 2em;
-    color: #fff;
+    color: white;
     cursor: pointer;
 }
 
