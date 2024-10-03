@@ -67,3 +67,13 @@ function redirectToUPI() {
     // Redirecting the user to their UPI app
     window.location.href = upiPaymentLink;
 }
+
+function toggleMenu() {
+    const navLinks = document.querySelector('.nav-links');
+    navLinks.classList.toggle('show'); // Toggle the 'show' class
+}
+
+function closeMenu() {
+    const navLinks = document.querySelector('.nav-links');
+    navLinks.classList.remove('show'); // Collapse the menu
+}
