@@ -7,19 +7,6 @@
     <title>Gallery - Shri Varasiddhi Vinayaka Temple</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="logo.png">
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "39070cbc-50ef-47a3-9842-a3a897eba442",
-      safari_web_id: "web.onesignal.auto.185a3882-a3fa-4e4c-9216-d752294e35fc",
-      notifyButton: {
-        enable: true,
-      },
-    });
-  });
-</script>
 </head>
 <body>
 
@@ -31,78 +18,35 @@
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="events.html">Puja Events</a></li>
-                    <li><a href="gallery.html">Gallery</a></li>
+                     <li><a href="gallery.html">Gallery</a></li>
                     <li><a href="annoncements.html">Announcements</a></li>
                     <li><a href="committee.html">Committee</a></li>
+                    <li><a href="payment.html">Payment Portal</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <!-- Gallery Section with Occasion Buttons -->
+    <!-- Gallery Section -->
     <section id="gallery" class="gallery-section">
         <div class="container">
-            <div class="toggle-buttons">
-                <button onclick="showOccasion(1)" class="occasion-button">BHOOMI PUJA</button>
-                <button onclick="showOccasion(2)" class="occasion-button">PRANA PRATHISHTAPANA</button>
-                <button onclick="showOccasion(3)" class="occasion-button">NIRANTARA ABHISHEKA</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Occasion 1 Gallery (initially hidden) -->
-    <section id="occasion-1" class="gallery-section" style="display:none;">
-        <div class="container">
-            <h3 style="font-size: 25px;">BHOOMI PUJA</h3>
-            <p style="font-weight: bold;">Date: November 23, 2023</p>
-
-            <div class="gallery-grid">
-                <div class="gallery-cardB">
-                    <img src="bgl1.jpeg" alt="Occasion 1 Image 1">
-                </div>
-                <div class="gallery-cardB">
-                    <img src="blg2.jpeg" alt="Occasion 1 Image 2">
-                </div>
-                    <div class="gallery-cardB">
-                        <img src="bgl3.jpeg" alt="Occasion 1 Image 1">
-                        </div>
-                        <div class="gallery-cardB">
-                            <img src="bgl4.jpeg" alt="Occasion 1 Image 1">
-                            </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Occasion 2 Gallery (initially hidden) -->
-    <section id="occasion-2" class="gallery-section" style="display:none;">
-        <div class="container">
-            <h3>PRANA PRATHISHTAPANA</h3>
-            <h3>Comming Soon............</h3>
-            <div class="gallery-grid">
-            </div>
-        </div>
-    </section>
-
-    <!-- Occasion 3 Gallery (initially hidden) -->
-    <section id="occasion-3" class="gallery-section" style="display:none;">
-        <div class="container">
-            <h3>NIRANTARA ABHISHEKA</h3>
+            <h2>Event Gallery</h2>
             <div class="gallery-grid">
                 <div class="gallery-card">
-                    <img src="gl1.jpeg" alt="Occasion 3 Image 1">
+                    <img src="gl1.jpeg" alt="Event 1">
                     <div class="card-info">
                         <h3>First Nirantar Abhisheka by Smt. Meenakshi A. Deshpande from C702.</h3>
                         <p>Date: August 31, 2024</p>
                     </div>
                 </div>
                 <div class="gallery-card">
-                    <img src="gl2.jpeg" alt="Occasion 3 Image 2">
+                    <img src="gl2.jpeg" alt="Event 2">
                     <div class="card-info">
                         <h3>Second Nirantar Abhisheka by Shravanika and Shreenika A102.</h3>
                         <p>Date: September 19, 2024</p>
                     </div>
                 </div>
+                <!-- Add more cards as needed -->
             </div>
         </div>
     </section>
@@ -114,6 +58,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
 </body>
+<script src="script.js"></script>
 </html>
