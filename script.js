@@ -89,3 +89,4 @@ document.addEventListener('click', function(event) {
         closeMenu(); // Collapse the menu
     }
 });
+
