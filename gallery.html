@@ -8,26 +8,34 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="logo.png">
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "39070cbc-50ef-47a3-9842-a3a897eba442",
+      safari_web_id: "web.onesignal.auto.185a3882-a3fa-4e4c-9216-d752294e35fc",
+      notifyButton: {
+        enable: true,
+      },
+    });
+  });
+</script>
 </head>
-    <!-- start webpushr tracking code --> 
-<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
-fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
-webpushr('setup',{'key':'BLE9-s3M1gHbDUZ9NxTCNe4Tdkizeu-HtpHaA_IiA3-VNVvo6DJa6TsEk1GBIUt3ejvrezJd8e_dBRiqEQwktUs' });</script>
-<!-- end webpushr tracking code -->
 <body>
 
-    <!-- Header Section -->
     <header class="main-header">
         <div class="container">
             <h1 class="temple-name">Shri Varasiddhi Vinayaka Temple</h1>
             <nav>
+                <div class="hamburger" onclick="toggleMenu()">&#9776;</div> <!-- Hamburger Icon -->
                 <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="events.html">Puja Events</a></li>
-                    <li><a href="gallery.html">Gallery</a></li>
-                    <li><a href="annoncements.html">Announcements</a></li>
-                    <li><a href="committee.html">Committee</a></li>
-                    <li><a href="payment.html">Payment Portal</a></li>
+                    <li><a href="index.html" onclick="closeMenu()">Home</a></li>
+                    <li><a href="events.html" onclick="closeMenu()">Puja Events</a></li>
+                    <li><a href="gallery.html" onclick="closeMenu()">Gallery</a></li>
+                    <li><a href="annoncements.html" onclick="closeMenu()">Announcements</a></li>
+                    <li><a href="committee.html" onclick="closeMenu()">Committee</a></li>
+                    <li><a href="payment.html" onclick="closeMenu()">Payment Portal</a></li>
+                    <button class="lang-toggle" onclick="toggleLanguage()">ಕನ್ನಡ / English</button>
                 </ul>
             </nav>
         </div>
