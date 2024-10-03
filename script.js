@@ -73,7 +73,19 @@ function toggleMenu() {
     navLinks.classList.toggle('show'); // Toggle the 'show' class
 }
 
+// Collapse the menu when clicking a link
 function closeMenu() {
     const navLinks = document.querySelector('.nav-links');
     navLinks.classList.remove('show'); // Collapse the menu
 }
+
+// Collapse the menu when clicking outside the header
+document.addEventListener('click', function(event) {
+    const header = document.querySelector('.main-header');
+    const navLinks = document.querySelector('.nav-links');
+
+    // Check if the clicked element is not within the header
+    if (!header.contains(event.target) && navLinks.classList.contains('show')) {
+        closeMenu(); // Collapse the menu
+    }
+});
