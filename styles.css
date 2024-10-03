@@ -358,3 +358,27 @@ h1, h2 {
     }
     
 }
+/* Bank Details Section */
+.bank-details-section {
+    padding: 40px 20px;
+    background-color: #fff8dc;
+    text-align: center;
+}
+
+.bank-details-section h2 {
+    font-size: 2em;
+    color: #8b0000;
+    margin-bottom: 20px;
+}
+
+.bank-details-section ul {
+    list-style: none;
+    padding: 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.bank-details-section ul li {
+    margin-bottom: 10px;
+}
+
