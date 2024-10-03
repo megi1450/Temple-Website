@@ -37,6 +37,15 @@ h1, h2 {
     display: flex; /* Display links in a row */
     flex-wrap: wrap; /* Allow wrapping */
     justify-content: center; /* Center links */
+    transition: max-height 0.3s ease, opacity 0.3s ease; /* Add transitions */
+    overflow: hidden; /* Hide overflow for animation */
+    max-height: 0; /* Initially collapse */
+    opacity: 0; /* Start as invisible */
+}
+
+.nav-links.show {
+    max-height: 300px; /* Set to a suitable value to allow for full expansion */
+    opacity: 1; /* Make visible */
 }
 
 .nav-links li {
@@ -74,22 +83,19 @@ h1, h2 {
 .hamburger {
     display: none; /* Hidden by default */
     font-size: 2em;
-    color: white;
+    color: #fff;
     cursor: pointer;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
     .nav-links {
-        display: none; /* Hide links initially */
         flex-direction: column; /* Stack vertically */
         background-color: #b8860b; /* Background for dropdown */
         position: absolute; /* Position absolutely */
         top: 60px; /* Below the header */
         left: 0;
         width: 100%;
-        animation: slideIn 0.3s ease; /* Animation for opening */
-        padding-bottom: 10px; /* Add gap at the bottom */
     }
 
     .nav-links.show {
