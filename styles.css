@@ -34,10 +34,12 @@ h1, h2 {
 .nav-links {
     list-style: none;
     padding: 0;
+    display: flex; /* Display links in a row */
+    flex-wrap: wrap; /* Allow wrapping */
+    justify-content: center; /* Center links */
 }
 
 .nav-links li {
-    display: inline-block;
     margin: 0 15px;
 }
 
@@ -66,6 +68,54 @@ h1, h2 {
 
 .lang-toggle:hover {
     background-color: #e0e0e0;
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none; /* Hidden by default */
+    font-size: 2em;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* Hide links initially */
+        flex-direction: column; /* Stack vertically */
+        background-color: #b8860b; /* Background for dropdown */
+        position: absolute; /* Position absolutely */
+        top: 60px; /* Below the header */
+        left: 0;
+        width: 100%;
+        animation: slideIn 0.3s ease; /* Animation for opening */
+        padding-bottom: 10px; /* Add gap at the bottom */
+    }
+
+    .nav-links.show {
+        display: flex; /* Show links when toggled */
+    }
+
+    .nav-links li {
+        margin: 10px 0; /* Margin between list items */
+        text-align: center; /* Center text in menu */
+    }
+
+    .hamburger {
+        display: block; /* Show hamburger icon */
+    }
+}
+
+/* Animation for opening */
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* Hero Section */
