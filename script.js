@@ -56,3 +56,16 @@ function showOccasion(occasion) {
     // Show the selected occasion gallery
     document.getElementById(`occasion-${occasion}`).style.display = 'block';
 }
+
+function redirectToUPI() {
+    const upiId = "0798062a0170493.bqr@kotak"; // UPI ID
+    const holderName = "ARVIND OASIS APARTMENTS OWNERS ASSOCIATION TEMPLE"; // Holder Name
+    const amount = prompt("Enter the amount you wish to donate:", ""); // Prompt for donation amount
+
+    if (amount) {
+        const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(holderName)}&mc=&tid=&tn=Donation%20to%20Temple&am=${amount}&cu=INR&url=`;
+        window.location.href = upiLink; // Redirect to UPI app
+    } else {
+        alert("Please enter a valid amount."); // Alert if amount is not entered
+    }
+}
