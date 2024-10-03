@@ -6,6 +6,9 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures footer stays at the bottom */
 }
 
 h1, h2 {
@@ -136,25 +139,6 @@ h1, h2 {
     text-align: center;
 }
 
-/* General Styles */
-body {
-    font-family: 'Georgia', serif;
-    background-color: #f9f3e3;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Ensures footer stays at the bottom */
-}
-
-h1, h2 {
-    font-family: 'Times New Roman', serif;
-    color: #8b0000;
-    text-align: center;
-}
-
 /* Announcement Section */
 .announcement-section {
     padding: 40px 20px; /* Adds padding for spacing */
@@ -178,14 +162,6 @@ h1, h2 {
     margin: 0 auto; /* Centers the content */
     font-size: 1.2em; /* Increases font size for readability */
     line-height: 1.6; /* Increases line height for better spacing */
-}
-
-/* Footer */
-.main-footer {
-    background-color: #8b0000;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
 }
 
 /* Committee Section Styles */
@@ -283,10 +259,29 @@ h1, h2 {
 }
 
 .gallery-grid {
-    display: grid;
+    display: grid; /* Use grid to layout cards */
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
-    gap: 20px; /* Space between cards */
+    gap: 5px; /* Space between cards */
     padding: 0 20px; /* Padding for the grid */
+
+}
+
+.gallery-cardB {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.gallery-cardB:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.gallery-cardB img {
+    width: 100%;
+    height: 100%; /* Responsive image */
 }
 
 .gallery-card {
@@ -304,7 +299,7 @@ h1, h2 {
 
 .gallery-card img {
     width: 100%;
-    height: auto; /* Responsive image */
+    height: 50%; /* Responsive image */
 }
 
 .card-info {
@@ -320,6 +315,48 @@ h1, h2 {
 .card-info p {
     margin: 0;
     color: #555; /* Slightly muted text color */
+}
+
+/* Toggle Buttons */
+.toggle-buttons {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.toggle-buttons button {
+    background-color: #8b0000;
+    color: white;
+    padding: 10px 20px;
+    margin: -100px 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+}
+
+.toggle-buttons button:hover {
+    background-color: #b22222;
+}
+
+@media (max-width: 600px) {
+    .toggle-buttons {
+        text-align: center;
+        margin-bottom: 5px;
+    }
+    
+    .toggle-buttons button {
+        background-color: #8b0000;
+        color: white;
+        padding: 10px 20px;
+        margin: 10px; /* Add margin to create space around each button */
+        border: none;
+        cursor: pointer;
+        font-size: 1.1em;
+        border-radius: 25px;
+        transition: background-color 0.3s;
+    }
+    
 }
 /* Bank Details Section */
 .bank-details-section {
@@ -343,6 +380,58 @@ h1, h2 {
 
 .bank-details-section ul li {
     margin-bottom: 10px;
+}
+
+/* Payment Section Styles */
+.payment-section {
+    padding: 40px 20px; /* Padding for top and bottom */
+    background-color: #fff8dc; /* Light background color for the section */
+    text-align: center; /* Center align text */
+}
+
+.payment-section h2 {
+    margin-bottom: 5px; /* Spacing below the heading */
+    font-size: 2.5em; /* Heading font size */
+    color: #8b0000; /* Heading color */
+}
+
+.payment-section p {
+    max-width: 600px; /* Limit the width for better readability */
+    margin: 0 auto 5px auto; /* Centering the paragraphs */
+    font-size: 1.2em; /* Font size for paragraphs */
+    line-height: 1.5; /* Line height for better spacing */
+    color: #333; /* Text color */
+}
+
+.donate-button {
+    background-color: blue; /* Button background color */
+    color: white; /* Button text color */
+    padding: 15px 25px; /* Padding for the button */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1.2em; /* Font size for button */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.donate-button:hover {
+    background-color: #b22222; /* Darker shade on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .payment-section h2 {
+        font-size: 2em; /* Smaller font size for smaller screens */
+    }
+
+    .payment-section p {
+        font-size: 1em; /* Smaller font size for smaller screens */
+    }
+
+    .donate-button {
+        padding: 10px 20px; /* Smaller padding for smaller screens */
+        font-size: 1em; /* Smaller font size for smaller screens */
+    }
 }
 
 /* Payment Section Styles */
