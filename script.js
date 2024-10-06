@@ -79,17 +79,18 @@ function closeMenu() {
     navLinks.classList.remove('show'); // Collapse the menu
 }
 
-// Collapse the menu when clicking outside the header and hamburger button
+// Collapse the menu when clicking outside the header and cta button
 document.addEventListener('click', function(event) {
     const header = document.querySelector('.main-header');
     const navLinks = document.querySelector('.nav-links');
-    const hamburger = document.querySelector('.hamburger'); // Select your hamburger button
+    const ctaButton = document.querySelector('.cta-button'); // Select your cta button
 
-    // Check if the clicked element is not within the header or the hamburger button
-    if (!header.contains(event.target) && !hamburger.contains(event.target) && navLinks.classList.contains('show')) {
+    // Check if the clicked element is not within the header or the cta button
+    if (!header.contains(event.target) && !ctaButton.contains(event.target) && navLinks.classList.contains('show')) {
         closeMenu(); // Collapse the menu
     }
 });
+
 function home(){
     window.location="index.html";
 }
