@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shri Varasiddhi Vinayaka Temple -- Registration Form</title>
+    <link rel="stylesheet" href="style2.css"> <!-- Link to your CSS -->
+    <link rel="icon" href="logo3.avif">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        input, select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            form {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form id="registrationForm">
+        <h2>Registration Form</h2>
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="date" id="date" required>
+        <input type="text" id="flatNumber" placeholder="Flat Number" required>
+        <input type="text" id="mobileNumber" placeholder="Mobile Number" required>
+        
+        <select id="event" required>
+            <option value="" disabled selected>Event...</option>
+            <option value="PANCHAMRIT ABHISHEKA">PANCHAMRIT ABHISHEKA</option>
+            <option value="NIRANTARA ABHISHEKA">NIRANTARA ABHISHEKA</option>
+            <option value="VEHICLE PUJA (TWO-WHEELER)">VEHICLE PUJA (TWO-WHEELER)</option>
+            <option value="VEHICLE PUJA (FOUR-WHEELER)">VEHICLE PUJA (FOUR-WHEELER)</option>
+        </select>
+
+        <select id="occasion" required>
+            <option value="" disabled selected>Occasion...</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Anniversary">Anniversary</option>
+            <option value="Others">Others</option>
+        </select>
+        
+        <input type="text" id="otherOccasion" placeholder="If Others, please specify" style="display:none;">
+
+        <button type="submit">Register</button>
+    </form>
+
+    <!-- Import Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js';
+        import { getFirestore, collection, setDoc, doc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js';
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKtqm0KzMmX4cCqT3PhGI2aFcF3LSXnEk",
+            authDomain: "ao-temple.firebaseapp.com",
+            projectId: "ao-temple",
+            storageBucket: "ao-temple.appspot.com",
+            messagingSenderId: "426167530682",
+            appId: "1:426167530682:web:848a4cb0ceee2ce05cfe83"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Handle form submission
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const date = document.getElementById('date').value;
+            const flatNumber = document.getElementById('flatNumber').value;
+            const mobileNumber = document.getElementById('mobileNumber').value;
+            const event = document.getElementById('event').value;
+            const occasion = document.getElementById('occasion').value;
+            const otherOccasion = document.getElementById('otherOccasion').value || "";
+
+            // Create the document ID using name and flat number
+            const docId = `${name}_${flatNumber}`;
+
+            // Call the function to save data to Firestore
+            await saveDataToFirestore(docId, name, date, flatNumber, mobileNumber, event, occasion, otherOccasion);
+        });
+
+        // Function to save data to Firestore
+        async function saveDataToFirestore(docId, name, date, flatNumber, mobileNumber, event, occasion, otherOccasion) {
+            try {
+                await setDoc(doc(db, 'submissions', docId), {
+                    name: name,
+                    date: date,
+                    flatNumber: flatNumber,
+                    mobileNumber: mobileNumber,
+                    event: event,
+                    occasion: occasion === "Others" ? otherOccasion : occasion,
+                    timestamp: serverTimestamp()
+                });
+                alert('Registered successfully!');
+                window.location.href = `receipt.html?name=${encodeURIComponent(name)}&date=${encodeURIComponent(date)}&flatNumber=${encodeURIComponent(flatNumber)}&event=${encodeURIComponent(event)}&occasion=${encodeURIComponent(occasion === "Others" ? otherOccasion : occasion)}&mobileNumber=${encodeURIComponent(mobileNumber)}`; // Redirect to receipt page
+            } catch (error) {
+                alert('Error saving data: ' + error.message);
+                console.error('Error saving data:', error);
+            }
+        }
+
+        // Show input field for other occasion if "Others" is selected
+        document.getElementById('occasion').addEventListener('change', function() {
+            const otherOccasionField = document.getElementById('otherOccasion');
+            if (this.value === "Others") {
+                otherOccasionField.style.display = "block";
+            } else {
+                otherOccasionField.style.display = "none";
+                otherOccasionField.value = ""; // Clear the field if not needed
+            }
+        });
+    </script>
+</body>
+</html>
