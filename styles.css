@@ -53,7 +53,6 @@ h1, h2 {
 
 /* Hamburger Menu */
 .hamburger, .hamburger2 {
-    display: none; /* Hidden by default */
     font-size: 23px;
     color: #fff;
     cursor: pointer;
