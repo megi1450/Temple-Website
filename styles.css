@@ -71,7 +71,7 @@ h1, h2 {
     margin: 0; /* No margin to avoid empty space */
     display: flex; /* Display links in a column */
     flex-direction: column; /* Stack vertically */
-    background-color: #b8870b; /* Background color for the menu */
+    background-color: #fff8dc; /* Background color for the menu */
     position: absolute; /* Position absolutely */
     top: 60px; /* Align right below the header */
     left: -100%; /* Start off-screen to the left */
@@ -95,7 +95,7 @@ h1, h2 {
 }
 
 .nav-links a {
-    color: #fff; /* Text color */
+    color: black; /* Text color */
     text-decoration: none; /* No underline */
     display: flex; /* Use flex to align items */
     align-items: center; /* Center items vertically */
@@ -346,8 +346,7 @@ h1, h2 {
 }
 
 /* Events Section Styles */
-.events-section {
-    padding: 50px 0;
+.events-section {   
     background-color: #fff8dc;
     text-align: center;
 }
