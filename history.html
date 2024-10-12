@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="logo3.avif">
+    <!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+    fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+    webpushr('setup',{'key':'BKnzhG9FBqq1IRacGsqz7_EzXY46Y5SVMEphgLeVAxYNPACGJJ0h1HQdMcUE5Qs7_HtCJVUaSE4TMONKck-5c5U' });</script>
+    <!-- end webpushr tracking code -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header, footer {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            display: block; /* Allows scrolling */
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            th, td {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            button {
+                width: 100%;
+                padding: 10px;
+            }
+
+            /* Table layout adjustments for mobile */
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap; /* Prevent wrapping */
+            }
+
+            tr {
+                display: flex;
+                flex-direction: column; /* Stack rows vertically */
+                margin-bottom: 10px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                padding: 10px;
+            }
+
+            th {
+                display: none; /* Hide header on small screens */
+            }
+
+            td {
+                display: flex;
+                justify-content: space-between; /* Space between labels and values */
+                padding: 5px; /* Adjust padding */
+                border: none; /* Remove borders */
+            }
+
+            .actions {
+                text-align: right; /* Align actions to the right */
+            }
+
+            .actions button {
+                background-color: #b8860b; /* Button background color */
+                color: white; /* Button text color */
+                border: none; /* Remove button border */
+                border-radius: 5px;
+                padding: 5px 10px;
+                cursor: pointer; /* Pointer cursor on hover */
+                margin-left: 5px; /* Space between buttons */
+            }
+        }
+    </style>
+</head>
+<body onload="checksignin()">
+
+    <header class="main-header">
+        <div class="container">
+            <h1 class="temple-name">Shri Varasiddhi Vinayaka Temple</h1>
+            <div class="hamburger2" onclick="home()">🏠︎ Go to Home</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Registration History</h2>
+        <table id="registrationTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Mobile Number</th>
+                    <th>Event</th>
+                    <th>Occasion</th>
+                    <th>Receipt No.</th> <!-- Updated -->
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic rows will be inserted here -->
+            </tbody>
+        </table>
+    </main>
+
+    <footer class="main-footer2">
+        <div class="container" style="width: 100%; align-items: center; justify-content: center;">
+            <p>&copy; 2024 Shri Varasiddhi Vinayaka Arvind Oasis Temple Committee | All Rights Reserved</p>
+            <hr>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js';
+        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKtqm0KzMmX4cCqT3PhGI2aFcF3LSXnEk",
+            authDomain: "ao-temple.firebaseapp.com",
+            projectId: "ao-temple",
+            storageBucket: "ao-temple.appspot.com",
+            messagingSenderId: "426167530682",
+            appId: "1:426167530682:web:848a4cb0ceee2ce05cfe83"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const flatNumber = localStorage.getItem('flatNumber'); // Retrieve flat number from local storage
+
+        // Fetch and display registration history
+        async function fetchRegistrationHistory() {
+            const registrationsRef = collection(db, 'users', flatNumber, 'registrations');
+            const snapshot = await getDocs(registrationsRef);
+            const tableBody = document.querySelector('#registrationTable tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.name}</td>
+                    <td>${data.date}</td>
+                    <td>${data.mobileNumber}</td>
+                    <td>${data.event}</td>
+                    <td>${data.occasion}</td>
+                    <td>${data.receiptNumber}</td> <!-- Display receipt number -->
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Fetch the registration history when the page loads
+        fetchRegistrationHistory();
+    </script>
+
+</body>
+<script src="script.js"></script>
+</html>

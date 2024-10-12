@@ -1,65 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shri Varasiddhi Vinayaka Temple</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Shri Varasiddhi Vinayaka Temple -- Sign In</title>
     <link rel="icon" href="logo3.avif">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #8b0000; /* Dark red background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* Full height of the viewport */
+            color: #333;
+        }
 
+        form {
+            background: #fff8dc; /* Slightly more opaque white background */
+            padding: 30px;
+            border-radius: 12px; /* More rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Slightly darker shadow */
+            max-width: 400px;
+            width: 100%; /* Full width on smaller screens */
+            text-align: left; /* Left-align text */
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #007bff; /* Attractive header color */
+            font-size: 1.5em; /* Larger font size */
+            text-align: center; /* Center header */
+        }
+
+        input {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px; /* Larger font size */
+            transition: border 0.3s; /* Smooth transition for input */
+        }
+
+        input:focus {
+            border-color: #007bff; /* Change border color on focus */
+            outline: none; /* Remove default outline */
+        }
+
+        button {
+            width: 100%;
+            background-color: #5cb85c; /* Green background */
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px; /* Larger button text */
+            transition: background-color 0.3s; /* Smooth hover transition */
+            margin-top: 10px; /* Space above button */
+        }
+
+        button:hover {
+            background-color: #4cae4c; /* Darker shade on hover */
+        }
+
+        p {
+            font-size: 14px; /* Smaller font size for terms */
+            line-height: 1.5; /* Better line spacing */
+            margin: 5px 0; /* Space between paragraphs */
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ccc; /* Subtle horizontal line */
+            margin: 20px 0; /* Space above and below the line */
+        }
+
+        @media (max-width: 600px) {
+            form {
+                padding: 20px; /* Adjust padding for smaller screens */
+            }
+
+            h2 {
+                font-size: 1.2em; /* Smaller header font on mobile */
+            }
+
+            input {
+                font-size: 14px; /* Smaller input font */
+            }
+
+            button {
+                font-size: 16px; /* Smaller button font */
+            }
+        }
+
+        @media (max-width: 400px) {
+            h2 {
+                font-size: 1.1em; /* Smaller header font on extra-small screens */
+            }
+
+            input,
+            button {
+                padding: 10px; /* Smaller padding for extra-small screens */
+            }
+        }
+    </style>
 </head>
-<!-- start webpushr tracking code --> 
-<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
-    fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
-    webpushr('setup',{'key':'BKnzhG9FBqq1IRacGsqz7_EzXY46Y5SVMEphgLeVAxYNPACGJJ0h1HQdMcUE5Qs7_HtCJVUaSE4TMONKck-5c5U' });</script>
-    <!-- end webpushr tracking code -->
+
 <body>
-    <div class="hamburger2"><img src="logo3.avif" style="height: 35px; width: 35px; border-radius: 75px;">&nbsp;&nbsp;Shri Varasiddhi Vinayaka Temple</div>
-    <header class="main-header">
-        <div class="container">
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="index.html" onclick="closeMenu()">Home</a></li>
-                    <li><a href="events.html" onclick="closeMenu()">Puja Events</a></li>
-                    <li><a href="gallery.html" onclick="closeMenu()">Gallery</a></li>
-                    <li><a href="annoncements.html" onclick="closeMenu()">Announcements</a></li>
-                    <li><a href="committee.html" onclick="closeMenu()">Committee</a></li>
-                    <li><a href="payment.html" onclick="closeMenu()">Payment Portal</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    
-    
 
-    <!-- Hero Section with Ganesha Image -->
-    <section class="hero-section">
-        <div class="container">
-            <h2>Welcome to Shri Varasiddhi Vinayaka Temple</h2>
-            <p>Experience the divine grace and peace at our sacred temple.</p>
-           <button class="cta-button" onclick="toggleMenu()"><span style="background-color: white; border-color: black; border-width: 2px; border-style: ridge; border-radius: 10px;">&nbsp;☰&nbsp;</span>&nbsp;&nbsp;Quick Links</button>
-            <br>
-            <br>
-            <button class="lang-toggle" onclick="toggleLanguage()">ಕನ್ನಡ / English</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        </div>
-    </section>
+    <form id="signinForm">
+        <h2>Sign In</h2>
+        <input type="text" id="flatNumber" placeholder="Flat Number (A to F and 3 to 4 digits)" required maxlength="5"
+            pattern="^[A-F][1-9][0-9]{0,3}$" title="Flat number must start with A-F followed by a floor number (1-9) and up to 3 more digits.">
+        <p><strong>Please enter your flat number carefully. You cannot change it again.</strong></p>
+        <hr>
+        <h2>Terms and Conditions</h2>
+        <p>1. <strong>Usage:</strong> By accessing or using our website, you agree to follow all guidelines and policies outlined here.</p>
+        <p>2. <strong>Puja Requests:</strong> All requests for pujas are subject to temple approval. Please ensure accurate information when submitting forms.</p>
+        <p>3. <strong>Donations:</strong> Donations made through the website are final and non-refundable.</p>
+        <p>4. <strong>Content:</strong> All content, including images and information, is owned by the temple. Unauthorized use is prohibited.</p>
+        <p>5. <strong>Website Access:</strong> The website link is intended for use by members of the Arvind Oasis community only and should not be shared outside the community.</p>
+        <p>6. <strong>Changes:</strong> We reserve the right to update these terms at any time. Continued use of the website means you accept the updated terms.</p>
+        <button type="submit">I Agree and Sign In</button>
+    </form>
 
-    <!-- About Section -->
-    <section id="about" class="about-section">
-        <div class="container">
-            <h2>About the Temple</h2>
-            <p>Welcome to Shri Varasiddhi Vinayaka Temple, a sacred haven devoted to Lord Ganesha, the embodiment of wisdom, prosperity, and success. Nestled within the vibrant community of Arvind Oasis, our temple stands as a beacon of spirituality and tradition. The temple's journey began with the auspicious Bhoomi Puja on November 23rd, 2023, followed by 48 days of the sacred Mandala Puja, culminating in the grand Pranaprathistapana on March 14th, 2024. These transformative events, witnessed by the devoted residents of Arvind Oasis, mark the temple as a place of deep faith and community spirit. Join us as we celebrate the rich traditions of daily rituals, special puja events, and spiritual gatherings that bring us closer to divine blessings and unity.</p>
-        </div>
-    </section>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js';
+        import { getFirestore, setDoc, doc } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js';
 
-    <!-- Footer Section -->
-    <footer class="main-footer">
-        <div class="container">
-            <p>&copy; 2024 Shri Varasiddhi Vinayaka Arvind Oasis Temple Committee | All Rights Reserved</p>
-        </div>
-    </footer>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKtqm0KzMmX4cCqT3PhGI2aFcF3LSXnEk",
+            authDomain: "ao-temple.firebaseapp.com",
+            projectId: "ao-temple",
+            storageBucket: "ao-temple.appspot.com",
+            messagingSenderId: "426167530682",
+            appId: "1:426167530682:web:848a4cb0ceee2ce05cfe83"
+        };
 
-    <script src="script.js"></script> <!-- JavaScript for language toggle functionality -->
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Check if user is already signed in when the DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem('signin') === 'true') {
+                window.location.href = 'main.html'; // Redirect to main.html if signed in
+            }
+        });
+
+        document.getElementById('signinForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const flatNumber = document.getElementById('flatNumber').value;
+
+            // Validate the flat number before proceeding
+            const flatNumberPattern = /^[A-F][1-9][0-9]{0,3}$/;
+            if (!flatNumberPattern.test(flatNumber)) {
+                alert("Invalid flat number. Please use a format like A1404, A504, etc.");
+                return;
+            }
+
+            // Save flat number and signin status to local storage
+            localStorage.setItem('flatNumber', flatNumber);
+            localStorage.setItem('signin', 'true');
+
+            // Create user document in Firestore
+            await setDoc(doc(db, 'users', flatNumber), {
+                flatNumber: flatNumber,
+                timestamp: new Date()
+            });
+
+            // Redirect to main.html
+            window.location.href = 'main.html';
+        });
+    </script>
 </body>
+<script src="script.js"></script>
 </html>

@@ -34,39 +34,6 @@ h1, h2 {
     font-size: 2.5em;
     color: #fff;
 }
-
-.nav-links {
-    list-style: none;
-    padding: 0;
-    display: flex; /* Display links in a row */
-    flex-wrap: wrap; /* Allow wrapping */
-    justify-content: center; /* Center links */
-    transition: max-height 0.3s ease, opacity 0.3s ease; /* Add transitions */
-    overflow: hidden; /* Hide overflow for animation */
-    max-height: 0; /* Initially collapse */
-    opacity: 0; /* Start as invisible */
-}
-
-.nav-links.show {
-    max-height: 300px; /* Set to a suitable value to allow for full expansion */
-    opacity: 1; /* Make visible */
-}
-
-.nav-links li {
-    margin: 0 15px;
-}
-
-.nav-links a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-}
-
-.nav-links a:hover {
-    text-decoration: underline;
-}
-
 /* Language Toggle Button */
 .lang-toggle {
     background-color: #fff;
@@ -98,30 +65,57 @@ h1, h2 {
     margin: 0; /* Remove any default margin */
 }
 
+.nav-links {
+    list-style: none;
+    padding: 0; /* No padding to avoid extra space */
+    margin: 0; /* No margin to avoid empty space */
+    display: flex; /* Display links in a column */
+    flex-direction: column; /* Stack vertically */
+    background-color: #b8870b; /* Background color for the menu */
+    position: absolute; /* Position absolutely */
+    top: 60px; /* Align right below the header */
+    left: -100%; /* Start off-screen to the left */
+    width: 250px; /* Fixed width for the sidebar */
+    border-radius: 0 15px 15px 0; /* Rounded corners on the right */
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2); /* Optional: add shadow for depth */
+    transition: left 0.3s ease; /* Smooth slide-in effect */
+    z-index: 1000; /* Ensure it is on top */
+}
+
+.nav-links.show {
+    left: 0; /* Slide in to visible position */
+}
+
+.nav-links li {
+    margin: 0; /* Remove margin for list items */
+    text-align: left; /* Align text to the left */
+    padding: 10px 15px; /* Add padding for better touch targets */
+    font-size: 18px; /* Increased font size */
+    font-weight: bold; /* Make text bold */
+}
+
+.nav-links a {
+    color: #fff; /* Text color */
+    text-decoration: none; /* No underline */
+    display: flex; /* Use flex to align items */
+    align-items: center; /* Center items vertically */
+    width: 100%; /* Full width for links */
+    text-transform: uppercase; /* Uppercase text */
+}
+
+.nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Background on hover */
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
     .nav-links {
-        flex-direction: column; /* Stack vertically */
-        background-color: #b8860b; /* Background for dropdown */
-        position: absolute; /* Position absolutely */
-        top: 60px; /* Below the header */
-        left: 0;
-        width: 100%; /* Ensure the width is 100% of the screen */
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: add some shadow for depth */
-        padding: 0; /* Reset padding to avoid excess space */
-        margin: 0; /* Reset margin to avoid excess space */
+        top: 60px; /* Ensure it aligns just below the header */
+        left: -100%; /* Start off-screen to the left */
     }
 
     .nav-links.show {
-        display: flex; /* Show links when toggled */
-    }
-
-    .nav-links li {
-        margin: 10px 0; /* Margin between list items */
-        text-align: center; /* Center text in menu */
-        padding: 10px; /* Add padding for better touch targets */
-        font-size: 16px; /* Adjust font size for readability */
+        left: 0; /* Slide in from left */
     }
 
     .hamburger, .hamburger2 {
@@ -135,50 +129,28 @@ h1, h2 {
 /* Additional Media Queries for Different Smaller Screens */
 @media (max-width: 600px) {
     .nav-links li {
-        margin: 8px 0; /* Reduce margin for smaller screens */
-        font-size: 14px; /* Adjust font size for better fitting */
-        padding: 8px; /* Adjust padding for smaller touch targets */
+        font-size: 16px; /* Adjust font size for better fitting */
+        padding: 10px; /* Adjust padding for smaller touch targets */
     }
 
     .hamburger, .hamburger2 {
-        display: flex; /* Use flexbox for centering */
-        justify-content: center; /* Center items horizontally */
-        align-items: center; /* Center items vertically */
         font-size: 22px; /* Slightly reduce the hamburger icon size */
-        width: 100%; /* Full width for proper centering */
-        padding: 8px; /* Adjust padding if needed */
-        text-align: center; /* Center the text within the hamburger */
-    }
-
-    .hero-section h2 {
-        font-size: 2.5em; /* Adjust hero text size */
-    }
-
-    .hero-section p {
-        font-size: 1.3em; /* Slightly smaller paragraph text size */
     }
 }
 
 @media (max-width: 480px) {
     .nav-links li {
-        margin: 5px 0; /* Further reduce margin */
-        font-size: 12px; /* Adjust font size for very small screens */
-        padding: 6px; /* Adjust padding */
+        font-size: 14px; /* Adjust font size for very small screens */
+        padding: 8px; /* Adjust padding */
     }
 
     .hamburger, .hamburger2 {
         font-size: 20px; /* Reduce the size of the hamburger icon */
-        padding: 8px; /* Adjust padding */
-    }
-    
-    .hero-section h2 {
-        font-size: 2em; /* Further reduce hero text size */
-    }
-
-    .hero-section p {
-        font-size: 1em; /* Further adjust paragraph text size */
     }
 }
+
+
+
 
 /* Animation for opening */
 @keyframes slideIn {
@@ -303,6 +275,12 @@ h1, h2 {
     text-align: center;
 }
 
+.main-footer2 {
+    background-color: #8b0000;
+    color: white;
+    padding: 20px 0;
+}
+
 /* Announcement Section */
 .announcement-section {
     padding: 40px 20px; /* Adds padding for spacing */
@@ -411,75 +389,155 @@ h1, h2 {
 
 /* Gallery Section Styles */
 .gallery-section {
-    padding: 50px 0;
+    padding: 50px 20px;
     background-color: #fff8dc;
     text-align: center;
 }
 
-.gallery-section h2 {
-    margin-bottom: 30px;
-    font-size: 2.5em;
+.occasion-title {
+    margin-bottom: 20px;
+    font-size: 2em;
     color: #8b0000;
 }
 
+.occasion-date {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
 .gallery-grid {
-    display: grid; /* Use grid to layout cards */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
-    gap: 5px; /* Space between cards */
-    padding: 0 20px; /* Padding for the grid */
-
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    padding: 0 10px;
 }
 
-.gallery-cardB {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-}
-
-.gallery-cardB:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
-}
-
-.gallery-cardB img {
-    width: 100%;
-    height: 100%; /* Responsive image */
-}
-
+.gallery-cardB,
 .gallery-card {
-    background-color: white;
-    border: 1px solid #ddd;
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid #dddddd00;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
 }
 
+.gallery-cardB:hover,
 .gallery-card:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
+    transform: translateY(-5px);
 }
 
+.gallery-cardB img,
 .gallery-card img {
     width: 100%;
-    height: 50%; /* Responsive image */
+    height: auto;
+    object-fit: cover;
 }
 
 .card-info {
-    padding: 15px;
-    text-align: left; /* Align text to the left */
+    padding: 10px;
+    text-align: left;
 }
 
 .card-info h3 {
-    margin: 0 0 10px 0;
-    font-size: 1.5em;
+    margin: 0 0 5px 0;
+    font-size: 1.2em;
 }
 
 .card-info p {
     margin: 0;
-    color: #555; /* Slightly muted text color */
+    color: #555;
+    font-size: 1em;
 }
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .occasion-title {
+        font-size: 1.8em;
+    }
+
+    .occasion-date {
+        font-size: 1em;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+
+    .card-info h3 {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .occasion-title {
+        font-size: 1.5em;
+    }
+
+    .occasion-date {
+        font-size: 0.9em;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-cardB,
+    .gallery-card {
+        margin: 10px 0;
+    }
+
+    .card-info h3 {
+        font-size: 0.9em;
+    }
+}
+
+/* Styles for Larger Screens (Above 1024px) */
+@media (min-width: 1024px) {
+    .gallery-section {
+        padding: 80px 40px; /* Increased padding for larger screens */
+    }
+
+    .occasion-title {
+        font-size: 2.5em; /* Larger font for occasion title */
+        margin-bottom: 30px;
+    }
+
+    .occasion-date {
+        font-size: 1.5em; /* Increase the date font size */
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Larger grid columns */
+        gap: 20px; /* Increased space between cards */
+        padding: 0 20px;
+    }
+
+    .gallery-cardB,
+    .gallery-card {
+        border: 1px solid #ddd; /* Slight border for visibility on larger screens */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Slightly deeper shadow */
+    }
+
+    .gallery-cardB img,
+    .gallery-card img {
+        height: 200px; /* Fixed height for better layout on larger screens */
+    }
+
+    .card-info {
+        padding: 15px; /* Increased padding */
+    }
+
+    .card-info h3 {
+        font-size: 1.5em; /* Larger font for better readability */
+    }
+
+    .card-info p {
+        font-size: 1.1em; /* Slightly larger for better readability */
+    }
+}
+
+
 
 /* Toggle Buttons */
 .toggle-buttons {
