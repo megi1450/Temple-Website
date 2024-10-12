@@ -194,55 +194,59 @@
         });
 
         document.getElementById('signinForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const flatNumber = document.getElementById('flatNumber').value;
-            const residentName = document.getElementById('residentName').value;
-            const email = document.getElementById('email').value;
-            
-            // Validate the flat number
-            const flatNumberPattern = /^[A-F][1-9][0-9]{0,3}$/;
-            if (!flatNumberPattern.test(flatNumber)) {
-                alert("Please enter a valid flat number (e.g., A123).");
-                return;
-            }
+    e.preventDefault();
+    const flatNumber = document.getElementById('flatNumber').value;
+    const residentName = document.getElementById('residentName').value;
+    const email = document.getElementById('email').value;
+    
+    // Validate the flat number
+    const flatNumberPattern = /^[A-F][1-9][0-9]{0,3}$/;
+    if (!flatNumberPattern.test(flatNumber)) {
+        alert("Please enter a valid flat number (e.g., A123).");
+        return;
+    }
 
-            const loading = document.getElementById('loading');
-            loading.style.visibility = 'visible'; // Show loading animation
+    const loading = document.getElementById('loading');
+    loading.style.visibility = 'visible'; // Show loading animation
 
-            try {
-                // Check if the flat number document exists, if not create it
-                const flatRef = doc(db, 'users', flatNumber);
-                const flatSnap = await getDoc(flatRef);
+    try {
+        // Check if the flat number document exists, if not create it
+        const flatRef = doc(db, 'users', flatNumber);
+        const flatSnap = await getDoc(flatRef);
 
-                if (!flatSnap.exists()) {
-                    await setDoc(flatRef, {}); // Create flat number document if it doesn't exist
-                }
+        if (!flatSnap.exists()) {
+            await setDoc(flatRef, {}); // Create flat number document if it doesn't exist
+        }
 
-                // Add user to the subcollection 'residents' under the flat number
-                const residentRef = doc(collection(flatRef, 'residents'), email); // Use email as document ID in 'residents' subcollection
-                const residentSnap = await getDoc(residentRef);
+        // Create a unique document ID using resident name and email
+        const residentDocId = `${residentName.replace(/\s+/g, '_')}_${email}`;
+        
+        // Add user to the subcollection 'residents' under the flat number
+        const residentRef = doc(collection(flatRef, 'residents'), residentDocId); // Use combined name and email as document ID
+        const residentSnap = await getDoc(residentRef);
 
-                if (residentSnap.exists()) {
-                    alert('This user has already signed in. Please try again.');
-                } else {
-                    // Add new resident under the flat number
-                    await setDoc(residentRef, {
-                        name: residentName,
-                        email: email,
-                        signInTime: new Date().toISOString() // Optional: Record sign-in time
-                    });
+        if (residentSnap.exists()) {
+            alert('This user has already signed in. Please try again.');
+        } else {
+            // Add new resident under the flat number
+            await setDoc(residentRef, {
+                name: residentName,
+                email: email,
+                signInTime: new Date().toISOString() // Optional: Record sign-in time
+            });
 
-                    localStorage.setItem('signin', 'true'); // Mark as signed in
-                    window.location.href = 'main.html'; // Redirect to main page
-                }
+            localStorage.setItem('signin', 'true'); // Mark as signed in
+            window.location.href = 'main.html'; // Redirect to main page
+        }
 
-            } catch (error) {
-                console.error("Error signing in: ", error);
-                alert("An error occurred while signing in. Please try again.");
-            } finally {
-                loading.style.visibility = 'hidden'; // Hide loading animation
-            }
-        });
+    } catch (error) {
+        console.error("Error signing in: ", error);
+        alert("An error occurred while signing in. Please try again.");
+    } finally {
+        loading.style.visibility = 'hidden'; // Hide loading animation
+    }
+});
+
     </script>
 </body>
 
