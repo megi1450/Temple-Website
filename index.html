@@ -188,7 +188,7 @@
         const db = getFirestore(app);
 
         document.addEventListener("DOMContentLoaded", function() {
-            if (localStorage.getItem('signin') === 'true') {
+            if (localStorage.getItem('active') === 'true') {
                 window.location.href = 'main.html'; // Redirect to main.html if already signed in
             }
         });
@@ -235,7 +235,7 @@
                 signInTime: new Date().toISOString() // Optional: Record sign-in time
             });
 
-            localStorage.setItem('signin', 'true'); // Mark as signed in
+            localStorage.setItem('active', 'true'); // Mark as signed in
             window.location.href = 'main.html'; // Redirect to main page
         }
 
