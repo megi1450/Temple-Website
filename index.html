@@ -9,24 +9,48 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #8b0000; /* Dark red background */
+            background: linear-gradient(to left, #301838, #b81736); /* Gradient background */
             margin: 0;
             padding: 0;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: flex-start; /* Align items to the top */
+            justify-content: center; /* Center horizontally */
             height: 100vh; /* Full height of the viewport */
             color: #333;
+            overflow: hidden; /* Prevent overflow on smaller screens */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* Align the form to the bottom */
+            height: 100vh; /* Full height of the viewport */
+            width: 100%; /* Full width */
         }
 
         form {
-            background: #fff8dc; /* Slightly more opaque white background */
-            padding: 30px;
-            border-radius: 12px; /* More rounded corners */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Slightly darker shadow */
-            max-width: 400px;
-            width: 100%; /* Full width on smaller screens */
+            background: #ffffff; /* Slightly more opaque white background */
+            padding: 30px; /* Adjusted padding */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Deeper shadow for more depth */
+            width: 95%; /* Full width on smaller screens */
             text-align: left; /* Left-align text */
+            box-sizing: border-box; /* Include padding and border in width/height */
+            animation: popIn 0.5s ease; /* Animation for the form */
+            border-radius: 20px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            
+        }   
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         h2 {
@@ -36,36 +60,59 @@
             text-align: center; /* Center header */
         }
 
+        .greeting {
+            margin-bottom: 10px;
+            font-size: 2em; /* Larger font size for greeting */
+            color: #007bff; /* Same color as header */
+            text-align: left; /* Center greeting */
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+        .greeting h3{
+            color: white;
+            padding-left: 20px;
+            padding-top: 65px;
+        }
+
         input {
             width: calc(100% - 24px);
             padding: 12px;
             margin: 10px 0;
+            margin-left: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 16px; /* Larger font size */
-            transition: border 0.3s; /* Smooth transition for input */
+            transition: border 0.3s, box-shadow 0.3s ease; /* Smooth transitions for input */
+            box-sizing: border-box; /* Include padding and border in width */
+            background-color: #fff; /* Optional: set a background color */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
         }
 
         input:focus {
             border-color: #007bff; /* Change border color on focus */
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5), /* Stronger shadow */
+                        0 4px 8px rgba(0, 0, 0, 0.3); /* Additional shadow for depth */
             outline: none; /* Remove default outline */
         }
 
         button {
             width: 100%;
-            background-color: #5cb85c; /* Green background */
+            background: linear-gradient(to left, #301838, #b81736);
             color: white;
             padding: 12px;
             border: none;
-            border-radius: 4px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 18px; /* Larger button text */
-            transition: background-color 0.3s; /* Smooth hover transition */
+            transition: border 0.3s, box-shadow 0.3s ease; /* Smooth transitions for input */
             margin-top: 10px; /* Space above button */
         }
 
         button:hover {
-            background-color: #4cae4c; /* Darker shade on hover */
+            background-color: #bd0000; /* Darker shade on hover */
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5); /* Deeper shadow on hover */
+            outline: none; /* Remove default outline */
         }
 
         p {
@@ -82,11 +129,11 @@
 
         @media (max-width: 600px) {
             form {
-                padding: 20px; /* Adjust padding for smaller screens */
+                padding: 15px; /* Adjust padding for smaller screens */
             }
 
             h2 {
-                font-size: 1.2em; /* Smaller header font on mobile */
+                font-size: 1.3em; /* Smaller header font on mobile */
             }
 
             input {
@@ -112,22 +159,24 @@
 </head>
 
 <body>
-
-    <form id="signinForm">
-        <h2>Sign In</h2>
-        <input type="text" id="flatNumber" placeholder="Flat Number (A to F and 3 to 4 digits)" required maxlength="5"
-            pattern="^[A-F][1-9][0-9]{0,3}$" title="Flat number must start with A-F followed by a floor number (1-9) and up to 3 more digits.">
-        <p><strong>Please enter your flat number carefully. You cannot change it again.</strong></p>
-        <hr>
-        <h2>Terms and Conditions</h2>
-        <p>1. <strong>Usage:</strong> By accessing or using our website, you agree to follow all guidelines and policies outlined here.</p>
-        <p>2. <strong>Puja Requests:</strong> All requests for pujas are subject to temple approval. Please ensure accurate information when submitting forms.</p>
-        <p>3. <strong>Donations:</strong> Donations made through the website are final and non-refundable.</p>
-        <p>4. <strong>Content:</strong> All content, including images and information, is owned by the temple. Unauthorized use is prohibited.</p>
-        <p>5. <strong>Website Access:</strong> The website link is intended for use by members of the Arvind Oasis community only and should not be shared outside the community.</p>
-        <p>6. <strong>Changes:</strong> We reserve the right to update these terms at any time. Continued use of the website means you accept the updated terms.</p>
-        <button type="submit">I Agree and Sign In</button>
-    </form>
+    <div class="container">
+        <div class="greeting"><h3>Hello Sign In, </h3></div> 
+        <img src="ld.gif" style="height: 50px; width: 50px; border-radius: 75px; margin-left: 180px; margin-bottom: 10px; visibility: hidden;" id="loading">
+        <form id="signinForm">
+            <input type="text" id="flatNumber" placeholder="Flat Number (A to F and 3 to 4 Number)" required maxlength="5"
+                pattern="^[A-F][1-9][0-9]{0,3}$" title="Flat number must start with A-F followed by a floor number (1-9) and up to 3 more digits.">
+            <p><strong>Please enter your flat number carefully. You cannot change it again.</strong></p>
+            <hr>
+            <h2>Terms and Conditions</h2>
+            <p>1. <strong>Usage:</strong> By accessing or using our website, you agree to follow all guidelines and policies outlined here.</p>
+            <p>2. <strong>Puja Requests:</strong> All requests for pujas are subject to temple approval. Please ensure accurate information when submitting forms.</p>
+            <p>3. <strong>Donations:</strong> Donations made through the website are final and non-refundable.</p>
+            <p>4. <strong>Content:</strong> All content, including images and information, is owned by the temple. Unauthorized use is prohibited.</p>
+            <p>5. <strong>Website Access:</strong> The website link is intended for use by members of the Arvind Oasis community only and should not be shared outside the community.</p>
+            <p>6. <strong>Changes:</strong> We reserve the right to update these terms at any time. Continued use of the website means you accept the updated terms.</p>
+            <button type="submit">Agree and Sign In</button>
+        </form>
+    </div>
 
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js';
@@ -156,27 +205,24 @@
             e.preventDefault();
             const flatNumber = document.getElementById('flatNumber').value;
 
-            // Validate the flat number before proceeding
-            const flatNumberPattern = /^[A-F][1-9][0-9]{0,3}$/;
-            if (!flatNumberPattern.test(flatNumber)) {
-                alert("Invalid flat number. Please use a format like A1404, A504, etc.");
+            // Validate the flat number before submitting
+            const regex = /^[A-F][1-9][0-9]{0,3}$/;
+            if (!regex.test(flatNumber)) {
+                alert("Invalid flat number. Please ensure it starts with A-F and is followed by a floor number (1-9) and up to 3 more digits.");
                 return;
             }
 
-            // Save flat number and signin status to local storage
-            localStorage.setItem('flatNumber', flatNumber);
+            // Store sign-in status in local storage
+            document.getElementById("loading").style="visibility: visible; height: 50px; width: 50px; border-radius: 75px; margin-left: 180px; margin-bottom: 10px; ";
             localStorage.setItem('signin', 'true');
-
-            // Create user document in Firestore
-            await setDoc(doc(db, 'users', flatNumber), {
+            localStorage.setItem('flatnumber', 'true');
+            await setDoc(doc(db, "users", flatNumber), {
                 flatNumber: flatNumber,
-                timestamp: new Date()
             });
 
-            // Redirect to main.html
-            window.location.href = 'main.html';
+            window.location.href = 'main.html'; // Redirect to main.html after sign-in
         });
     </script>
 </body>
-<script src="script.js"></script>
+
 </html>

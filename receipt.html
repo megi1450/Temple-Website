@@ -62,7 +62,6 @@
         <p><strong>Mobile Number:</strong> <span id="mobileNumber"></span></p>
         <p><strong>Event:</strong> <span id="event"></span></p>
         <p><strong>Occasion:</strong> <span id="occasion"></span></p>
-        <p><strong>Registration ID:</strong> <span id="registrationId"></span></p>
     </div>
     <p><em>This screenshot is to be shared with the Temple Committee for documentation. If you leave thsi site, your cannot get the recipt back.</em></p>
         <p><strong>Note: </strong><em>For each event payment transaction, the same receipt number should be entered.</em></p>
@@ -80,7 +79,6 @@
         document.getElementById('mobileNumber').textContent = params.get('mobileNumber');
         document.getElementById('event').textContent = params.get('event');
         document.getElementById('occasion').textContent = params.get('occasion');
-        document.getElementById('registrationId').textContent = params.get('registrationId');
 
         // Function to download the receipt
         document.getElementById('downloadReceipt').addEventListener('click', function() {
