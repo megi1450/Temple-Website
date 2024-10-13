@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shri Varasiddhi Vinayaka Temple -- Login</title>
+    <link rel="icon" href="logo.png">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to left, #301838, #b81736); /* Gradient background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: flex-start; /* Align items to the top */
+            height: 100vh; /* Full height of the viewport */
+            color: #333;
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center items */
+            width: 100%; /* Full width */
+            max-width: 400px; /* Limit max width for larger screens */
+            margin: 0 auto; /* Center container on larger screens */
+            padding: 20px; /* Padding around the container */
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.9); /* Slightly opaque white background */
+            padding: 30px; /* Padding for form */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Shadow for depth */
+            width: 100%; /* Full width */
+            box-sizing: border-box; /* Include padding and border in width */
+            border-radius: 20px;
+            animation: popIn 0.5s ease; /* Animation for the form */
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #007bff; /* Attractive header color */
+            font-size: 1.5em; /* Larger font size */
+            text-align: center; /* Center header */
+        }
+
+        .greeting {
+            margin-bottom: 10px;
+            font-size: 1.5em; /* Larger font size for greeting */
+            color: #007bff; /* Same color as header */
+            text-align: center; /* Center greeting */
+            width: 100%;
+        }
+
+        input {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px; /* Larger font size */
+            transition: border 0.3s, box-shadow 0.3s ease; /* Smooth transitions for input */
+            box-sizing: border-box; /* Include padding and border in width */
+            background-color: #fff; /* Optional: set a background color */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        }
+
+        input:focus {
+            border-color: #007bff; /* Change border color on focus */
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5), /* Stronger shadow */
+                        0 4px 8px rgba(0, 0, 0, 0.3); /* Additional shadow for depth */
+            outline: none; /* Remove default outline */
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(to left, #301838, #b81736);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px; /* Larger button text */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+            margin-top: 10px; /* Space above button */
+        }
+
+        button:hover {
+            background-color: #bd0000; /* Darker shade on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
+            outline: none; /* Remove default outline */
+        }
+
+        p {
+            font-size: 14px; /* Smaller font size for terms */
+            line-height: 1.5; /* Better line spacing */
+            margin: 5px 0; /* Space between paragraphs */
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ccc; /* Subtle horizontal line */
+            margin: 20px 0; /* Space above and below the line */
+        }
+
+        @media (max-width: 600px) {
+            h2 {
+                font-size: 1.3em; /* Smaller header font on mobile */
+            }
+
+            input {
+                font-size: 14px; /* Smaller input font */
+            }
+
+            button {
+                font-size: 16px; /* Smaller button font */
+            }
+
+            .greeting {
+                font-size: 1.2em; /* Adjust greeting font size for smaller screens */
+            }
+        }
+
+        @media (max-width: 400px) {
+            h2 {
+                font-size: 1.1em; /* Smaller header font on extra-small screens */
+            }
+
+            input,
+            button {
+                padding: 10px; /* Smaller padding for extra-small screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="greeting"><h4>Welcome Back, </h4></div> 
+        <form id="loginForm">
+            <input type="text" id="flatNumber" placeholder="Flat Number (A to F and 3 to 4 Number)" required maxlength="5"
+                pattern="^[A-F][1-9][0-9]{0,3}$" title="Flat number must start with A-F followed by a floor number (1-9) and up to 3 more digits.">
+            <input type="text" id="residentName" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <p><strong>Please enter your flat number, name, and email carefully.</strong></p>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js';
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKtqm0KzMmX4cCqT3PhGI2aFcF3LSXnEk",
+            authDomain: "ao-temple.firebaseapp.com",
+            projectId: "ao-temple",
+            storageBucket: "ao-temple.appspot.com",
+            messagingSenderId: "426167530682",
+            appId: "1:426167530682:web:848a4cb0ceee2ce05cfe83"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const flatNumber = document.getElementById('flatNumber').value;
+            const residentName = document.getElementById('residentName').value;
+            const email = document.getElementById('email').value;
+
+            // Validate the flat number
+            const flatNumberPattern = /^[A-F][1-9][0-9]{0,3}$/;
+            if (!flatNumberPattern.test(flatNumber)) {
+                alert("Please enter a valid flat number (e.g., A123).");
+                return;
+            }
+
+            try {
+                // Get the reference to the flat document
+                const flatRef = doc(db, 'users', flatNumber);
+                const flatSnap = await getDoc(flatRef);
+
+                if (flatSnap.exists()) {
+                    // Create a unique document ID using resident name and email
+                    const residentDocId = `${residentName.replace(/\s+/g, '_')}_${email}`;
+
+                    // Check if the resident document exists
+                    const residentRef = doc(flatRef, 'residents', residentDocId);
+                    const residentSnap = await getDoc(residentRef);
+
+                    if (residentSnap.exists()) {
+                        localStorage.setItem('status', 'true'); // Mark as signed in
+                        window.location.href = 'main.html'; // Redirect to main page
+                    } else {
+                        alert('No account found with this name and email for the given flat number.'); // Show error message
+                    }
+                } else {
+                    alert('No flat found with this number.'); // Show error message
+                }
+            } catch (error) {
+                console.error("Error logging in: ", error);
+                alert("An error occurred while logging in. Please try again.");
+            }
+        });
+    </script>
+</body>
+
+</html>
