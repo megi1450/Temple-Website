@@ -9,36 +9,36 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to left, #301838, #b81736); /* Gradient background */
+            background: linear-gradient(to left, #301838, #b81736);
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: flex-start; /* Align items to the top */
-            height: 100vh; /* Full height of the viewport */
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
             color: #333;
-            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-y: auto;
         }
 
         .container {
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Center content vertically */
-            align-items: center; /* Center items */
-            width: 100%; /* Full width */
-            max-width: 400px; /* Limit max width for larger screens */
-            margin: 0 auto; /* Center container on larger screens */
-            padding: 20px; /* Padding around the container */
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         form {
-            background: rgba(255, 255, 255, 0.9); /* Slightly opaque white background */
-            padding: 30px; /* Padding for form */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Shadow for depth */
-            width: 100%; /* Full width */
-            box-sizing: border-box; /* Include padding and border in width */
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            box-sizing: border-box;
             border-radius: 20px;
-            animation: popIn 0.5s ease; /* Animation for the form */
+            animation: popIn 0.5s ease;
         }
 
         @keyframes popIn {
@@ -46,6 +46,7 @@
                 transform: scale(0.8);
                 opacity: 0;
             }
+
             to {
                 transform: scale(1);
                 opacity: 1;
@@ -54,22 +55,22 @@
 
         h2 {
             margin-bottom: 20px;
-            color: #007bff; /* Attractive header color */
-            font-size: 1.5em; /* Larger font size */
-            text-align: center; /* Center header */
+            color: #007bff;
+            font-size: 1.5em;
+            text-align: center;
         }
 
         .greeting {
             margin-bottom: 10px;
-            font-size: 1.5em; /* Larger font size for greeting */
-            color: #007bff; /* Same color as header */
-            text-align: center; /* Center greeting */
+            font-size: 1.5em;
+            color: #007bff;
+            text-align: center;
             width: 100%;
         }
 
         .greeting h4 {
             color: white;
-            padding-top: 10px; /* Adjusted padding */
+            padding-top: 10px;
         }
 
         input {
@@ -78,18 +79,18 @@
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 16px; /* Larger font size */
-            transition: border 0.3s, box-shadow 0.3s ease; /* Smooth transitions for input */
-            box-sizing: border-box; /* Include padding and border in width */
-            background-color: #fff; /* Optional: set a background color */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+            font-size: 16px;
+            transition: border 0.3s, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         input:focus {
-            border-color: #007bff; /* Change border color on focus */
-            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5), /* Stronger shadow */
-                        0 4px 8px rgba(0, 0, 0, 0.3); /* Additional shadow for depth */
-            outline: none; /* Remove default outline */
+            border-color: #007bff;
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5),
+                0 4px 8px rgba(0, 0, 0, 0.3);
+            outline: none;
         }
 
         button {
@@ -100,55 +101,55 @@
             border: none;
             border-radius: 25px;
             cursor: pointer;
-            font-size: 18px; /* Larger button text */
-            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
-            margin-top: 10px; /* Space above button */
+            font-size: 18px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 10px;
         }
 
         button:hover {
-            background-color: #bd0000; /* Darker shade on hover */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
-            outline: none; /* Remove default outline */
+            background-color: #bd0000;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            outline: none;
         }
 
         p {
-            font-size: 14px; /* Smaller font size for terms */
-            line-height: 1.5; /* Better line spacing */
-            margin: 5px 0; /* Space between paragraphs */
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 5px 0;
         }
 
         hr {
             border: none;
-            border-top: 1px solid #ccc; /* Subtle horizontal line */
-            margin: 20px 0; /* Space above and below the line */
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
         }
 
         @media (max-width: 600px) {
             h2 {
-                font-size: 1.3em; /* Smaller header font on mobile */
+                font-size: 1.3em;
             }
 
             input {
-                font-size: 14px; /* Smaller input font */
+                font-size: 14px;
             }
 
             button {
-                font-size: 16px; /* Smaller button font */
+                font-size: 16px;
             }
 
             .greeting {
-                font-size: 1.2em; /* Adjust greeting font size for smaller screens */
+                font-size: 1.2em;
             }
         }
 
         @media (max-width: 400px) {
             h2 {
-                font-size: 1.1em; /* Smaller header font on extra-small screens */
+                font-size: 1.1em;
             }
 
             input,
             button {
-                padding: 10px; /* Smaller padding for extra-small screens */
+                padding: 10px;
             }
         }
     </style>
@@ -156,7 +157,9 @@
 
 <body>
     <div class="container">
-        <div class="greeting"><h4>Hello Sign In, </h4></div> 
+        <div class="greeting">
+            <h4>Hello Sign In, </h4>
+        </div>
         <img src="ld.gif" style="height: 50px; width: 50px; border-radius: 75px; margin-bottom: 10px; visibility: hidden;" id="loading">
         <form id="signinForm">
             <input type="text" id="flatNumber" placeholder="Flat Number (A to F and 3 to 4 Number)" required maxlength="5"
@@ -164,10 +167,7 @@
             <input type="text" id="residentName" placeholder="Your Name" required>
             <input type="email" id="email" placeholder="Email" required>
             <p><strong>Please enter your flat number and name carefully.</strong></p>
-            <hr>
-            <h2>Terms and Conditions</h2>
-            <!-- Same terms and conditions as before -->
-            <button type="submit">Agree and Sign In</button>
+            <button type="submit">Sign In</button>
         </form>
     </div>
 
@@ -187,18 +187,53 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        document.addEventListener("DOMContentLoaded", function() {
-            if (localStorage.getItem('active') === 'true') {
-                window.location.href = 'main.html'; // Redirect to main.html if already signed in
-            }
-        });
+        document.addEventListener("DOMContentLoaded", async function() {
+    if (localStorage.getItem('status') === 'true') {
+        const flatNumber = localStorage.getItem('flatNumber');
+        const residentName = localStorage.getItem('residentName');
+        const email = localStorage.getItem('email');
+        
+        if (flatNumber && residentName && email) {
+            // Show loading animation
+            const loading = document.getElementById('loading');
+            loading.style.visibility = 'visible';
 
-        document.getElementById('signinForm').addEventListener('submit', async function(e) {
+            try {
+                // Check if the flat number document exists
+                const flatRef = doc(db, 'users', flatNumber);
+                const flatSnap = await getDoc(flatRef);
+
+                if (flatSnap.exists()) {
+                    // Check if the resident exists under this flat
+                    const residentDocId = `${residentName.replace(/\s+/g, '_')}_${email}`;
+                    const residentRef = doc(collection(flatRef, 'residents'), residentDocId);
+                    const residentSnap = await getDoc(residentRef);
+
+                    if (residentSnap.exists()) {
+                        window.location.href = 'main.html'; // Redirect to main.html if user exists
+                    } else {
+                        // Clear local storage if the user does not exist
+                        localStorage.clear();
+                    }
+                } else {
+                    // Clear local storage if the flat number does not exist
+                    localStorage.clear();
+                }
+            } catch (error) {
+                console.error("Error checking user: ", error);
+            } finally {
+                loading.style.visibility = 'hidden'; // Hide loading animation
+            }
+        }
+    }
+});
+
+document.getElementById('signinForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const flatNumber = document.getElementById('flatNumber').value;
     const residentName = document.getElementById('residentName').value;
     const email = document.getElementById('email').value;
-    
+
     // Validate the flat number
     const flatNumberPattern = /^[A-F][1-9][0-9]{0,3}$/;
     if (!flatNumberPattern.test(flatNumber)) {
@@ -206,11 +241,15 @@
         return;
     }
 
+    // Save user data in local storage
+    localStorage.setItem('flatNumber', flatNumber);
+    localStorage.setItem('residentName', residentName);
+    localStorage.setItem('email', email);
     const loading = document.getElementById('loading');
     loading.style.visibility = 'visible'; // Show loading animation
 
     try {
-        // Check if the flat number document exists, if not create it
+        // Check if the flat number document exists
         const flatRef = doc(db, 'users', flatNumber);
         const flatSnap = await getDoc(flatRef);
 
@@ -218,15 +257,14 @@
             await setDoc(flatRef, {}); // Create flat number document if it doesn't exist
         }
 
-        // Create a unique document ID using resident name and email
+        // Create a unique ID for the resident document based on name and email
         const residentDocId = `${residentName.replace(/\s+/g, '_')}_${email}`;
-        
-        // Add user to the subcollection 'residents' under the flat number
-        const residentRef = doc(collection(flatRef, 'residents'), residentDocId); // Use combined name and email as document ID
+        const residentRef = doc(collection(flatRef, 'residents'), residentDocId);
         const residentSnap = await getDoc(residentRef);
 
         if (residentSnap.exists()) {
-            alert('This user has already signed in. Please try again.');
+            alert('This account already exists. You will be redirected to the new login page.');
+            window.location.href = 'login.html'; // Redirect to new login page
         } else {
             // Add new resident under the flat number
             await setDoc(residentRef, {
@@ -235,8 +273,8 @@
                 signInTime: new Date().toISOString() // Optional: Record sign-in time
             });
 
-            localStorage.setItem('active', 'true'); // Mark as signed in
-            window.location.href = 'main.html'; // Redirect to main page
+            localStorage.setItem('status', 'true'); // Mark as signed in
+            window.location.href = 'terms.html'; // Redirect to main page
         }
 
     } catch (error) {
