@@ -112,7 +112,11 @@ function home(){
 }
 
 function checksignin(){
-    if (localStorage.getItem('active') !== 'true') {
+    if (localStorage.getItem('status') !== 'true') {
         window.location.href = 'index.html'; // Redirect to sign-in page if not signed in
     }
 }
+
+function idxto(){
+    window.location.href='main.html';
+   }
