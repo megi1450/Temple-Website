@@ -188,7 +188,7 @@
         const db = getFirestore(app);
 
         document.addEventListener("DOMContentLoaded", async function() {
-    if (localStorage.getItem('status') === 'true') {
+    if (localStorage.getItem('input') === 'true') {
         const flatNumber = localStorage.getItem('flatNumber');
         const residentName = localStorage.getItem('residentName');
         const email = localStorage.getItem('email');
@@ -273,7 +273,7 @@ document.getElementById('signinForm').addEventListener('submit', async function(
                 signInTime: new Date().toISOString() // Optional: Record sign-in time
             });
 
-            localStorage.setItem('status', 'true'); // Mark as signed in
+            localStorage.setItem('input', 'true'); // Mark as signed in
             window.location.href = 'terms.html'; // Redirect to main page
         }
 
