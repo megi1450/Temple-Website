@@ -135,7 +135,7 @@
         }
     </style>
 </head>
-<body onload="admin()">
+<body>
 
     <h1>AO TEMPLE ADMIN</h1>
     <div style="display: flex;">
@@ -241,7 +241,6 @@
                 searchResults = []; // Reset search results array
                 let registrationCount = 0; // Initialize registration count
 
-                // Collect matching results
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
 
@@ -266,6 +265,8 @@
                         resultDiv.innerHTML = `
                             <p><strong>Registration ID:</strong> ${data.registrationID}</p>
                             <p><strong>Receipt Number:</strong> ${data.receiptNumber}</p>
+                            <p><strong>Name:</strong> ${data.name}</p>
+                            <p><strong>Flat Number:</strong> ${data.flatNumber}</p>
                             <p><strong>Event:</strong> ${data.event}</p>
                             <p><strong>Occasion:</strong> ${data.occasion}</p>
                             <p><strong>Date:</strong> ${regDate.toLocaleDateString()}</p>
@@ -287,5 +288,4 @@
         });
     </script>
 </body>
-<script src="ad"></script>
 </html>
