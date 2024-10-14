@@ -163,8 +163,6 @@
 
         <!-- Hidden text input for specifying "Other" occasion -->
         <input type="text" id="otherOccasionInput" placeholder="Specify other occasion" style="display:none;">
-
-        <input type="text" id="registrationID" placeholder="Registration ID">
         <input type="text" id="receiptNumber" placeholder="Receipt Number">
 
         <!-- Month filter -->
@@ -225,7 +223,6 @@
             const event = document.getElementById('event').value;
             let occasion = document.getElementById('occasion').value;
             const otherOccasion = document.getElementById('otherOccasionInput').value;
-            const registrationID = document.getElementById('registrationID').value;
             const receiptNumber = document.getElementById('receiptNumber').value;
             const month = document.getElementById('monthFilter').value;
             const currentYear = new Date().getFullYear(); // Get the current year
@@ -252,18 +249,16 @@
                     // Check if conditions are met
                     const isEventMatch = event === '' || data.event === event;
                     const isOccasionMatch = occasion === '' || data.occasion === occasion;
-                    const isRegistrationIDMatch = registrationID === '' || data.registrationID === registrationID;
                     const isReceiptNumberMatch = receiptNumber === '' || data.receiptNumber === receiptNumber;
                     const isMonthMatch = month === '' || regMonth === month;
                     const isYearMatch = regYear === currentYear || regYear === currentYear + 1; // Check for the current and next year
 
                     // Only count registrations that match the filters
-                    if (isEventMatch && isOccasionMatch && isRegistrationIDMatch && isReceiptNumberMatch && isMonthMatch && isYearMatch) {
+                    if (isEventMatch && isOccasionMatch && isReceiptNumberMatch && isMonthMatch && isYearMatch) {
                         registrationCount++;
                         const resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
                         resultDiv.innerHTML = `
-                            <p><strong>Registration ID:</strong> ${data.registrationID}</p>
                             <p><strong>Receipt Number:</strong> ${data.receiptNumber}</p>
                             <p><strong>Name:</strong> ${data.name}</p>
                             <p><strong>Flat Number:</strong> ${data.flatNumber}</p>
