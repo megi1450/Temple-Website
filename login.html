@@ -205,7 +205,7 @@
                     const residentSnap = await getDoc(residentRef);
 
                     if (residentSnap.exists()) {
-                        localStorage.setItem('status', 'true'); // Mark as signed in
+                        localStorage.setItem('input', 'true'); // Mark as signed in
                         window.location.href = 'main.html'; // Redirect to main page
                     } else {
                         alert('No account found with this name and email for the given flat number.'); // Show error message
