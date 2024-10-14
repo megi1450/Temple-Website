@@ -79,9 +79,11 @@
                 display: flex;
                 flex-direction: column; /* Stack rows vertically */
                 margin-bottom: 10px;
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                padding: 10px;
+                background: #fff; /* Card background */
+                border-radius: 8px; /* Rounded corners */
+                padding: 15px; /* Inner spacing */
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+                position: relative; /* For positioning the expand button */
             }
 
             th {
@@ -93,20 +95,38 @@
                 justify-content: space-between; /* Space between labels and values */
                 padding: 5px; /* Adjust padding */
                 border: none; /* Remove borders */
+                font-size: 16px; /* Adjust font size */
+                margin-bottom: 5px; /* Space between each item */
             }
 
-            .actions {
-                text-align: right; /* Align actions to the right */
+            .label {
+                font-weight: bold; /* Highlight labels */
+                color: #333; /* Label color */
             }
 
-            .actions button {
-                background-color: #b8860b; /* Button background color */
-                color: white; /* Button text color */
-                border: none; /* Remove button border */
-                border-radius: 5px;
-                padding: 5px 10px;
-                cursor: pointer; /* Pointer cursor on hover */
-                margin-left: 5px; /* Space between buttons */
+            .value {
+                text-align: right; /* Align values to the right */
+                color: #555; /* Value color */
+            }
+
+            .toggle-button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 20px; /* Increase size for visibility */
+                color: #5cb85c; /* Match with the theme color */
+                margin-top: 10px; /* Space above button */
+            }
+
+            .expandable-content {
+                display: none; /* Hidden by default */
+                padding-top: 10px; /* Spacing above the expandable content */
+                border-top: 1px solid #ccc; /* Divider for the expandable content */
+                margin-top: 10px; /* Space above expandable content */
+            }
+
+            .expanded {
+                display: block; /* Show content when expanded */
             }
         }
     </style>
@@ -130,7 +150,7 @@
                     <th>Mobile Number</th>
                     <th>Event</th>
                     <th>Occasion</th>
-                    <th>Receipt No.</th> <!-- Updated -->
+                    <th>Receipt No.</th>
                 </tr>
             </thead>
             <tbody>
@@ -173,20 +193,71 @@
             snapshot.forEach(doc => {
                 const data = doc.data();
                 const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${data.name}</td>
-                    <td>${data.date}</td>
-                    <td>${data.mobileNumber}</td>
-                    <td>${data.event}</td>
-                    <td>${data.occasion}</td>
-                    <td>${data.receiptNumber}</td> <!-- Display receipt number -->
+
+                // Create a toggle button for expanding the details
+                const toggleButton = document.createElement('button');
+                toggleButton.classList.add('toggle-button');
+                toggleButton.innerHTML = '➕'; // Plus icon
+
+                // Create a container for expandable content
+                const expandableContent = document.createElement('div');
+                expandableContent.classList.add('expandable-content');
+
+                // Populate the expandable content
+                expandableContent.innerHTML = `
+                    <div><span class="label">Name:</span> <span class="value">${data.name}</span></div>
+                    <div><span class="label">Date:</span> <span class="value">${data.date}</span></div>
+                    <div><span class="label">Mobile Number:</span> <span class="value">${data.mobileNumber}</span></div>
+                    <div><span class="label">Event:</span> <span class="value">${data.event}</span></div>
+                    <div><span class="label">Occasion:</span> <span class="value">${data.occasion}</span></div>
+                    <div><span class="label">Receipt No:</span> <span class="value">${data.receiptNumber}</span></div>
                 `;
+
+                // Set the initial content for the row with "Event" and "Receipt No."
+                row.innerHTML = `
+                    <td class="value">${data.event}</td>
+                    <td class="value">${data.receiptNumber}</td>
+                `;
+
+                // Append the button and expandable content to the row
+                row.appendChild(toggleButton);
+                row.appendChild(expandableContent);
                 tableBody.appendChild(row);
+
+                // Toggle functionality
+                toggleButton.onclick = function (event) {
+                    // Toggle the expandable content visibility
+                    expandableContent.classList.toggle('expanded');
+                    toggleButton.innerHTML = expandableContent.classList.contains('expanded') ? '➖' : '➕'; // Change icon
+
+                    // Prevent the click event from bubbling up
+                    event.stopPropagation();
+                };
+
+                // Click on row to collapse expandable content
+                row.onclick = function () {
+                    expandableContent.classList.remove('expanded');
+                    toggleButton.innerHTML = '➕'; // Reset icon to plus
+                };
             });
         }
 
         // Fetch the registration history when the page loads
         fetchRegistrationHistory();
+
+        // Handle clicks outside of expandable rows to collapse them
+        document.addEventListener('click', function () {
+            const allExpandableContents = document.querySelectorAll('.expandable-content');
+            const allToggleButtons = document.querySelectorAll('.toggle-button');
+
+            allExpandableContents.forEach(content => {
+                content.classList.remove('expanded'); // Collapse all
+            });
+
+            allToggleButtons.forEach(button => {
+                button.innerHTML = '➕'; // Reset all buttons to plus
+            });
+        });
     </script>
 
 </body>
