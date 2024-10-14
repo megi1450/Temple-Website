@@ -188,102 +188,117 @@
         const db = getFirestore(app);
 
         document.addEventListener("DOMContentLoaded", async function() {
-    if (localStorage.getItem('input') === 'true') {
-        const flatNumber = localStorage.getItem('flatNumber');
-        const residentName = localStorage.getItem('residentName');
-        const email = localStorage.getItem('email');
-        
-        if (flatNumber && residentName && email) {
-            // Show loading animation
+            if (localStorage.getItem('input') === 'true') {
+                const flatNumber = localStorage.getItem('flatNumber');
+                const residentName = localStorage.getItem('residentName');
+                const email = localStorage.getItem('email');
+                
+                if (flatNumber && residentName && email) {
+                    // Disable inputs and show loading animation
+                    document.getElementById('flatNumber').disabled = true;
+                    document.getElementById('residentName').disabled = true;
+                    document.getElementById('email').disabled = true;
+                    const loading = document.getElementById('loading');
+                    loading.style.visibility = 'visible';
+
+                    try {
+                        // Check if the flat number document exists
+                        const flatRef = doc(db, 'users', flatNumber);
+                        const flatSnap = await getDoc(flatRef);
+
+                        if (flatSnap.exists()) {
+                            // Check if the resident exists under this flat
+                            const residentDocId = `${residentName.replace(/\s+/g, '_')}_${email}`;
+                            const residentRef = doc(collection(flatRef, 'residents'), residentDocId);
+                            const residentSnap = await getDoc(residentRef);
+
+                            if (residentSnap.exists()) {
+                                window.location.href = 'main.html'; // Redirect to main.html if user exists
+                            } else {
+                                // Clear local storage if the user does not exist
+                                localStorage.clear();
+                            }
+                        } else {
+                            // Clear local storage if the flat number does not exist
+                            localStorage.clear();
+                        }
+                    } catch (error) {
+                        console.error("Error checking user: ", error);
+                    } finally {
+                        loading.style.visibility = 'hidden'; // Hide loading animation
+                        // Re-enable inputs after checking
+                        document.getElementById('flatNumber').disabled = false;
+                        document.getElementById('residentName').disabled = false;
+                        document.getElementById('email').disabled = false;
+                    }
+                }
+            }
+        });
+
+        document.getElementById('signinForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const flatNumber = document.getElementById('flatNumber').value;
+            const residentName = document.getElementById('residentName').value;
+            const email = document.getElementById('email').value;
+
+            // Validate the flat number
+            const flatNumberPattern = /^[A-F][1-9][0-9]{0,3}$/;
+            if (!flatNumberPattern.test(flatNumber)) {
+                alert("Please enter a valid flat number (e.g., A123).");
+                return;
+            }
+
+            // Save user data in local storage
+            localStorage.setItem('flatNumber', flatNumber);
+            localStorage.setItem('residentName', residentName);
+            localStorage.setItem('email', email);
             const loading = document.getElementById('loading');
-            loading.style.visibility = 'visible';
+            loading.style.visibility = 'visible'; // Show loading animation
+
+            // Disable inputs during sign-in process
+            document.getElementById('flatNumber').disabled = true;
+            document.getElementById('residentName').disabled = true;
+            document.getElementById('email').disabled = true;
 
             try {
                 // Check if the flat number document exists
                 const flatRef = doc(db, 'users', flatNumber);
                 const flatSnap = await getDoc(flatRef);
 
-                if (flatSnap.exists()) {
-                    // Check if the resident exists under this flat
-                    const residentDocId = `${residentName.replace(/\s+/g, '_')}_${email}`;
-                    const residentRef = doc(collection(flatRef, 'residents'), residentDocId);
-                    const residentSnap = await getDoc(residentRef);
-
-                    if (residentSnap.exists()) {
-                        window.location.href = 'main.html'; // Redirect to main.html if user exists
-                    } else {
-                        // Clear local storage if the user does not exist
-                        localStorage.clear();
-                    }
-                } else {
-                    // Clear local storage if the flat number does not exist
-                    localStorage.clear();
+                if (!flatSnap.exists()) {
+                    await setDoc(flatRef, {}); // Create flat number document if it doesn't exist
                 }
+
+                // Create a unique ID for the resident document based on name and email
+                const residentDocId = `${residentName.replace(/\s+/g, '_')}_${email}`;
+                const residentRef = doc(collection(flatRef, 'residents'), residentDocId);
+                const residentSnap = await getDoc(residentRef);
+
+                if (residentSnap.exists()) {
+                    window.location.href = 'login.html'; // Redirect to new login page
+                } else {
+                    // Add new resident under the flat number
+                    await setDoc(residentRef, {
+                        name: residentName,
+                        email: email,
+                        signInTime: new Date().toISOString() // Optional: Record sign-in time
+                    });
+
+                    localStorage.setItem('input', 'true'); // Mark as signed in
+                    window.location.href = 'terms.html'; // Redirect to main page
+                }
+
             } catch (error) {
-                console.error("Error checking user: ", error);
+                console.error("Error signing in: ", error);
+                alert("An error occurred while signing in. Please try again.");
             } finally {
                 loading.style.visibility = 'hidden'; // Hide loading animation
+                // Re-enable inputs after sign-in process
+                document.getElementById('flatNumber').disabled = false;
+                document.getElementById('residentName').disabled = false;
+                document.getElementById('email').disabled = false;
             }
-        }
-    }
-});
-
-document.getElementById('signinForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const flatNumber = document.getElementById('flatNumber').value;
-    const residentName = document.getElementById('residentName').value;
-    const email = document.getElementById('email').value;
-
-    // Validate the flat number
-    const flatNumberPattern = /^[A-F][1-9][0-9]{0,3}$/;
-    if (!flatNumberPattern.test(flatNumber)) {
-        alert("Please enter a valid flat number (e.g., A123).");
-        return;
-    }
-
-    // Save user data in local storage
-    localStorage.setItem('flatNumber', flatNumber);
-    localStorage.setItem('residentName', residentName);
-    localStorage.setItem('email', email);
-    const loading = document.getElementById('loading');
-    loading.style.visibility = 'visible'; // Show loading animation
-
-    try {
-        // Check if the flat number document exists
-        const flatRef = doc(db, 'users', flatNumber);
-        const flatSnap = await getDoc(flatRef);
-
-        if (!flatSnap.exists()) {
-            await setDoc(flatRef, {}); // Create flat number document if it doesn't exist
-        }
-
-        // Create a unique ID for the resident document based on name and email
-        const residentDocId = `${residentName.replace(/\s+/g, '_')}_${email}`;
-        const residentRef = doc(collection(flatRef, 'residents'), residentDocId);
-        const residentSnap = await getDoc(residentRef);
-
-        if (residentSnap.exists()) {
-            alert('This account already exists. You will be redirected to the new login page.');
-            window.location.href = 'login.html'; // Redirect to new login page
-        } else {
-            // Add new resident under the flat number
-            await setDoc(residentRef, {
-                name: residentName,
-                email: email,
-                signInTime: new Date().toISOString() // Optional: Record sign-in time
-            });
-
-            localStorage.setItem('input', 'true'); // Mark as signed in
-            window.location.href = 'terms.html'; // Redirect to main page
-        }
-
-    } catch (error) {
-        console.error("Error signing in: ", error);
-        alert("An error occurred while signing in. Please try again.");
-    } finally {
-        loading.style.visibility = 'hidden'; // Hide loading animation
-    }
-});
+        });
 
     </script>
 </body>
