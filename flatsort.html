@@ -132,7 +132,7 @@
 
     <h1>Flat Number Search</h1>
     <div style="display: flex;">
-        <button id="homeButton" onclick="window.location.href='index.html'">Home</button>
+        <button id="homeButton" onclick="window.location.href='adminhome.html'">Home</button>
         <button id="homeButton" onclick="window.location.href='event.html'">Event Info</button>
     </div>
 
@@ -145,6 +145,7 @@
         </select>
         <button id="searchBtn">Search</button>
         <button id="exportBtn">Export to Excel</button>
+        <img src="ld.gif" style="height: 50px; width: 50px; border-radius: 75px; margin-bottom: 10px; visibility: hidden;" id="loading">
     </div>
 
     <div id="summary"></div>
@@ -167,6 +168,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const loading = document.getElementById('loading');
         let searchResults = [];
 
         document.getElementById('searchBtn').addEventListener('click', async () => {
@@ -270,15 +272,17 @@
         });
 
         document.getElementById('exportBtn').addEventListener('click', () => {
+            loading.style.visibility = 'visible';
             if (searchResults.length === 0) {
                 alert('No results to export.');
+                loading.style.visibility = 'hidden';
                 return;
             }
-
             const worksheet = XLSX.utils.json_to_sheet(searchResults);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Results');
             XLSX.writeFile(workbook, 'search_results.xlsx');
+            loading.style.visibility = 'visible';
         });
     </script>
 </body>

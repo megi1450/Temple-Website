@@ -135,11 +135,11 @@
         }
     </style>
 </head>
-<body>
+<body onload="admin()">
 
     <h1>AO TEMPLE ADMIN</h1>
     <div style="display: flex;">
-        <button id="homeButton" onclick="window.location.href='index.html'">Home</button>
+        <button id="homeButton" onclick="window.location.href='adminhome.html'">Home</button>
         &nbsp;&nbsp;
         <button id="homeButton" onclick="window.location.href='flatsort.html'">Flat Info</button>
     </div>
@@ -184,6 +184,7 @@
 
         <button id="searchBtn">Search</button>
         <button id="exportBtn">Export to Excel</button>
+        <img src="ld.gif" style="height: 50px; width: 50px; border-radius: 75px; margin-bottom: 10px; visibility: hidden;" id="loading">
     </div>
 
     <div id="results"></div>
@@ -220,67 +221,103 @@
         });
 
         document.getElementById('searchBtn').addEventListener('click', async () => {
-            const event = document.getElementById('event').value;
-            let occasion = document.getElementById('occasion').value;
-            const otherOccasion = document.getElementById('otherOccasionInput').value;
-            const receiptNumber = document.getElementById('receiptNumber').value;
-            const month = document.getElementById('monthFilter').value;
-            const currentYear = new Date().getFullYear(); // Get the current year
+    const event = document.getElementById('event').value;
+    let occasion = document.getElementById('occasion').value;
+    const otherOccasion = document.getElementById('otherOccasionInput').value;
+    const receiptNumber = document.getElementById('receiptNumber').value;
+    const month = document.getElementById('monthFilter').value;
+    const currentYear = new Date().getFullYear(); // Get the current year
+    const loading = document.getElementById('loading');
 
-            if (occasion === 'Others') {
-                occasion = otherOccasion;
-            }
+    if (occasion === 'Others') {
+        occasion = otherOccasion;
+    }
 
-            try {
-                const querySnapshot = await getDocs(collection(db, 'submissions'));
-                const resultsDiv = document.getElementById('results');
-                resultsDiv.innerHTML = ''; // Clear previous results
-                searchResults = []; // Reset search results array
-                let registrationCount = 0; // Initialize registration count
+    try {
+        const querySnapshot = await getDocs(collection(db, 'submissions'));
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = ''; // Clear previous results
+        searchResults = []; // Reset search results array
+        let registrationCount = 0; // Initialize registration count
 
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
 
-                    // Extract the year and month from the registration date
-                    const regDate = new Date(data.date);
-                    const regMonth = String(regDate.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-                    const regYear = regDate.getFullYear();
+            // Extract the year and month from the registration date
+            const regDate = new Date(data.date);
+            const regMonth = String(regDate.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+            const regYear = regDate.getFullYear();
 
-                    // Check if conditions are met
-                    const isEventMatch = event === '' || data.event === event;
-                    const isOccasionMatch = occasion === '' || data.occasion === occasion;
-                    const isReceiptNumberMatch = receiptNumber === '' || data.receiptNumber === receiptNumber;
-                    const isMonthMatch = month === '' || regMonth === month;
-                    const isYearMatch = regYear === currentYear || regYear === currentYear + 1; // Check for the current and next year
+            // Check if conditions are met
+            const isEventMatch = event === '' || data.event === event;
+            const isOccasionMatch = occasion === '' || data.occasion === occasion;
+            const isReceiptNumberMatch = receiptNumber === '' || data.receiptNumber === receiptNumber;
+            const isMonthMatch = month === '' || regMonth === month;
+            const isYearMatch = regYear === currentYear || regYear === currentYear + 1; // Check for the current and next year
 
-                    // Only count registrations that match the filters
-                    if (isEventMatch && isOccasionMatch && isReceiptNumberMatch && isMonthMatch && isYearMatch) {
-                        registrationCount++;
-                        const resultDiv = document.createElement('div');
-                        resultDiv.classList.add('result');
-                        resultDiv.innerHTML = `
-                            <p><strong>Receipt Number:</strong> ${data.receiptNumber}</p>
-                            <p><strong>Name:</strong> ${data.name}</p>
-                            <p><strong>Flat Number:</strong> ${data.flatNumber}</p>
-                            <p><strong>Event:</strong> ${data.event}</p>
-                            <p><strong>Occasion:</strong> ${data.occasion}</p>
-                            <p><strong>Date:</strong> ${regDate.toLocaleDateString()}</p>
-                        `;
-                        resultsDiv.appendChild(resultDiv);
-                    }
+            // Only count registrations that match the filters
+            if (isEventMatch && isOccasionMatch && isReceiptNumberMatch && isMonthMatch && isYearMatch) {
+                searchResults.push({
+                    ...data, // Store all the data
+                    regDate // Store the parsed date object for sorting
                 });
-
-                // Display total registrations at the top of results
-                const totalCountDiv = document.createElement('div');
-                totalCountDiv.innerHTML = `<p>Total Registrations: ${registrationCount}</p>`;
-                totalCountDiv.style.fontWeight = 'bold';
-                totalCountDiv.style.marginBottom = '10px';
-                resultsDiv.insertBefore(totalCountDiv, resultsDiv.firstChild);
-
-            } catch (error) {
-                console.error('Error fetching documents: ', error);
+                registrationCount++;
             }
         });
+
+        // Sort the results by date (latest first)
+        searchResults.sort((a, b) => b.regDate - a.regDate);
+
+        // Display sorted results
+        searchResults.forEach((data) => {
+            const resultDiv = document.createElement('div');
+            resultDiv.classList.add('result');
+            resultDiv.innerHTML = `
+                <p><strong>Receipt Number:</strong> ${data.receiptNumber}</p>
+                <p><strong>Name:</strong> ${data.name}</p>
+                <p><strong>Flat Number:</strong> ${data.flatNumber}</p>
+                <p><strong>Event:</strong> ${data.event}</p>
+                <p><strong>Occasion:</strong> ${data.occasion}</p>
+                <p><strong>Date:</strong> ${data.regDate.toLocaleDateString()}</p>
+            `;
+            resultsDiv.appendChild(resultDiv);
+        });
+
+        // Display total registrations at the top of results
+        const totalCountDiv = document.createElement('div');
+        totalCountDiv.innerHTML = `<p>Total Registrations: ${registrationCount}</p>`;
+        totalCountDiv.style.fontWeight = 'bold';
+        totalCountDiv.style.marginBottom = '10px';
+        resultsDiv.insertBefore(totalCountDiv, resultsDiv.firstChild);
+
+    } catch (error) {
+        console.error('Error fetching documents: ', error);
+    }
+});
+document.getElementById('exportBtn').addEventListener('click', () => {
+    loading.style.visibility = 'visible';
+    if (searchResults.length === 0) {
+        alert('No results to export.');
+        loading.style.visibility = 'hidden';
+        return;
+    }
+
+    // Convert each registration date to a readable string (if needed)
+    const formattedResults = searchResults.map(result => ({
+        ...result,
+        regDate: result.regDate.toLocaleDateString() // Format the date object as a string
+    }));
+
+    // Convert the results into a sheet
+    const worksheet = XLSX.utils.json_to_sheet(formattedResults);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Results');
+
+    // Write the workbook to a file
+    XLSX.writeFile(workbook, 'search_results.xlsx');
+    loading.style.visibility = 'hidden';
+});
+
     </script>
 </body>
 </html>
