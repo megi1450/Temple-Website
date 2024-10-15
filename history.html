@@ -129,6 +129,41 @@
                 display: block; /* Show content when expanded */
             }
         }
+/* Responsive Styles for Larger Screens */
+@media (min-width: 601px) {
+    table {
+        display: table; /* Standard table layout */
+        overflow-x: visible;
+        white-space: normal;
+    }
+
+    tr {
+        display: table-row;
+        margin-bottom: 0;
+        background: none;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+    }
+
+    td, th {
+        display: table-cell;
+        padding: 10px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    /* Hide the toggle button and expandable content for larger screens */
+    .toggle-button, .expandable-content {
+        display: none;
+    }
+}
+
     </style>
 </head>
 <body onload="checksignin()">
@@ -184,66 +219,75 @@
         const flatNumber = localStorage.getItem('flatNumber'); // Retrieve flat number from local storage
 
         // Fetch and display registration history
-        async function fetchRegistrationHistory() {
-            const registrationsRef = collection(db, 'users', flatNumber, 'registrations');
-            const snapshot = await getDocs(registrationsRef);
-            const tableBody = document.querySelector('#registrationTable tbody');
-            tableBody.innerHTML = ''; // Clear existing rows
+        // Fetch and display registration history
+async function fetchRegistrationHistory() {
+    const registrationsRef = collection(db, 'users', flatNumber, 'registrations');
+    const snapshot = await getDocs(registrationsRef);
+    const tableBody = document.querySelector('#registrationTable tbody');
+    tableBody.innerHTML = ''; // Clear existing rows
 
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                const row = document.createElement('tr');
+    const isLargeScreen = window.innerWidth >= 601; // Check if screen is larger than or equal to 601px
 
-                // Create a toggle button for expanding the details
-                const toggleButton = document.createElement('button');
-                toggleButton.classList.add('toggle-button');
-                toggleButton.innerHTML = '➕'; // Plus icon
+    snapshot.forEach(doc => {
+        const data = doc.data();
+        const row = document.createElement('tr');
 
-                // Create a container for expandable content
-                const expandableContent = document.createElement('div');
-                expandableContent.classList.add('expandable-content');
+        if (isLargeScreen) {
+            // For larger screens, display all fields directly in the table
+            row.innerHTML = `
+                <td>${data.name}</td>
+                <td>${data.date}</td>
+                <td>${data.mobileNumber}</td>
+                <td>${data.event}</td>
+                <td>${data.occasion}</td>
+                <td>${data.receiptNumber}</td>
+            `;
+        } else {
+            // For mobile, display only event and receipt number with expandable content
+            const toggleButton = document.createElement('button');
+            toggleButton.classList.add('toggle-button');
+            toggleButton.innerHTML = '➕'; // Plus icon
 
-                // Populate the expandable content
-                expandableContent.innerHTML = `
-                    <div><span class="label">Name:</span> <span class="value">${data.name}</span></div>
-                    <div><span class="label">Date:</span> <span class="value">${data.date}</span></div>
-                    <div><span class="label">Mobile Number:</span> <span class="value">${data.mobileNumber}</span></div>
-                    <div><span class="label">Event:</span> <span class="value">${data.event}</span></div>
-                    <div><span class="label">Occasion:</span> <span class="value">${data.occasion}</span></div>
-                    <div><span class="label">Receipt No:</span> <span class="value">${data.receiptNumber}</span></div>
-                `;
+            const expandableContent = document.createElement('div');
+            expandableContent.classList.add('expandable-content');
+            expandableContent.innerHTML = `
+                <div><span class="label">Name:</span> <span class="value">${data.name}</span></div>
+                <div><span class="label">Date:</span> <span class="value">${data.date}</span></div>
+                <div><span class="label">Mobile Number:</span> <span class="value">${data.mobileNumber}</span></div>
+                <div><span class="label">Event:</span> <span class="value">${data.event}</span></div>
+                <div><span class="label">Occasion:</span> <span class="value">${data.occasion}</span></div>
+                <div><span class="label">Receipt No:</span> <span class="value">${data.receiptNumber}</span></div>
+            `;
 
-                // Set the initial content for the row with "Event" and "Receipt No."
-                row.innerHTML = `
-                    <td class="value">${data.event}</td>
-                    <td class="value">${data.receiptNumber}</td>
-                `;
+            row.innerHTML = `
+                <td>${data.event}</td>
+                <td>${data.receiptNumber}</td>
+            `;
+            row.appendChild(toggleButton);
+            row.appendChild(expandableContent);
 
-                // Append the button and expandable content to the row
-                row.appendChild(toggleButton);
-                row.appendChild(expandableContent);
-                tableBody.appendChild(row);
+            toggleButton.onclick = function (event) {
+                expandableContent.classList.toggle('expanded');
+                toggleButton.innerHTML = expandableContent.classList.contains('expanded') ? '➖' : '➕';
+                event.stopPropagation();
+            };
 
-                // Toggle functionality
-                toggleButton.onclick = function (event) {
-                    // Toggle the expandable content visibility
-                    expandableContent.classList.toggle('expanded');
-                    toggleButton.innerHTML = expandableContent.classList.contains('expanded') ? '➖' : '➕'; // Change icon
-
-                    // Prevent the click event from bubbling up
-                    event.stopPropagation();
-                };
-
-                // Click on row to collapse expandable content
-                row.onclick = function () {
-                    expandableContent.classList.remove('expanded');
-                    toggleButton.innerHTML = '➕'; // Reset icon to plus
-                };
-            });
+            row.onclick = function () {
+                expandableContent.classList.remove('expanded');
+                toggleButton.innerHTML = '➕';
+            };
         }
 
-        // Fetch the registration history when the page loads
-        fetchRegistrationHistory();
+        tableBody.appendChild(row);
+    });
+}
+
+// Fetch the registration history when the page loads
+fetchRegistrationHistory();
+
+// Ensure table updates when window is resized (optional)
+window.addEventListener('resize', fetchRegistrationHistory);
+
 
         // Handle clicks outside of expandable rows to collapse them
         document.addEventListener('click', function () {
