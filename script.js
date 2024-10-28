@@ -82,28 +82,42 @@ function redirectToUPI() {
     window.location.href = upiPaymentLink;
 }
 
+// Toggle the visibility of the menu
 function toggleMenu() {
     const navLinks = document.querySelector('.nav-links');
-    navLinks.classList.toggle('show'); // Toggle the 'show' class
+    navLinks.classList.toggle('show'); // Toggle the 'show' class to show/hide the menu
 }
 
 // Collapse the menu when clicking a link
 function closeMenu() {
     const navLinks = document.querySelector('.nav-links');
-    navLinks.classList.remove('show'); // Collapse the menu
+    navLinks.classList.remove('show'); // Remove the 'show' class to collapse the menu
 }
 
-// Collapse the menu when clicking outside the header and cta button
-document.addEventListener('click', function(event) {
+// Collapse the menu when clicking outside of the header and cta button
+document.addEventListener('click', function (event) {
     const header = document.querySelector('.main-header');
     const navLinks = document.querySelector('.nav-links');
-    const ctaButton = document.querySelector('.cta-button'); // Select your cta button
+    const ctaButton = document.querySelector('.cta-button');
 
-    // Check if the clicked element is not within the header or the cta button
+    // Check if the clicked element is outside the header, CTA button, and the nav links
     if (!header.contains(event.target) && !ctaButton.contains(event.target) && navLinks.classList.contains('show')) {
         closeMenu(); // Collapse the menu
     }
 });
+
+// Add event listeners to all nav link items to collapse the menu after selection
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', closeMenu); // Collapse the menu when a link is clicked
+});
+
+// Optional: Handle keydown events (like pressing the Escape key) to close the menu
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') { // If the Escape key is pressed
+        closeMenu(); // Collapse the menu
+    }
+});
+
 
 
 
@@ -120,3 +134,11 @@ function checksignin(){
 function idxto(){
     window.location.href='main.html';
    }
+
+   document.querySelector('.exit-button').addEventListener('click', function() {
+    localStorage.removeItem('email');
+    localStorage.removeItem('flatNumber');
+    localStorage.removeItem('input');
+    localStorage.removeItem('residentName');
+    window.location='index.html';
+});
