@@ -93,7 +93,7 @@ function toggleMenu() {
     if (navLinks.classList.contains('show')) {
         setTimeout(() => {
             closeMenu(); // Collapse the menu after 6 seconds
-        }, 3000);
+        }, 6000);
     }
 }
 
