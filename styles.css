@@ -627,21 +627,23 @@ h1, h2 {
     margin: 0; /* No margin to avoid empty space */
     display: flex; /* Display links in a row */
     flex-wrap: wrap; /* Allow wrapping for better spacing */
-    background-color: #fff8dc; /* Background color for the menu */
+    background-color: #00137c; /* Background color for the menu */
     position: fixed; /* Fix position to bottom */
     bottom: -300px; /* Start off-screen below (adjust height if needed) */
     left: 0; /* Align to the left */
     right: 0; /* Align to the right */
     width: 100%; /* Full width for the sidebar */
-    border-radius: 15px 15px 0 0; /* Rounded corners on the top */
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2); /* Optional: add shadow for depth */
+    border-radius: 15px;
     transition: bottom 0.3s ease; /* Smooth slide-in effect */
     z-index: 1000; /* Ensure it is on top */
 }
 
 .nav-links.show {
-    bottom: 60px; /* Slide in to position just above the main menu button */
+    bottom: 0; /* Adjust to cover the bottom of the screen */
+    height: 300px; /* Set a height for the nav links */
 }
+
 
 .nav-links li {
     flex: 1 1 50%; /* Allow two links in a row, each taking half width */
@@ -653,7 +655,7 @@ h1, h2 {
 }
 
 .nav-links a {
-    color: black; /* Text color */
+    color: rgb(255, 255, 255); /* Text color */
     text-decoration: none; /* No underline */
     display: flex; /* Use flex to align items */
     justify-content: center; /* Center items horizontally */
@@ -668,7 +670,7 @@ h1, h2 {
 
 /* Exit button styles */
 .exit-button {
-    background-color: #ff4d4d; /* Red background for exit button */
+    background-color: #8b0000; /* Red background for exit button */
     color: white; /* White text color */
     border: none; /* No border */
     border-radius: 5px; /* Rounded corners */

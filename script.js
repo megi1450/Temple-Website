@@ -85,13 +85,25 @@ function redirectToUPI() {
 // Toggle the visibility of the menu
 function toggleMenu() {
     const navLinks = document.querySelector('.nav-links');
+    const ctaButton = document.querySelector('.cta-button');
+
     navLinks.classList.toggle('show'); // Toggle the 'show' class to show/hide the menu
+    ctaButton.style.display = navLinks.classList.contains('show') ? 'none' : 'block'; // Hide button when menu is shown
+
+    if (navLinks.classList.contains('show')) {
+        setTimeout(() => {
+            closeMenu(); // Collapse the menu after 6 seconds
+        }, 3000);
+    }
 }
 
 // Collapse the menu when clicking a link
 function closeMenu() {
     const navLinks = document.querySelector('.nav-links');
+    const ctaButton = document.querySelector('.cta-button');
+
     navLinks.classList.remove('show'); // Remove the 'show' class to collapse the menu
+    ctaButton.style.display = 'block'; // Show the button again
 }
 
 // Collapse the menu when clicking outside of the header and cta button
@@ -117,6 +129,8 @@ document.addEventListener('keydown', function (event) {
         closeMenu(); // Collapse the menu
     }
 });
+
+
 
 
 
