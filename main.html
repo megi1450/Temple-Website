@@ -7,99 +7,13 @@
     <title>Shri Varasiddhi Vinayaka Temple</title>
     <link rel="stylesheet" href="styles.css"> 
     <link rel="icon" href="logo.png">
-
-    <!-- Include McQueen Lite CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mcqueen/1.0.0/mcqueen.min.css" />
-
-    <style>
-        /* Moving message styling */
-        .diwali-message {
-            position: absolute; /* Change to absolute to scroll with content */
-            top: 50px; /* Place it just below the hamburger menu */
-            left: 0;
-            width: 100%;
-            background-color: #8b0000; /* Dark red background */
-            color: white; /* White text */
-            font-size: 1.2rem; /* Reduced font size */
-            font-weight: bold; /* Bold text */
-            text-align: center; /* Center the text */
-            overflow: hidden; /* Hide overflow */
-            z-index: 1002; /* Above other content */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Reduced shadow effect */
-            padding: 2px 0; /* Reduced padding for better spacing */
-        }
-
-        .diwali-message-container {
-            display: flex; /* Use flexbox for continuous effect */
-            animation: scrollMessage 15s linear infinite; /* Continuous animation */
-        }
-
-        .diwali-message span {
-            white-space: nowrap; /* Prevent line breaks */
-            padding-right: 50px; /* Reduced space between messages */
-        }
-
-        /* Animation for right-to-left scrolling */
-        @keyframes scrollMessage {
-            0% {
-                transform: translateX(100%); /* Start from right */
-            }
-            100% {
-                transform: translateX(-100%); /* End at left */
-            }
-        }
-
-        /* Animated Crackers */
-        .cracker-left, .cracker-right {
-            position: absolute;
-            top: 20%;
-            width: 550px;
-            z-index: 1001; /* Below the message */
-            pointer-events: none; /* Allow clicks to pass through */
-        }
-
-        .cracker-left {
-            right: -120px; /* Start off the left side */
-        }
-
-        .cracker-right {
-            left: -120px; /* Start off the right side */
-        }
-
-        @media only screen and (max-width: 600px) {
-            .cracker-left, .cracker-right {
-                position: absolute;
-                top: 20%;
-                width: 300px;
-                z-index: 1001; /* Below the message */
-            }
-            .cracker-left {
-            right: -100px; /* Start off the left side */
-        }
-
-        .cracker-right {
-            left: -100px; /* Start off the right side */
-        }
-        }
-
-        header {
-            position: relative; /* Set the header as relative for positioning the message */
-        }
-    </style>
 </head>
 
 <body onload="checksignin()">
 
     <div class="hamburger2">
         <img src="logo3.avif" style="height: 35px; width: 35px; border-radius: 75px;">&nbsp;&nbsp;Shri Varasiddhi Vinayaka Temple
-    </div>
-
-    <!-- Moving Diwali message -->
-    <div class="diwali-message">
-        <div class="diwali-message-container">
-            <span>🌟✨ Happy Diwali to all Arvind Oasis residents! May Lord Ganesha bless you with peace and prosperity! ✨🌟</span>
-            <span>🌟✨ Happy Diwali to all Arvind Oasis residents! May Lord Ganesha bless you with peace and prosperity! ✨🌟</span>
-        </div>
     </div>
 
     <!-- Animated Crackers -->
@@ -118,6 +32,7 @@
                     <li><a href="history.html" onclick="closeMenu()">📝 REGISTRATION HISTORY</a></li>
                     <li><a href="payment.html" onclick="closeMenu()">💳 PAYMENT PORTAL</a></li>
                     <li><a href="pass.html" onclick="closeMenu()">🧑‍💼 ADMIN</a></li>
+                    <li><button class="exit-button">ⓘ Exit</button></li>
                 </ul>
             </nav>
         </div>
@@ -127,8 +42,6 @@
         <div class="container">
             <h2>Welcome to Shri Varasiddhi Vinayaka Temple</h2>
             <p style="font-weight: bold;">Experience the divine grace and peace at our sacred temple.</p>
-            <button class="cta-button" onclick="toggleMenu()">&nbsp;☰&nbsp;&nbsp;&nbsp;Main Menu</button>
-            <br><br>
             <button class="lang-toggle" onclick="toggleLanguage()">ಕನ್ನಡ / English</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
     </section>
@@ -147,6 +60,8 @@
         <p>&copy; 2024 Shri Varasiddhi Vinayaka Arvind Oasis Temple Committee | All Rights Reserved</p>
     </footer>
 
-    <script src="script.js"></script> <!-- JavaScript for additional functionality -->
+    <button class="cta-button" onclick="toggleMenu()">☰ Main Menu</button>
+
+    <script src="script.js"></script>
 </body>
 </html>
