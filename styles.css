@@ -615,7 +615,7 @@ h1, h2 {
     height: 100px; /* Height of the button */
     position: fixed; /* Fix position */
     left: 0; /* Position from the left */
-    top: 35%; /* Center vertically */
+    top: 55%; /* Center vertically */
     transform: translateY(-50%); /* Adjust to center */
     cursor: pointer; /* Pointer cursor */
     z-index: 1001; /* Ensure it is above other elements */
