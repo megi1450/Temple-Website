@@ -82,14 +82,17 @@ function redirectToUPI() {
     window.location.href = upiPaymentLink;
 }
 
-// Toggle the visibility of the menu
+// Toggle the visibility of the side menu
 function toggleMenu() {
     const navLinks = document.querySelector('.nav-links');
     const ctaButton = document.querySelector('.cta-button');
 
     navLinks.classList.toggle('show'); // Toggle the 'show' class to show/hide the menu
-    ctaButton.style.display = navLinks.classList.contains('show') ? 'none' : 'block'; // Hide button when menu is shown
 
+    // Show or hide the button based on the menu state
+    ctaButton.style.display = navLinks.classList.contains('show') ? 'none' : 'flex'; // Hide button when menu is shown
+
+    // Close the menu after a timeout if it's open
     if (navLinks.classList.contains('show')) {
         setTimeout(() => {
             closeMenu(); // Collapse the menu after 6 seconds
@@ -103,7 +106,7 @@ function closeMenu() {
     const ctaButton = document.querySelector('.cta-button');
 
     navLinks.classList.remove('show'); // Remove the 'show' class to collapse the menu
-    ctaButton.style.display = 'block'; // Show the button again
+    ctaButton.style.display = 'flex'; // Show the button again
 }
 
 // Collapse the menu when clicking outside of the header and cta button
@@ -112,7 +115,6 @@ document.addEventListener('click', function (event) {
     const navLinks = document.querySelector('.nav-links');
     const ctaButton = document.querySelector('.cta-button');
 
-    // Check if the clicked element is outside the header, CTA button, and the nav links
     if (!header.contains(event.target) && !ctaButton.contains(event.target) && navLinks.classList.contains('show')) {
         closeMenu(); // Collapse the menu
     }
@@ -129,6 +131,9 @@ document.addEventListener('keydown', function (event) {
         closeMenu(); // Collapse the menu
     }
 });
+
+
+
 
 
 
