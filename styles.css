@@ -65,12 +65,10 @@ h1, h2 {
     color: #fff;
     cursor: pointer;
     background-color: #b8860b;
-    padding-left: 15px;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
-    width: 100%; /* Set to full width */
+    width: 250px;
     text-align: center; /* Center the text within the hamburger */
-    margin: 0; /* Remove any default margin */
 }
 .hlogo{
     width: 40px; height: 40px; border-radius: 75px; margin-top: 20px;
