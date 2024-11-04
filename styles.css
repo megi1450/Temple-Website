@@ -35,9 +35,10 @@ h1, h2 {
     padding: 10px 15px;
     border: none;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 0.8em;
     border-radius: 5px;
     margin-left: 20px;
+    margin-top: 200px;
 }
 
 .lang-toggle:hover {
@@ -58,6 +59,29 @@ h1, h2 {
     margin: 0; /* Remove any default margin */
 }
 
+.hamburger2{
+    height: 70px;
+    display: flex;
+}
+.hlogo{
+    width: 40px; height: 40px; border-radius: 75px; margin-top: 20px;
+}
+@media (max-width: 480px) {
+    .hamburger2 p{
+        font-size: 19px;
+    }
+}
+@media (max-height: 860px) {
+    .cta-button{
+        margin-bottom: 100px;
+    }
+}
+
+@media (max-height: 667px) {
+    .cta-button{
+        margin-bottom: 150px;
+    }
+}
 
 
 
@@ -123,7 +147,7 @@ h1, h2 {
     }
 
     .hero-section h2 {
-        font-size: 2.5em; /* Slightly smaller hero text size */
+        font-size: 2.5px; /* Slightly smaller hero text size */
     }
 
     .hero-section p {
@@ -134,6 +158,7 @@ h1, h2 {
 @media (max-width: 480px) {
     .hero-section {
         padding: 20px; /* Less padding for very small screens */
+        height: 55vh;
     }
 
     .hero-section h2 {
@@ -603,35 +628,30 @@ h1, h2 {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Styles for the trigger button */
 .cta-button {
-    background-color: #ffffff; /* Black color for the button */
-    color: rgb(0, 0, 0); /* Text color */
-    border: none; 
+    background-color: #fff;
+    color: #8b0000;
     font-weight: bold;
-    font-size: 25px;
-    border-radius: 5px; /* Slightly rounded corners */
-    width: 40px; /* Width of the rectangular button */
-    height: 100px; /* Height of the button */
-    position: fixed; /* Fix position */
-    left: 0; /* Position from the left */
-    top: 60%; /* Center vertically */
-    transform: translateY(-50%); /* Adjust to center */
-    cursor: pointer; /* Pointer cursor */
-    z-index: 1001; /* Ensure it is above other elements */
-    display: flex; /* Flexbox for centering icon */
-    align-items: center; /* Center icon vertically */
-    justify-content: center; /* Center icon horizontally */
-    border: rgb(120, 120, 120);
-    border-style: ridge;
-    border-right-width: 7px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8em;
+    border-radius: 5px;
+    margin-top: 20px;
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.3s linear;
+}
+
+.cta-button.hidden {
+    visibility: hidden;
+    opacity: 0;
 }
 
 .cta-button:hover {
     background-color: #444444; /* Darker on hover */
 }
+
 
 /* Styles for the navigation links */
 .nav-links {
@@ -724,5 +744,35 @@ h1, h2 {
         pointer-events: none; /* Allow clicks to pass through */
         right: 15%; /* Align to right */
         height: 300px; /* Adjust height */
+    }
+}
+
+/* Container for the scrolling text */
+.scrolling-container {
+    width: 100%;        /* Full width */
+    height: 30px;       /* Height of the thin line */
+    overflow: hidden;   /* Hide overflowing text */
+    background-color: #f0f0f0;
+    position: relative;
+    border: 1px solid #ccc; /* Optional border */
+}
+
+/* Styling for the moving text */
+.scrolling-text {
+    position: absolute;
+    white-space: nowrap;
+    animation: scroll-left 10s linear infinite;
+    font-size: 1.2em;
+    padding-left: 100%; /* Start from the right */
+    color: #8b0000;
+}
+
+/* Keyframes for the scrolling animation */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
     }
 }
