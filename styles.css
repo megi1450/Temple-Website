@@ -46,7 +46,7 @@ h1, h2 {
 }
 
 /* Hamburger Menu */
-.hamburger, .hamburger2 {
+.hamburger2 {
     font-size: 23px;
     color: #fff;
     cursor: pointer;
@@ -57,11 +57,20 @@ h1, h2 {
     width: 100%; /* Set to full width */
     text-align: center; /* Center the text within the hamburger */
     margin: 0; /* Remove any default margin */
-}
-
-.hamburger2{
     height: 70px;
     display: flex;
+}
+.hamburger{
+    font-size: 23px;
+    color: #fff;
+    cursor: pointer;
+    background-color: #b8860b;
+    padding-left: 15px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    width: 100%; /* Set to full width */
+    text-align: center; /* Center the text within the hamburger */
+    margin: 0; /* Remove any default margin */
 }
 .hlogo{
     width: 40px; height: 40px; border-radius: 75px; margin-top: 20px;

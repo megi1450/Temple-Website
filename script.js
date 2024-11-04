@@ -50,10 +50,6 @@ function translateAboutToEnglish() {
     return "Welcome to Shri Varasiddhi Vinayaka Temple, a sacred haven devoted to Lord Ganesha, the embodiment of wisdom, prosperity, and success. Nestled within the vibrant community of Arvind Oasis, our temple stands as a beacon of spirituality and tradition. The temple's journey began with the auspicious Bhoomi Puja on <strong>November 23rd, 2023</strong>, followed by 48 days of the sacred Mandala Puja, culminating in the grand Pranaprathistapana on <strong>March 14th, 2024</strong>. These transformative events, witnessed by the devoted residents of Arvind Oasis, mark the temple as a place of deep faith and community spirit. Join us as we celebrate the rich traditions of daily rituals, special puja events, and spiritual gatherings that bring us closer to divine blessings and unity.";
 }
 
-
-
-
-
 function link(){
     window.location.href="form.html";
 }
