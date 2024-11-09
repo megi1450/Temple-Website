@@ -56,6 +56,9 @@ function link(){
 function link2(){
     window.location.href="https://docs.google.com/spreadsheets/d/1CfJ0WdT2DBdFmr4u_Z6-xIhtt73yc_e48UgzFMnDHhk/edit?usp=sharing";
 }
+function link3(){
+    window.location.href="https://docs.google.com/spreadsheets/d/1uvOow48ouaK5p0HScEJHpUkuUVi_qhWx0-RYH-2K8SY/edit?gid=0#gid=0";
+}
 
 function showOccasion(occasion) {
     // Hide both occasion galleries initially
