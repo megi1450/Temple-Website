@@ -4,6 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #2c3e50;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .dropdown-container {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        label {
+            font-size: 16px;
+            color: #34495e;
+            margin-right: 10px;
+        }
+
+        select {
+            padding: 8px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            width: 200px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .chart-container {
+            width: 80%;
+            max-width: 900px;
+            margin-top: 40px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            width: 100% !important;
+            height: auto;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .legend div {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .legend div span {
+            width: 15px;
+            height: 15px;
+            display: inline-block;
+            margin-right: 5px;
+        }
+    </style>
     <script type="module">
         // Import Firebase and Firestore modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
@@ -191,25 +274,39 @@
 <body>
     <h2>Flat and Block Contributions for Temple Activities</h2>
     
-    <!-- Dropdown Menu for Event Selection -->
-    <label for="event">Select Event:</label>
-    <select id="event" onchange="updateChart()">
-        <option value="" selected>None of the above</option>
-        <option value="PANCHAMRIT ABHISHEKA">PANCHAMRIT ABHISHEKA</option>
-        <option value="NIRANTARA ABHISHEKA">NIRANTARA ABHISHEKA</option>
-        <option value="SANKASHTAHARA CHATURTHI">SANKASHTAHARA CHATURTHI</option>
-        <option value="SHRI SATYANARAYANA PUJA GROUP CEREMONY">SHRI SATYANARAYANA PUJA GROUP CEREMONY</option>
-        <option value="VEHICLE PUJA (TWO-WHEELER)">VEHICLE PUJA (TWO-WHEELER)</option>
-        <option value="VEHICLE PUJA (FOUR-WHEELER)">VEHICLE PUJA (FOUR-WHEELER)</option>
-    </select>
+    <!-- Dropdown Menus for Event and View Selection -->
+    <div class="dropdown-container">
+        <div>
+            <label for="event">Select Event:</label>
+            <select id="event" onchange="updateChart()">
+                <option value="" selected>None of the above</option>
+                <option value="PANCHAMRIT ABHISHEKA">PANCHAMRIT ABHISHEKA</option>
+                <option value="NIRANTARA ABHISHEKA">NIRANTARA ABHISHEKA</option>
+                <option value="SANKASHTAHARA CHATURTHI">SANKASHTAHARA CHATURTHI</option>
+                <option value="SHRI SATYANARAYANA PUJA GROUP CEREMONY">SHRI SATYANARAYANA PUJA GROUP CEREMONY</option>
+                <option value="VEHICLE PUJA (TWO-WHEELER)">VEHICLE PUJA (TWO-WHEELER)</option>
+                <option value="VEHICLE PUJA (FOUR-WHEELER)">VEHICLE PUJA (FOUR-WHEELER)</option>
+            </select>
+        </div>
 
-    <!-- Dropdown Menu for View Selection -->
-    <label for="filterType">Select View:</label>
-    <select id="filterType" onchange="updateChart()">
-        <option value="flat">Per Flat</option>
-        <option value="block">Per Block</option>
-    </select>
+        <div>
+            <label for="filterType">Select View:</label>
+            <select id="filterType" onchange="updateChart()">
+                <option value="flat">Per Flat</option>
+                <option value="block">Per Block</option>
+            </select>
+        </div>
+    </div>
 
-    <canvas id="contributionsChart" width="800" height="400"></canvas>
+    <!-- Chart Container -->
+    <div class="chart-container">
+        <canvas id="contributionsChart" width="800" height="400"></canvas>
+    </div>
+
+    <!-- Legend (Optional) -->
+    <div class="legend">
+        <div><span style="background-color: rgba(75, 192, 192, 0.6)"></span>Total Registrations</div>
+        <div><span style="background-color: rgba(153, 102, 255, 0.6)"></span>Registrations Per Block</div>
+    </div>
 </body>
 </html>
