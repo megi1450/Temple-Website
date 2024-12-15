@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>Redirecting......</title>
+    </head>
+    <body onload="redirecttoupi()">
+        <center>
+            <br>
+            <br>
+            <h1>Just a moment until redirected to your upi..........</h1>
+            <h2>If not redirected yet, <button onclick="redirecttoupi()">CLICK HERE</button></h2>
+            <img src="ld.gif" style="height: 50px; width: 50px; border-radius: 75px; margin-bottom: 10px;">
+            <br>
+            <br>
+            <br>
+            <h3>Note: Once you have been redirected you can leave the page.</h3>
+        </center>
+        <script>
+            function redirecttoupi() {
+    const upiId = "0798062a0170493.bqr@kotak"; // Your UPI ID
+    const receiverName = "ARVIND OASIS APARTMENTS OWNERS ASSOCIATION TEMPLE"; // UPI holder name
+
+    // Creating the UPI payment link without amount
+    const upiPaymentLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(receiverName)}`;
+
+    // Redirecting the user to their UPI app
+    window.location.href = upiPaymentLink;
+}
+        </script>
+    </body>
+</html>
