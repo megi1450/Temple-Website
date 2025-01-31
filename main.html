@@ -53,11 +53,31 @@
         </div>
     </section>
 
+    <!-- Modal Popup -->
+<div id="imageModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">✖</span>
+        <img src="popup.jpeg" alt="Popup Image">
+    </div>
+</div>
+
+
     <!-- Footer Section -->
     <footer class="main-footer">
         <p>&copy; 2024 Shri Varasiddhi Vinayaka Arvind Oasis Temple Committee | All Rights Reserved</p>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Function to show modal
+        function showModal() {
+            document.getElementById("imageModal").style.display = "flex";
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+    </script>
 </body>
 </html>

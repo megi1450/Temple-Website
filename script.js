@@ -166,3 +166,23 @@ function idxto(){
     localStorage.removeItem('residentName');
     window.location='index.html';
 });
+
+/// Function to show modal
+function showModal() {
+    const modal = document.getElementById("imageModal");
+    modal.style.display = "flex";
+    modal.style.opacity = "0"; // Initial opacity to zero for fade-in
+    setTimeout(() => {
+        modal.style.opacity = "1"; // Fade in after showing modal
+    }, 50); // Delay to apply opacity transition
+}
+
+// Function to close modal
+function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+}
+
+// Show modal when page loads
+window.onload = function() {
+    showModal();
+};
