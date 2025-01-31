@@ -226,7 +226,6 @@
     const otherOccasion = document.getElementById('otherOccasionInput').value;
     const receiptNumber = document.getElementById('receiptNumber').value;
     const month = document.getElementById('monthFilter').value;
-    const currentYear = new Date().getFullYear(); // Get the current year
     const loading = document.getElementById('loading');
 
     if (occasion === 'Others') {
@@ -243,23 +242,43 @@
         querySnapshot.forEach((doc) => {
             const data = doc.data();
 
-            // Extract the year and month from the registration date
+            // Extract month and day from the registration date
             const regDate = new Date(data.date);
-            const regMonth = String(regDate.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-            const regYear = regDate.getFullYear();
+            const regMonth = regDate.getMonth(); // Get 0-indexed month
+            const regDay = regDate.getDate();
+
+            // Convert month number to month name
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            const monthName = monthNames[regMonth];
+
+            // Append ordinal suffix to the day
+            const ordinalSuffix = (day) => {
+                if (day > 3 && day < 21) return "th"; // Covers 4-20
+                switch (day % 10) {
+                    case 1: return "st";
+                    case 2: return "nd";
+                    case 3: return "rd";
+                    default: return "th";
+                }
+            };
+
+            const formattedDate = `${monthName} ${regDay}${ordinalSuffix(regDay)}`; // Example: August 4th
 
             // Check if conditions are met
             const isEventMatch = event === '' || data.event === event;
             const isOccasionMatch = occasion === '' || data.occasion === occasion;
             const isReceiptNumberMatch = receiptNumber === '' || data.receiptNumber === receiptNumber;
-            const isMonthMatch = month === '' || regMonth === month;
-            const isYearMatch = regYear === currentYear || regYear === currentYear + 1; // Check for the current and next year
+            const isMonthMatch = month === '' || String(regMonth + 1).padStart(2, '0') === month;
 
             // Only count registrations that match the filters
-            if (isEventMatch && isOccasionMatch && isReceiptNumberMatch && isMonthMatch && isYearMatch) {
+            if (isEventMatch && isOccasionMatch && isReceiptNumberMatch && isMonthMatch) {
                 searchResults.push({
                     ...data, // Store all the data
-                    regDate // Store the parsed date object for sorting
+                    regDate, // Store the parsed date object for sorting
+                    formattedDate // Store the formatted date
                 });
                 registrationCount++;
             }
@@ -278,7 +297,7 @@
                 <p><strong>Flat Number:</strong> ${data.flatNumber}</p>
                 <p><strong>Event:</strong> ${data.event}</p>
                 <p><strong>Occasion:</strong> ${data.occasion}</p>
-                <p><strong>Date:</strong> ${data.regDate.toLocaleDateString()}</p>
+                <p><strong>Date:</strong> ${data.formattedDate}</p> <!-- Display as "Month Dayth" -->
             `;
             resultsDiv.appendChild(resultDiv);
         });
@@ -294,6 +313,9 @@
         console.error('Error fetching documents: ', error);
     }
 });
+
+
+
 document.getElementById('exportBtn').addEventListener('click', () => {
     loading.style.visibility = 'visible';
     if (searchResults.length === 0) {
