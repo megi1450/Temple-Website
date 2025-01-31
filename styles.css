@@ -803,27 +803,29 @@ h1, h2 {
 
 .modal-content {
     position: relative;
-    max-width: 90%; /* Default max-width */
-    max-height: 90%; /* Default max-height */
-    overflow: hidden; /* Ensure content stays inside */
+    max-width: 90%;
+    max-height: 90%;
+    overflow: hidden;
 }
 
+/* Image inside the modal */
 .modal-content img {
     width: 100%;
     height: auto;
     border-radius: 10px;
 }
 
-/* Close button styles */
+/* Close button positioned outside the modal */
 .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
+    position: fixed; /* Outside of modal */
+    top: 10px; /* Adjusted to be above modal */
+    left: 50%; /* Centered horizontally */
+    transform: translateX(-50%); /* Center the button */
+    font-size: 30px;
     font-weight: bold;
     color: white;
     cursor: pointer;
-    background-color: #333;
+    background-color: #333; /* Standard dark background */
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -834,7 +836,7 @@ h1, h2 {
 }
 
 .close-btn:hover {
-    background-color: #555;
+    background-color: #555; /* Lighter background on hover */
 }
 
 /* Animation for fade-in */
@@ -847,11 +849,11 @@ h1, h2 {
     }
 }
 
-/* Responsive Design for smaller screens */
+/* Responsive Design for mobile screens */
 @media (max-width: 600px) {
     .modal-content {
-        max-width: 95%; /* Increase the max-width for smaller screens */
-        max-height: 95%; /* Increase the max-height for smaller screens */
+        max-width: 95%;
+        max-height: 95%;
     }
 
     .modal-content img {
@@ -859,12 +861,12 @@ h1, h2 {
         height: auto;
     }
 
+    /* Adjust close button for mobile */
     .close-btn {
-        width: 35px; /* Slightly smaller button */
-        height: 35px; /* Slightly smaller button */
-        font-size: 20px; /* Slightly smaller icon */
+        width: 35px; /* Slightly smaller button for mobile */
+        height: 35px; /* Slightly smaller button for mobile */
+        font-size: 24px; /* Slightly smaller icon */
         line-height: 35px; /* Center the smaller icon */
-        top: 8px; /* Adjust the position of the button */
-        right: 8px; /* Adjust the position of the button */
+        top: 320px; /* Positioned above the modal */
     }
 }
