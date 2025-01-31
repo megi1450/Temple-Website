@@ -65,6 +65,9 @@ function link3() {
 function link4() {
     window.open("https://docs.google.com/spreadsheets/d/1cPysMmwDhZwQcNfhoGa-bLmtRz16WldO1w7aaVYJDqw/edit?usp=sharing", "_blank");
 }
+function link5() {
+    window.open("https://chat.whatsapp.com/Ky1DZdkCxSi54b2yJhLCul", "_blank");
+}
 
 
 function showOccasion(occasion) {
