@@ -178,11 +178,20 @@ function showModal() {
 }
 
 // Function to close modal
-function closeModal() {
-    document.getElementById("imageModal").style.display = "none";
+function closeModal(event) {
+    // If the click is on the modal background or the close button, close the modal
+    const modal = document.getElementById("imageModal");
+    
+    // Check if the clicked area is outside the modal content (the background)
+    if (event.target === modal || event.target === document.querySelector(".close-btn")) {
+        modal.style.display = "none";
+    }
 }
 
 // Show modal when page loads
 window.onload = function() {
     showModal();
 };
+
+// Add event listener to close modal when clicking outside the modal content
+document.getElementById("imageModal").addEventListener('click', closeModal);

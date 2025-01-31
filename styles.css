@@ -818,7 +818,7 @@ h1, h2 {
 /* Close button positioned outside the modal */
 .close-btn {
     position: fixed; /* Outside of modal */
-    top: 5%; /* 5% from the top for more dynamic positioning */
+    top: 5%; /* 5% from the top */
     left: 50%; /* Centered horizontally */
     transform: translateX(-50%); /* Center the button */
     font-size: 30px;
@@ -870,3 +870,4 @@ h1, h2 {
         top: 3%; /* 3% from the top for better alignment on mobile */
     }
 }
+    
