@@ -50,18 +50,22 @@ function translateAboutToEnglish() {
     return "Welcome to Shri Varasiddhi Vinayaka Temple, a sacred haven devoted to Lord Ganesha, the embodiment of wisdom, prosperity, and success. Nestled within the vibrant community of Arvind Oasis, our temple stands as a beacon of spirituality and tradition. The temple's journey began with the auspicious Bhoomi Puja on <strong>November 23rd, 2023</strong>, followed by 48 days of the sacred Mandala Puja, culminating in the grand Pranaprathistapana on <strong>March 14th, 2024</strong>. These transformative events, witnessed by the devoted residents of Arvind Oasis, mark the temple as a place of deep faith and community spirit. Join us as we celebrate the rich traditions of daily rituals, special puja events, and spiritual gatherings that bring us closer to divine blessings and unity.";
 }
 
-function link(){
-    window.location.href="form.html";
+function link() {
+    window.location.href = "form.html";
 }
-function link2(){
-    window.location.href="https://docs.google.com/spreadsheets/d/1CfJ0WdT2DBdFmr4u_Z6-xIhtt73yc_e48UgzFMnDHhk/edit?usp=sharing";
+
+function link2() {
+    window.open("https://docs.google.com/spreadsheets/d/1CfJ0WdT2DBdFmr4u_Z6-xIhtt73yc_e48UgzFMnDHhk/edit?usp=sharing", "_blank");
 }
-function link3(){
-    window.location.href="https://docs.google.com/spreadsheets/d/1uvOow48ouaK5p0HScEJHpUkuUVi_qhWx0-RYH-2K8SY/edit?gid=0#gid=0";
+
+function link3() {
+    window.open("https://docs.google.com/spreadsheets/d/1uvOow48ouaK5p0HScEJHpUkuUVi_qhWx0-RYH-2K8SY/edit?gid=0#gid=0", "_blank");
 }
-function link4(){
-    window.location.href="https://docs.google.com/spreadsheets/d/1cPysMmwDhZwQcNfhoGa-bLmtRz16WldO1w7aaVYJDqw/edit?usp=sharing";
+
+function link4() {
+    window.open("https://docs.google.com/spreadsheets/d/1cPysMmwDhZwQcNfhoGa-bLmtRz16WldO1w7aaVYJDqw/edit?usp=sharing", "_blank");
 }
+
 
 function showOccasion(occasion) {
     // Hide both occasion galleries initially
