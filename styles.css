@@ -107,16 +107,44 @@ h1, h2 {
 
 /* Hero Section */
 .hero-section {
-    background: url('back.jpeg') no-repeat center center/cover;
-    height: 70vh; /* Maintain height for larger screens */
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Full screen height */
     color: white;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 30px; /* Moderate padding for breathing space */
+    padding: 30px;
+    overflow: hidden; /* Prevents scrolling */
 }
+
+/* Main Video (Centered) */
+.background-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensures full video is visible */
+    transform: translate(-50%, -50%);
+    z-index: -2;
+}
+
+/* Blurred Video (Fills empty spaces) */
+.blurred-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Expands video to fill screen */
+    filter: blur(10px) brightness(60%); /* Reduced blur effect */
+    z-index: -3;
+}
+
+
 
 .hero-section h2 {
     font-size: 3.5em; /* Slightly larger font size for visibility */
