@@ -672,7 +672,7 @@ h1, h2 {
     cursor: pointer;
     font-size: 0.8em;
     border-radius: 5px;
-    margin-top: 20px;
+    margin-top: 400px;
     visibility: visible;
     opacity: 1;
     transition: visibility 0s, opacity 0.3s linear;

@@ -75,6 +75,7 @@ function showOccasion(occasion) {
     document.getElementById('occasion-1').style.display = 'none';
     document.getElementById('occasion-2').style.display = 'none';
     document.getElementById('occasion-3').style.display = 'none';
+    document.getElementById('occasion-4').style.display = 'none';
 
     // Show the selected occasion gallery
     document.getElementById(`occasion-${occasion}`).style.display = 'block';
