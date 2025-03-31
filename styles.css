@@ -358,6 +358,8 @@ h1, h2 {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 10px;
     padding: 0 10px;
+    max-width: 100%;
+    justify-content: center;
 }
 
 .gallery-cardB,
@@ -382,20 +384,13 @@ h1, h2 {
     object-fit: cover;
 }
 
-.card-info {
-    padding: 10px;
-    text-align: left;
-}
-
-.card-info h3 {
-    margin: 0 0 5px 0;
-    font-size: 1.2em;
-}
-
-.card-info p {
-    margin: 0;
-    color: #555;
-    font-size: 1em;
+/* Make iframes responsive */
+iframe {
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16/9; /* Ensures proper scaling */
+    display: block;
+    margin: auto;
 }
 
 /* Responsive Styles */
@@ -443,47 +438,48 @@ h1, h2 {
 /* Styles for Larger Screens (Above 1024px) */
 @media (min-width: 1024px) {
     .gallery-section {
-        padding: 80px 40px; /* Increased padding for larger screens */
+        padding: 80px 40px;
     }
 
     .occasion-title {
-        font-size: 2.5em; /* Larger font for occasion title */
+        font-size: 2.5em;
         margin-bottom: 30px;
     }
 
     .occasion-date {
-        font-size: 1.5em; /* Increase the date font size */
+        font-size: 1.5em;
     }
 
     .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Larger grid columns */
-        gap: 20px; /* Increased space between cards */
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
         padding: 0 20px;
     }
 
     .gallery-cardB,
     .gallery-card {
-        border: 1px solid #ddd; /* Slight border for visibility on larger screens */
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Slightly deeper shadow */
+        border: 1px solid #ddd;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
     .gallery-cardB img,
     .gallery-card img {
-        height: 200px; /* Fixed height for better layout on larger screens */
+        height: 200px;
     }
 
     .card-info {
-        padding: 15px; /* Increased padding */
+        padding: 15px;
     }
 
     .card-info h3 {
-        font-size: 1.5em; /* Larger font for better readability */
+        font-size: 1.5em;
     }
 
     .card-info p {
-        font-size: 1.1em; /* Slightly larger for better readability */
+        font-size: 1.1em;
     }
 }
+
 
 
 
