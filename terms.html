@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shri Varasiddhi Vinayaka Temple -- Terms</title>
+    <link rel="icon" href="logo3.avif">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to left, #301838, #b81736);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: flex-start; /* Align items to the top */
+            justify-content: center; /* Center horizontally */
+            min-height: 100vh; /* Ensure minimum height is 100% of the viewport */
+            color: #333;
+            overflow-y: auto; /* Allow vertical scrolling */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 20px; /* Add padding for the container */
+        }
+
+        .box {
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 400px;
+            text-align: left;
+            box-sizing: border-box;
+            border-radius: 10px;
+            margin-top: 50px; /* Adjusted margin */
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #007bff;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        input {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s, box-shadow 0.3s ease;
+            background-color: #fff;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(to left, #301838, #b81736);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #bd0000;
+        }
+
+        .greeting {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+            color: #007bff;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .box {
+                padding: 15px;
+            }
+
+            .greeting h4 {
+                font-size: 1.2em;
+            }
+
+            h2 {
+                font-size: 1.3em;
+            }
+
+            input {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .box {
+                margin-top: 30px;
+            }
+
+            .greeting h4 {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="box">
+            <div class="greeting"><h4>Terms and Conditions</h4></div>
+
+            <p>1. <strong>Usage:</strong> By accessing or using our website, you agree to follow all guidelines and policies outlined here.</p>
+            <p>2. <strong>Puja Requests:</strong> All requests for pujas are subject to temple approval. Please ensure accurate information when submitting forms.</p>
+            <p>3. <strong>Donations:</strong> Donations made through the website are final and non-refundable.</p>
+            <p>4. <strong>Content:</strong> All content, including images and information, is owned by the temple. Unauthorized use is prohibited.</p>
+            <p>5. <strong>Website Access:</strong> The website link is intended for use by members of the Arvind Oasis community only and should not be shared outside the community.</p>
+            <p>6. <strong>Changes:</strong> We reserve the right to update these terms at any time. Continued use of the website means you accept the updated terms.</p>
+
+            <button onclick="idxto()">I Agree</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shri Varasiddhi Vinayaka Temple</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mcqueen/1.0.0/mcqueen.min.css" />
+</head>
+
+<body onload="checksignin()">
+    <div class="hamburger2">
+        <img src="logo3.avif" class="hlogo">&nbsp;&nbsp;<p>Shri Varasiddhi Vinayaka Temple</p>
+    </div>
+    <div class="scrolling-container">
+        <div class="scrolling-text">Welcome to Shri Varasiddhi Vinayaka Temple. Experience the divine grace and peace at our sacred temple.</div>
+    </div>
+
+    <header class="main-header">
+        <div class="container">
+            <nav>
+                <ul class="nav-links">
+                    <li class="li"><a href="main.html" onclick="closeMenu()">👉 HOME</a></li>
+                    <li class="li"><a href="events.html" onclick="closeMenu()">👉 PUJA EVENTS</a></li>
+                    <li class="li"><a href="gallery.html" onclick="closeMenu()">👉 GALLERY</a></li>
+                    <li class="li"><a href="annoncements.html" onclick="closeMenu()">👉 ANNOUNCEMENTS</a></li>
+                    <li class="li"><a href="committee.html" onclick="closeMenu()">👉 COMMITTEE</a></li>
+                    <li class="li"><a href="history.html" onclick="closeMenu()">👉 RECIPT HISTORY</a></li>
+                    <li class="li"><a href="payment.html" onclick="closeMenu()">👉 PAYMENT PORTAL</a></li>
+                    <li class="li"><a href="pass.html" onclick="closeMenu()">👉 ADMIN</a></li>
+                    <li><button class="exit-button">ⓘ Logout</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="video-container">
+            <img src="back3.jpg" class="background-video">
+            <img src="back3.jpg" class="blurred-video">
+        </div>
+        <div class="container">
+            <button class="cta-button" onclick="toggleMenu()">☰ Main Menu</button>&nbsp;&nbsp;&nbsp;
+            <button class="lang-toggle" onclick="toggleLanguage()">ಕನ್ನಡ / English</button>
+        </div>
+    </section>
+    
+
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2>About the Temple</h2>
+            <p class="about-section-text">Welcome to Shri Varasiddhi Vinayaka Temple, a sacred haven devoted to Lord Ganesha, the embodiment of wisdom, prosperity, and success. Nestled within the vibrant community of Arvind Oasis, our temple stands as a beacon of spirituality and tradition.
+                <br> The temple's journey began with the auspicious Bhoomi Puja on <strong>November 23rd, 2023</strong>, followed by 48 days of the sacred Mandala Puja, culminating in the grand Pranaprathistapana on <strong>March 14th, 2024</strong>. These transformative events, witnessed by the devoted residents of Arvind Oasis, mark the temple as a place of deep faith and community spirit. 
+                <br>Join us as we celebrate the rich traditions of daily rituals, special puja events, and spiritual gatherings that bring us closer to divine blessings and unity.</p>
+        </div>
+    </section>
+
+   
+
+
+
+    <!-- Footer Section -->
+    <footer class="main-footer">
+        <p>&copy; 2024 Shri Varasiddhi Vinayaka Arvind Oasis Temple Committee | All Rights Reserved</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Function to show modal
+        function showModal() {
+            document.getElementById("imageModal").style.display = "flex";
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>

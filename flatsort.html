@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flat Number Lookup</title>
+    <link rel="icon" href="logo3.png">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        h1 {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        #homeButton {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+            width: fit-content;
+        }
+
+        #homeButton:hover {
+            background-color: #45a049;
+        }
+
+        #searchPanel {
+            background-color: white;
+            padding: 20px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            max-width: 800px;
+        }
+
+        select, input, button {
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+
+        .result {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .result p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        #summary {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px;
+                padding: 10px 0;
+            }
+
+            #searchPanel {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            select, input, button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .result {
+                padding: 10px;
+            }
+
+            .result p {
+                font-size: 13px;
+            }
+
+            #summary {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body onload="admin()">
+
+    <h1>Flat Number Search</h1>
+    <div style="display: flex;">
+        <button id="homeButton" onclick="window.location.href='adminhome.html'">Home</button>
+        <button id="homeButton" onclick="window.location.href='event.html'">Event Info</button>
+    </div>
+
+    <div id="searchPanel">
+        <input type="text" id="flatNumber" placeholder="Enter Flat Number">
+        <select id="filter">
+            <option value="all">All</option>
+            <option value="residents">Residents</option>
+            <option value="registrations">Registrations</option>
+        </select>
+        <button id="searchBtn">Search</button>
+        <button id="exportBtn">Export to Excel</button>
+        <img src="ld.gif" style="height: 50px; width: 50px; border-radius: 75px; margin-bottom: 10px; visibility: hidden;" id="loading">
+    </div>
+
+    <div id="summary"></div>
+
+    <div id="results"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js';
+        import { getFirestore, doc, collection, getDoc, getDocs } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKtqm0KzMmX4cCqT3PhGI2aFcF3LSXnEk",
+            authDomain: "ao-temple.firebaseapp.com",
+            projectId: "ao-temple",
+            storageBucket: "ao-temple.appspot.com",
+            messagingSenderId: "426167530682",
+            appId: "1:426167530682:web:848a4cb0ceee2ce05cfe83"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const loading = document.getElementById('loading');
+        let searchResults = [];
+
+        document.getElementById('searchBtn').addEventListener('click', async () => {
+            let flatNumberInput = document.getElementById('flatNumber').value.trim(); // Clean the input
+            const filter = document.getElementById('filter').value;
+            const resultsDiv = document.getElementById('results');
+            const summaryDiv = document.getElementById('summary');
+            resultsDiv.innerHTML = ''; // Clear previous results
+            summaryDiv.innerHTML = ''; // Clear previous summary
+            searchResults = []; // Clear previous search results
+
+            if (!flatNumberInput) {
+                alert('Please enter a flat number');
+                return;
+            }
+
+            // Normalizing the flat number input to handle different formatting
+            flatNumberInput = flatNumberInput.replace(/<\/?i>/g, '').toUpperCase(); // Remove italic tags if present
+
+            let residentCount = 0;
+            let registrationCount = 0;
+
+            try {
+                // Fetch the document for the flat number directly
+                const flatDocRef = doc(db, 'users', flatNumberInput);
+                const flatDocSnapshot = await getDoc(flatDocRef);
+
+                if (!flatDocSnapshot.exists()) {
+                    resultsDiv.innerHTML = `<p>No data found for Flat Number: ${flatNumberInput}.</p>`;
+                    return;
+                }
+
+                resultsDiv.innerHTML = `<h2>Details for Flat: ${flatNumberInput}</h2>`;
+
+                // Fetch and display residents
+                if (filter === 'all' || filter === 'residents') {
+                    const residentsRef = collection(db, 'users', flatNumberInput, 'residents');
+                    const residentsSnapshot = await getDocs(residentsRef);
+                    let residentsData = [];
+
+                    residentsSnapshot.forEach((doc) => {
+                        residentsData.push(doc.data());
+                    });
+
+                    // Sort residents by 'time' (descending order)
+                    residentsData.sort((a, b) => new Date(b.signInTime) - new Date(a.signInTime));
+
+                    residentsData.forEach((data) => {
+                        const residentHTML = `
+                            <div class="result">
+                                <p><strong>Resident Name:</strong> ${data.name}</p>
+                                <p><strong>Email:</strong> ${data.email}</p>
+                                <p><strong>Created:</strong> ${data.signInTime}</p>
+                            </div>
+                        `;
+                        resultsDiv.insertAdjacentHTML('beforeend', residentHTML);
+                        searchResults.push({
+                            'Resident Name': data.name,
+                            'Email': data.email,
+                            'Login Time': data.signInTime
+                        });
+                        residentCount++;
+                    });
+                }
+
+                // Fetch and display registrations
+                if (filter === 'all' || filter === 'registrations') {
+                    const registrationsRef = collection(db, 'users', flatNumberInput, 'registrations');
+                    const registrationsSnapshot = await getDocs(registrationsRef);
+                    let registrationsData = [];
+
+                    registrationsSnapshot.forEach((doc) => {
+                        registrationsData.push(doc.data());
+                    });
+
+                    registrationsData.forEach((data) => {
+                        const registrationHTML = `
+                            <div class="result">
+                                <p><strong>Registration Name:</strong> ${data.name}</p>
+                                <p><strong>Event:</strong> ${data.event}</p>
+                                <p><strong>Time:</strong> ${data.time}</p>
+                            </div>
+                        `;
+                        resultsDiv.insertAdjacentHTML('beforeend', registrationHTML);
+                        searchResults.push({
+                            'Registration Name': data.name,
+                            'Event': data.event,
+                            'Registration Time': data.time
+                        });
+                        registrationCount++;
+                    });
+                }
+
+                // Show summary
+                summaryDiv.innerHTML = `<strong>Total Residents:</strong> ${residentCount} <strong>Total Registrations:</strong> ${registrationCount}`;
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                resultsDiv.innerHTML = '<p>Error fetching data. Please try again.</p>';
+            }
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            loading.style.visibility = 'visible';
+            if (searchResults.length === 0) {
+                alert('No results to export.');
+                loading.style.visibility = 'hidden';
+                return;
+            }
+            const worksheet = XLSX.utils.json_to_sheet(searchResults);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Results');
+            XLSX.writeFile(workbook, 'search_results.xlsx');
+            loading.style.visibility = 'visible';
+        });
+    </script>
+</body>
+<script src="admin.js"></script>
+</html>

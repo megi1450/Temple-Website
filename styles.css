@@ -1,0 +1,896 @@
+/* General Styles */
+* {
+    box-sizing: border-box; /* Ensure padding does not affect width */
+}
+
+body {
+    font-family: 'Georgia', serif;
+    background-color: #f9f3e3;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures footer stays at the bottom */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+h1, h2 {
+    font-family: 'Times New Roman', serif;
+    color: #8b0000;
+    text-align: center;
+}
+
+.temple-name {
+    margin: 0;
+    font-size: 2.5em;
+    color: #fff;
+}
+/* Language Toggle Button */
+.lang-toggle {
+    background-color: #fff;
+    color: #8b0000;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8em;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-top: 200px;
+}
+
+.lang-toggle:hover {
+    background-color: #e0e0e0;
+}
+
+/* Hamburger Menu */
+.hamburger2 {
+    font-size: 23px;
+    color: #fff;
+    cursor: pointer;
+    background-color: #8b0000;
+    padding-left: 15px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    width: 100%; /* Set to full width */
+    text-align: center; /* Center the text within the hamburger */
+    margin: 0; /* Remove any default margin */
+    height: 70px;
+    display: flex;
+}
+.hamburger{
+    font-size: 23px;
+    color: #fff;
+    cursor: pointer;
+    background-color: #b8860b;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    width: 250px;
+    text-align: center; /* Center the text within the hamburger */
+}
+.hlogo{
+    width: 40px; height: 40px; border-radius: 75px; margin-top: 20px;
+}
+@media (max-width: 480px) {
+    .hamburger2 p{
+        font-size: 19px;
+    }
+}
+@media (max-height: 860px) {
+    .cta-button{
+        margin-bottom: 100px;
+    }
+}
+
+@media (max-height: 667px) {
+    .cta-button{
+        margin-bottom: 150px;
+    }
+}
+
+
+
+
+/* Animation for opening */
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Full screen height */
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px;
+    overflow: hidden; /* Prevents scrolling */
+}
+
+/* Main Video (Centered) */
+.background-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensures full video is visible */
+    transform: translate(-50%, -50%);
+    z-index: -2;
+}
+
+/* Blurred Video (Fills empty spaces) */
+.blurred-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Expands video to fill screen */
+    filter: blur(10px) brightness(60%); /* Reduced blur effect */
+    z-index: -3;
+}
+
+
+
+.hero-section h2 {
+    font-size: 3.5em; /* Slightly larger font size for visibility */
+    margin-bottom: 20px; /* Space below the title */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.hero-section p {
+    font-size: 1.8em; /* Slightly larger paragraph size for readability */
+    margin-bottom: 30px; /* Space below the paragraph */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Styles for Hero Section */
+@media (max-width: 768px) {
+    .hero-section {
+        height: auto; /* Allow height to adjust based on content */
+        padding: 40px; /* Increased padding for smaller screens */
+    }
+
+    .hero-section h2 {
+        font-size: 2.8em; /* Larger text size for smaller screens */
+        margin-bottom: 15px; /* Space below the title */
+    }
+
+    .hero-section p {
+        font-size: 1.5em; /* Larger paragraph size for readability */
+        margin-bottom: 20px; /* Space below the paragraph */
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-section {
+        padding: 30px; /* Moderate padding for very small screens */
+    }
+
+    .hero-section h2 {
+        font-size: 2.5px; /* Slightly smaller hero text size */
+    }
+
+    .hero-section p {
+        font-size: 1.3em; /* Slightly smaller paragraph text size */
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        padding: 20px; /* Less padding for very small screens */
+        height: 55vh;
+    }
+
+    .hero-section h2 {
+        font-size: 2.2em; /* Reduce hero text size further */
+    }
+
+    .hero-section p {
+        font-size: 1.1em; /* Slightly reduced paragraph text size */
+    }
+}
+
+/* About Section */
+.about-section {
+    padding: 10px 0;
+    background-color: #fff8dc;
+    text-align: center;
+}
+
+.about-section h2 {
+    margin-bottom: 20px;
+}
+
+.about-section p {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.2em;
+}
+
+/* Footer */
+.main-footer {
+    background-color: #8b0000;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* Announcement Section */
+.announcement-section {
+    padding: 40px 20px; /* Adds padding for spacing */
+    background-color: #fff8dc;
+    flex: 1; /* Allows this section to take available space */
+}
+
+.announcement-section h2 {
+    margin-bottom: 20px;
+}
+
+.announcement-date {
+    font-size: 0.9em; /* Smaller font for date */
+    color: #555; /* Lighter color for date */
+    text-align: center;
+    margin-bottom: 20px; /* Spacing below the date */
+}
+
+.announcement-content {
+    max-width: 800px; /* Limits the width of the content */
+    margin: 0 auto; /* Centers the content */
+    font-size: 1.2em; /* Increases font size for readability */
+    line-height: 1.6; /* Increases line height for better spacing */
+}
+
+/* Committee Section Styles */
+.committee-section {
+    padding: 50px 0;
+    background-color: #fff8dc;
+    text-align: center;
+}
+
+.committee-section h2 {
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    color: #8b0000;
+}
+
+.committee-members {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Space between members */
+}
+
+.member {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    width: 250px; /* Fixed width for consistency */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.member p {
+    margin: 5px 0;
+}
+
+.member a {
+    color: #8b0000;
+    text-decoration: none;
+}
+
+.member a:hover {
+    text-decoration: underline;
+}
+
+/* Events Section Styles */
+.events-section {   
+    background-color: #fff8dc;
+    text-align: center;
+}
+
+.events-section h2 {
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    color: #8b0000;
+}
+
+.events-table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    width: 80%; /* Adjust width for better visibility */
+}
+
+.events-table th, .events-table td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+}
+
+.events-table th {
+    background-color: #8b0000;
+    color: white;
+    font-size: 1.2em;
+}
+
+.events-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.events-table tr:hover {
+    background-color: #ddd; /* Highlight on hover */
+}
+
+/* Gallery Section Styles */
+.gallery-section {
+    padding: 50px 20px;
+    background-color: #fff8dc;
+    text-align: center;
+}
+
+.occasion-title {
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: #8b0000;
+}
+
+.occasion-date {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    padding: 0 10px;
+    max-width: 100%;
+    justify-content: center;
+}
+
+.gallery-cardB,
+.gallery-card {
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid #dddddd00;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.gallery-cardB:hover,
+.gallery-card:hover {
+    transform: translateY(-5px);
+}
+
+.gallery-cardB img,
+.gallery-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Make iframes responsive */
+iframe {
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16/9; /* Ensures proper scaling */
+    display: block;
+    margin: auto;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .occasion-title {
+        font-size: 1.8em;
+    }
+
+    .occasion-date {
+        font-size: 1em;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+
+    .card-info h3 {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .occasion-title {
+        font-size: 1.5em;
+    }
+
+    .occasion-date {
+        font-size: 0.9em;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-cardB,
+    .gallery-card {
+        margin: 10px 0;
+    }
+
+    .card-info h3 {
+        font-size: 0.9em;
+    }
+}
+
+/* Styles for Larger Screens (Above 1024px) */
+@media (min-width: 1024px) {
+    .gallery-section {
+        padding: 80px 40px;
+    }
+
+    .occasion-title {
+        font-size: 2.5em;
+        margin-bottom: 30px;
+    }
+
+    .occasion-date {
+        font-size: 1.5em;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .gallery-cardB,
+    .gallery-card {
+        border: 1px solid #ddd;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .gallery-cardB img,
+    .gallery-card img {
+        height: 200px;
+    }
+
+    .card-info {
+        padding: 15px;
+    }
+
+    .card-info h3 {
+        font-size: 1.5em;
+    }
+
+    .card-info p {
+        font-size: 1.1em;
+    }
+}
+
+
+
+
+/* Toggle Buttons */
+.toggle-buttons {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.toggle-buttons button {
+    background-color: #8b0000;
+    color: white;
+    padding: 10px 20px;
+    margin: -100px 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+}
+
+.toggle-buttons button:hover {
+    background-color: #b22222;
+}
+
+@media (max-width: 600px) {
+    .toggle-buttons {
+        text-align: center;
+        margin-bottom: 5px;
+    }
+    
+    .toggle-buttons button {
+        background-color: #8b0000;
+        color: white;
+        padding: 10px 20px;
+        margin: 10px; /* Add margin to create space around each button */
+        border: none;
+        cursor: pointer;
+        font-size: 1.1em;
+        border-radius: 25px;
+        transition: background-color 0.3s;
+    }
+    
+}
+/* Bank Details Section */
+.bank-details-section {
+    padding: 40px 20px;
+    background-color: #fff8dc;
+    text-align: center;
+}
+
+.bank-details-section h2 {
+    font-size: 2em;
+    color: #8b0000;
+    margin-bottom: 20px;
+}
+
+.bank-details-section ul {
+    list-style: none;
+    padding: 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.bank-details-section ul li {
+    margin-bottom: 10px;
+}
+
+/* Payment Section Styles */
+.payment-section {
+    padding: 40px 20px; /* Padding for top and bottom */
+    background-color: #fff8dc; /* Light background color for the section */
+    text-align: center; /* Center align text */
+}
+
+.payment-section h2 {
+    margin-bottom: 5px; /* Spacing below the heading */
+    font-size: 2.5em; /* Heading font size */
+    color: #8b0000; /* Heading color */
+}
+
+.payment-section p {
+    max-width: 600px; /* Limit the width for better readability */
+    margin: 0 auto 5px auto; /* Centering the paragraphs */
+    font-size: 1.2em; /* Font size for paragraphs */
+    line-height: 1.5; /* Line height for better spacing */
+    color: #333; /* Text color */
+}
+
+.donate-button {
+    background-color: blue; /* Button background color */
+    color: white; /* Button text color */
+    padding: 15px 25px; /* Padding for the button */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1.2em; /* Font size for button */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.donate-button:hover {
+    background-color: #b22222; /* Darker shade on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .payment-section h2 {
+        font-size: 2em; /* Smaller font size for smaller screens */
+    }
+
+    .payment-section p {
+        font-size: 1em; /* Smaller font size for smaller screens */
+    }
+
+    .donate-button {
+        padding: 10px 20px; /* Smaller padding for smaller screens */
+        font-size: 1em; /* Smaller font size for smaller screens */
+    }
+}
+
+/* Payment Section Styles */
+.payment-section {
+    padding: 40px 20px; /* Padding for top and bottom */
+    background-color: #fff8dc; /* Light background color for the section */
+    text-align: center; /* Center align text */
+}
+
+.payment-section h2 {
+    margin-bottom: 5px; /* Spacing below the heading */
+    font-size: 2.5em; /* Heading font size */
+    color: #8b0000; /* Heading color */
+}
+
+.payment-section p {
+    max-width: 600px; /* Limit the width for better readability */
+    margin: 0 auto 5px auto; /* Centering the paragraphs */
+    font-size: 1.2em; /* Font size for paragraphs */
+    line-height: 1.5; /* Line height for better spacing */
+    color: #333; /* Text color */
+}
+
+.donate-button {
+    background-color: blue; /* Button background color */
+    color: white; /* Button text color */
+    padding: 15px 25px; /* Padding for the button */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1.2em; /* Font size for button */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.donate-button:hover {
+    background-color: #b22222; /* Darker shade on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .payment-section h2 {
+        font-size: 2em; /* Smaller font size for smaller screens */
+    }
+
+    .payment-section p {
+        font-size: 1em; /* Smaller font size for smaller screens */
+    }
+
+    .donate-button {
+        padding: 10px 20px; /* Smaller padding for smaller screens */
+        font-size: 1em; /* Smaller font size for smaller screens */
+    }
+}
+
+/* Existing styles for header, buttons, and nav links */
+.main-header {
+    background-color: #b8860b;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button {
+    background-color: #fff;
+    color: #8b0000;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8em;
+    border-radius: 5px;
+    margin-top: 400px;
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.3s linear;
+}
+
+.cta-button.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.cta-button:hover {
+    background-color: #444444; /* Darker on hover */
+}
+
+
+/* Styles for the navigation links */
+.nav-links {
+    list-style: none;
+    padding: 0; 
+    margin: 0; 
+    display: flex; 
+    flex-direction: column; 
+    background-color: #ffffff; 
+    position: fixed; 
+    top: 0; 
+    left: -250px; 
+    height: fit-content; 
+    padding-bottom: 10px;
+    width: 200px; 
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2); 
+    transition: left 0.3s ease; 
+    z-index: 1000; 
+    border-bottom-right-radius: 15px;
+    
+}
+
+.nav-links.show {
+    left: 0; 
+}
+
+.li {
+    margin: 10px 0; 
+    text-align: left; 
+    padding-left: 10px;
+    font-size: 15px; 
+}
+
+.nav-links a {
+    color: #8b0000; 
+    text-decoration: none; 
+    display: block; 
+    width: 100%; 
+    text-transform: uppercase; 
+}
+
+.nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.2); 
+}
+
+/* Exit button styles */
+.exit-button {
+    background-color: #8b0000; 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 5px 15px; 
+    cursor: pointer; 
+    font-size: 18px; 
+    width: 75%; 
+    border-radius: 25px;
+}
+
+.exit-button:hover {
+    background-color: #cc0000; 
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .nav-links {
+        left: -250px; 
+    }
+
+    .nav-links.show {
+        left: 0; 
+    }
+}
+
+
+
+
+/* Styles for animated effects */
+.dec{
+    position: absolute;
+    top: 15%; 
+    pointer-events: none; /* Allow clicks to pass through */
+    right: 25%;
+    height: 300
+    px; /* Adjust height */
+}
+
+@media (max-width: 601px) {
+    .dec{
+        position: absolute;
+        top: 15%; 
+        pointer-events: none; /* Allow clicks to pass through */
+        right: 15%; /* Align to right */
+        height: 300px; /* Adjust height */
+    }
+}
+
+/* Container for the scrolling text */
+.scrolling-container {
+    width: 100%;        /* Full width */
+    height: 30px;       /* Height of the thin line */
+    overflow: hidden;   /* Hide overflowing text */
+    background-color: #f0f0f0;
+    position: relative;
+    border: 1px solid #ccc; /* Optional border */
+}
+
+/* Styling for the moving text */
+.scrolling-text {
+    position: absolute;
+    white-space: nowrap;
+    animation: scroll-left 10s linear infinite;
+    font-size: 1.2em;
+    padding-left: 100%; /* Start from the right */
+    color: #8b0000;
+}
+
+/* Keyframes for the scrolling animation */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: fadeIn 0.6s ease-in-out forwards; /* Slower fade-in effect */
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: hidden;
+}
+
+/* Image inside the modal */
+.modal-content img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Close button positioned outside the modal */
+.close-btn {
+    position: fixed; /* Outside of modal */
+    top: 5%; /* 5% from the top */
+    left: 50%; /* Centered horizontally */
+    transform: translateX(-50%); /* Center the button */
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    background-color: #333; /* Standard dark background */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    padding: 0;
+    border: none;
+}
+
+.close-btn:hover {
+    background-color: #555; /* Lighter background on hover */
+}
+
+/* Animation for fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive Design for mobile screens */
+@media (max-width: 600px) {
+    .modal-content {
+        max-width: 95%;
+        max-height: 95%;
+    }
+
+    .modal-content img {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Adjust close button for mobile */
+    .close-btn {
+        width: 35px; /* Slightly smaller button for mobile */
+        height: 35px; /* Slightly smaller button for mobile */
+        font-size: 24px; /* Slightly smaller icon */
+        line-height: 35px; /* Center the smaller icon */
+        top: 3%; /* 3% from the top for better alignment on mobile */
+    }
+}

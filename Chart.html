@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
+        // Import Firebase and Firestore modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKtqm0KzMmX4cCqT3PhGI2aFcF3LSXnEk",
+            authDomain: "ao-temple.firebaseapp.com",
+            projectId: "ao-temple",
+            storageBucket: "ao-temple.firebasestorage.app",
+            messagingSenderId: "426167530682",
+            appId: "1:426167530682:web:848a4cb0ceee2ce05cfe83",
+            measurementId: "G-PXNQPS2DY6"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Fetch registration data and aggregate flat numbers based on selected event
+        async function fetchData(eventFilter = '') {
+            let queryRef = collection(db, "submissions");
+
+            // If an event is selected, filter by event
+            if (eventFilter) {
+                queryRef = query(queryRef, where("event", "==", eventFilter));
+            }
+
+            const snapshot = await getDocs(queryRef);
+            const flatCount = {};
+
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const flatNumber = data.flatNumber;
+                if (flatNumber) {
+                    flatCount[flatNumber] = (flatCount[flatNumber] || 0) + 1;
+                }
+            });
+
+            return flatCount;
+        }
+
+        // Initialize chart and fetch data
+        async function initChart() {
+            const flatCount = await fetchData();
+
+            // Prepare chart data for per flat view
+            const flatNumbers = Object.keys(flatCount);
+            const registrationCounts = Object.values(flatCount);
+
+            // Chart Data for Per Flat View
+            const flatData = {
+                labels: flatNumbers,
+                datasets: [{
+                    label: 'Total Registrations',
+                    data: registrationCounts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            // Chart Data for Per Block View (aggregation by blocks)
+            const blockCount = {
+                "A Block": 0,
+                "B Block": 0,
+                "C Block": 0,
+                "D Block": 0,
+                "E Block": 0,
+                "F Block": 0
+            };
+
+            // Aggregate contributions per block
+            flatNumbers.forEach(flat => {
+                const block = flat.charAt(0); // First letter indicates block
+                if (blockCount[`${block} Block`] !== undefined) {
+                    blockCount[`${block} Block`] += flatCount[flat];
+                }
+            });
+
+            const blockData = {
+                labels: Object.keys(blockCount),
+                datasets: [{
+                    label: 'Total Registrations (Per Block)',
+                    data: Object.values(blockCount),
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            // Chart Config
+            const config = {
+                type: 'bar',
+                data: flatData, // Start with flat data
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: true, text: 'Flat Contributions' }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                autoSkip: false, // Ensure all flat labels are shown
+                                maxRotation: 90, // Rotate labels vertically
+                                minRotation: 90,
+                                font: {
+                                    size: 10 // Reduce font size for better visibility
+                                }
+                            }
+                        },
+                        y: { beginAtZero: true }
+                    }
+                }
+            };
+
+            // Initialize Chart
+            const contributionsChart = new Chart(
+                document.getElementById('contributionsChart'),
+                config
+            );
+
+
+            // Update chart based on dropdown selection
+            window.updateChart = async function() {
+                const filterType = document.getElementById('filterType').value;
+                const eventFilter = document.getElementById('event').value;
+
+                const flatCount = await fetchData(eventFilter);
+
+                // Prepare chart data for per flat view
+                const flatNumbers = Object.keys(flatCount);
+                const registrationCounts = Object.values(flatCount);
+
+                const flatData = {
+                    labels: flatNumbers,
+                    datasets: [{
+                        label: 'Total Registrations',
+                        data: registrationCounts,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                };
+
+                const blockCount = {
+                    "A Block": 0,
+                    "B Block": 0,
+                    "C Block": 0,
+                    "D Block": 0,
+                    "E Block": 0,
+                    "F Block": 0
+                };
+
+                // Aggregate contributions per block
+                flatNumbers.forEach(flat => {
+                    const block = flat.charAt(0); // First letter indicates block
+                    if (blockCount[`${block} Block`] !== undefined) {
+                        blockCount[`${block} Block`] += flatCount[flat];
+                    }
+                });
+
+                const blockData = {
+                    labels: Object.keys(blockCount),
+                    datasets: [{
+                        label: 'Total Registrations (Per Block)',
+                        data: Object.values(blockCount),
+                        backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }]
+                };
+
+                // Update chart
+                if (filterType === 'flat') {
+                    contributionsChart.data = flatData;
+                    contributionsChart.options.plugins.title.text = 'Flat Contributions';
+                } else {
+                    contributionsChart.data = blockData;
+                    contributionsChart.options.plugins.title.text = 'Block Contributions';
+                }
+                contributionsChart.update();
+            }
+
+            // Trigger the initial chart update
+            updateChart();
+        }
+
+        // Initial chart load
+        initChart();
+    </script>
+    <style>
+        /* Make the chart responsive */
+        #contributionsChart {
+            width: 100%;
+            height: 400px; /* Maintain a large chart size */
+        }
+    </style>
+</head>
+<body onload="admin()">
+    <h2>Flat and Block Contributions for Temple Activities</h2>
+    
+    <!-- Dropdown Menus for Event and View Selection -->
+    <div class="dropdown-container">
+        <div>
+            <label for="event">Select Event:</label>
+            <select id="event" onchange="updateChart()">
+                <option value="" selected>None of the above</option>
+                <option value="PANCHAMRIT ABHISHEKA">PANCHAMRIT ABHISHEKA</option>
+                <option value="NIRANTARA ABHISHEKA">NIRANTARA ABHISHEKA</option>
+                <option value="SANKASHTAHARA CHATURTHI">SANKASHTAHARA CHATURTHI</option>
+                <option value="SHRI SATYANARAYANA PUJA GROUP CEREMONY">SHRI SATYANARAYANA PUJA GROUP CEREMONY</option>
+                <option value="VEHICLE PUJA (TWO-WHEELER)">VEHICLE PUJA (TWO-WHEELER)</option>
+                <option value="VEHICLE PUJA (FOUR-WHEELER)">VEHICLE PUJA (FOUR-WHEELER)</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="filterType">Select View:</label>
+            <select id="filterType" onchange="updateChart()">
+                <option value="flat">Per Flat</option>
+                <option value="block">Per Block</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Chart Container -->
+    <div class="chart-container">
+        <canvas id="contributionsChart" width="800" height="400"></canvas>
+    </div>
+
+    <!-- Legend (Optional) -->
+    <div class="legend">
+        <div><span style="background-color: rgba(75, 192, 192, 0.6)"></span>Total Registrations</div>
+        <div><span style="background-color: rgba(153, 102, 255, 0.6)"></span>Registrations Per Block</div>
+    </div>
+</body>
+<script src="admin.js"></script>
+</html>

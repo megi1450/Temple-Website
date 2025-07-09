@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="icon" href="logo.png">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+        input, select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body onload="checksignin()">
+    <form id="registrationForm">
+        <h2>Registration Form</h2>
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="date" id="date" placeholder="Select Date" required>
+        <input type="text" id="mobileNumber" placeholder="Mobile Number" required>
+        
+        <select id="event" required>
+            <option value="" disabled selected>Event...</option>
+            <option value="PANCHAMRIT ABHISHEKA">PANCHAMRIT ABHISHEKA</option>
+            <option value="NIRANTARA ABHISHEKA">NIRANTARA ABHISHEKA</option>
+            <option value="SANKASHTAHARA CHATURTHI">SANKASHTAHARA CHATURTHI</option>
+            <option value="SHRI SATYANARAYANA PUJA GROUP CEREMONY">SHRI SATYANARAYANA PUJA GROUP CEREMONY</option>
+            <option value="VEHICLE PUJA (TWO-WHEELER)">VEHICLE PUJA (TWO-WHEELER)</option>
+            <option value="VEHICLE PUJA (FOUR-WHEELER)">VEHICLE PUJA (FOUR-WHEELER)</option>
+        </select>
+
+        <select id="occasion" required>
+            <option value="" disabled selected>Occasion...</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Anniversary">Anniversary</option>
+            <option value="Others">Others</option>
+        </select>
+        
+        <input type="text" id="otherOccasion" placeholder="If Others, please specify" style="display:none;">
+        <button type="submit">Submit</button>
+    </form>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js';
+        import { getFirestore, setDoc, doc, serverTimestamp, getDoc, getDocs, collection } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKtqm0KzMmX4cCqT3PhGI2aFcF3LSXnEk",
+            authDomain: "ao-temple.firebaseapp.com",
+            projectId: "ao-temple",
+            storageBucket: "ao-temple.appspot.com",
+            messagingSenderId: "426167530682",
+            appId: "1:426167530682:web:848a4cb0ceee2ce05cfe83"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const flatNumber = localStorage.getItem('flatNumber');
+    
+        // Flag to track if the registration exists
+        let registrationExists = false;
+    
+        // Show/hide "Other Occasion" input when "Others" is selected
+        document.getElementById('occasion').addEventListener('change', function() {
+            const occasion = this.value;
+            const otherOccasionInput = document.getElementById('otherOccasion');
+            if (occasion === 'Others') {
+                otherOccasionInput.style.display = 'block'; // Show input when "Others" is selected
+            } else {
+                otherOccasionInput.style.display = 'none'; // Hide input for other occasions
+            }
+        });
+    
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+    
+            // Reset registration exists flag
+            registrationExists = false;
+        
+            const name = document.getElementById('name').value;
+            const date = document.getElementById('date').value;
+            const mobileNumber = document.getElementById('mobileNumber').value;
+            const event = document.getElementById('event').value;
+            const occasion = document.getElementById('occasion').value;
+            const otherOccasion = document.getElementById('otherOccasion').value || "";
+    
+            // Create a unique registration ID
+            const registrationId = `${flatNumber}_${name}_${event}_${occasion || otherOccasion}`; 
+    
+            // Check if the registration already exists in both collections
+            const submissionsRef = collection(db, 'submissions');
+            const registrationsRef = collection(db, `users/${flatNumber}/registrations`);
+    
+            const submissionsQuery = await getDocs(submissionsRef);
+            const registrationsQuery = await getDocs(registrationsRef);
+            
+            // Check for existing submission
+            submissionsQuery.forEach(doc => {
+                if (doc.id === registrationId) {
+                    registrationExists = true;
+                }
+            });
+    
+            // Check for existing registration
+            registrationsQuery.forEach(doc => {
+                if (doc.id === registrationId) {
+                    registrationExists = true;
+                }
+            });
+    
+            // If registration exists, alert the user
+            if (registrationExists) {
+    alert("This registration already exists.");
+    window.location.href = "history.html"; // Redirect to history.html
+    return; // Stop further processing
+}
+
+    
+            // Proceed with fetching the last receipt number and saving the registration
+            const receiptDoc = doc(db, 'receiptNumbers', 'counter');
+            const receiptSnap = await getDoc(receiptDoc);
+            let receiptNumber = '0001'; // Default to the first receipt number as a string
+        
+            if (receiptSnap.exists()) {
+                // Get the last receipt number as a string
+                receiptNumber = receiptSnap.data().lastReceiptNumber; 
+                let newNumber = parseInt(receiptNumber) + 1; // Increment the last receipt number
+                receiptNumber = String(newNumber).padStart(4, '0'); // Format it to always be 4 digits
+            }
+    
+            // Save the registration data
+            const registrationData = {
+                name,
+                date,
+                flatNumber,
+                mobileNumber,
+                event,
+                occasion: occasion === "Others" ? otherOccasion : occasion,
+                registrationId,
+                createdAt: serverTimestamp(),
+                receiptNumber // Store the formatted receipt number
+            };
+    
+            // Save data to the submissions collection
+            await setDoc(doc(db, 'submissions', registrationId), registrationData);
+        
+            // Save data under the user's flat number in the "registrations" sub-collection
+            await setDoc(doc(db, 'users', flatNumber, 'registrations', registrationId), registrationData);
+        
+            // Save the updated receipt number back to Firestore as a string
+            await setDoc(receiptDoc, { lastReceiptNumber: receiptNumber });
+        
+            // Redirect to the receipt page with the necessary details
+            window.location.href = `receipt.html?receiptNumber=${receiptNumber}&name=${name}&date=${date}&flatNumber=${flatNumber}&mobileNumber=${mobileNumber}&event=${event}&occasion=${occasion === "Others" ? otherOccasion : occasion}&registrationId=${registrationId}`;
+        });
+    </script>
+    
+    
+</body>
+<script src="script.js"></script>
+</html>

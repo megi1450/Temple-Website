@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Payment Portal - Shri Varasiddhi Vinayaka Temple</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="logo.png">
+</head>
+
+    <body onload="checksignin()">
+
+        <div class="hamburger2">
+            <img src="logo3.avif" class="hlogo">&nbsp;&nbsp;<p>Shri Varasiddhi Vinayaka Temple</p>
+        </div>
+        <div style="width: 100%; align-items: center; justify-items: center;">
+            <div class="hamburger" onclick="home()">🏠︎ Go to Home</div>
+            </div>
+
+    <!-- Payment Section -->
+    <section class="payment-section">
+        <div class="container">
+            <h2>Bank Account Details for Temple Donations</h2>
+            <p><strong>Bank Name:</strong> Kotak Mahindra Bank</p>
+            <p><strong>Account Name:</strong> ARVIND OASIS APARTMENTS OWNERS ASSOCIATION TEMPLE</p>
+            <p><strong>Account Number:</strong> 8749290362</p>
+            <p><strong>IFSC Code:</strong> KKBK0008062</p>
+            <p><strong>UPI ID:</strong> 0798062a0170493.bqr@kotak</p>
+            <p><strong>Branch:</strong> 247, 7TH Cross, 5TH Main, APMC Yard, Yeshwantpur, Bangalore, 560022</p>
+            <br>
+            <button onclick="redirectToUPI()" class="donate-button">Donate via UPI</button>
+            <br><br>
+            <p><strong>Note:</strong> Please ensure that the transaction is made to this account. Kindly share the transaction details with the temple committee.</p>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2024 Shri Varasiddhi Vinayaka Arvind Oasis Temple Committee | All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script> <!-- External JavaScript file -->
+</body>
+</html>

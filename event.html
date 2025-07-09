@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="icon" href="logo3.png">
+    <style>
+        /* Base styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        h1 {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        #homeButton {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+            display: block; /* Center the button */
+            margin: 20px auto; /* Center button and add margin */
+            text-align: center;
+            width: fit-content; /* Button width fits the text */
+        }
+
+        #homeButton:hover {
+            background-color: #45a049;
+        }
+
+        #searchPanel {
+            background-color: white;
+            padding: 20px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            max-width: 800px;
+        }
+
+        select, input, button {
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+
+        .result {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .result p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px;
+                padding: 10px 0;
+            }
+
+            #searchPanel {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            select, input, button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .result {
+                padding: 10px;
+            }
+
+            .result p {
+                font-size: 13px;
+            }
+        }
+
+        /* Tablet responsiveness */
+        @media (min-width: 601px) and (max-width: 1024px) {
+            h1 {
+                font-size: 22px;
+            }
+
+            select, input, button {
+                font-size: 15px;
+            }
+
+            #searchPanel {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body onload="admin()">
+
+    <h1>AO TEMPLE ADMIN</h1>
+    <div style="display: flex;">
+        <button id="homeButton" onclick="window.location.href='adminhome.html'">Home</button>
+        &nbsp;&nbsp;
+        <button id="homeButton" onclick="window.location.href='flatsort.html'">Flat Info</button>
+    </div>
+    <div id="searchPanel">
+        <select id="event">
+            <option value="" selected>None of the above</option>
+            <option value="PANCHAMRIT ABHISHEKA">PANCHAMRIT ABHISHEKA</option>
+            <option value="NIRANTARA ABHISHEKA">NIRANTARA ABHISHEKA</option>
+            <option value="SANKASHTAHARA CHATURTHI">SANKASHTAHARA CHATURTHI</option>
+            <option value="SHRI SATYANARAYANA PUJA GROUP CEREMONY">SHRI SATYANARAYANA PUJA GROUP CEREMONY</option>
+            <option value="VEHICLE PUJA (TWO-WHEELER)">VEHICLE PUJA (TWO-WHEELER)</option>
+            <option value="VEHICLE PUJA (FOUR-WHEELER)">VEHICLE PUJA (FOUR-WHEELER)</option>
+        </select>
+
+        <select id="occasion">
+            <option value="" selected>None of the above</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Anniversary">Anniversary</option>
+            <option value="Others">Others</option>
+        </select>
+
+        <!-- Hidden text input for specifying "Other" occasion -->
+        <input type="text" id="otherOccasionInput" placeholder="Specify other occasion" style="display:none;">
+        <input type="text" id="receiptNumber" placeholder="Receipt Number">
+
+        <!-- Month filter -->
+        <select id="monthFilter">
+            <option value="" selected>All Months</option>
+            <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="03">March</option>
+            <option value="04">April</option>
+            <option value="05">May</option>
+            <option value="06">June</option>
+            <option value="07">July</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+
+        <button id="searchBtn">Search</button>
+        <button id="exportBtn">Export to Excel</button>
+        <img src="ld.gif" style="height: 50px; width: 50px; border-radius: 75px; margin-bottom: 10px; visibility: hidden;" id="loading">
+    </div>
+
+    <div id="results"></div>
+
+    <!-- Importing xlsx library for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js';
+        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKtqm0KzMmX4cCqT3PhGI2aFcF3LSXnEk",
+            authDomain: "ao-temple.firebaseapp.com",
+            projectId: "ao-temple",
+            storageBucket: "ao-temple.appspot.com",
+            messagingSenderId: "426167530682",
+            appId: "1:426167530682:web:848a4cb0ceee2ce05cfe83"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const occasionSelect = document.getElementById('occasion');
+        const otherOccasionInput = document.getElementById('otherOccasionInput');
+        let searchResults = [];
+
+        occasionSelect.addEventListener('change', () => {
+            if (occasionSelect.value === 'Others') {
+                otherOccasionInput.style.display = 'block';
+            } else {
+                otherOccasionInput.style.display = 'none';
+            }
+        });
+
+        document.getElementById('searchBtn').addEventListener('click', async () => {
+    const event = document.getElementById('event').value;
+    let occasion = document.getElementById('occasion').value;
+    const otherOccasion = document.getElementById('otherOccasionInput').value;
+    const receiptNumber = document.getElementById('receiptNumber').value;
+    const month = document.getElementById('monthFilter').value;
+    const loading = document.getElementById('loading');
+
+    if (occasion === 'Others') {
+        occasion = otherOccasion;
+    }
+
+    try {
+        const querySnapshot = await getDocs(collection(db, 'submissions'));
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = ''; // Clear previous results
+        searchResults = []; // Reset search results array
+        let registrationCount = 0; // Initialize registration count
+
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+
+            // Extract month and day from the registration date
+            const regDate = new Date(data.date);
+            const regMonth = regDate.getMonth(); // Get 0-indexed month
+            const regDay = regDate.getDate();
+
+            // Convert month number to month name
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            const monthName = monthNames[regMonth];
+
+            // Append ordinal suffix to the day
+            const ordinalSuffix = (day) => {
+                if (day > 3 && day < 21) return "th"; // Covers 4-20
+                switch (day % 10) {
+                    case 1: return "st";
+                    case 2: return "nd";
+                    case 3: return "rd";
+                    default: return "th";
+                }
+            };
+
+            const formattedDate = `${monthName} ${regDay}${ordinalSuffix(regDay)}`; // Example: August 4th
+
+            // Check if conditions are met
+            const isEventMatch = event === '' || data.event === event;
+            const isOccasionMatch = occasion === '' || data.occasion === occasion;
+            const isReceiptNumberMatch = receiptNumber === '' || data.receiptNumber === receiptNumber;
+            const isMonthMatch = month === '' || String(regMonth + 1).padStart(2, '0') === month;
+
+            // Only count registrations that match the filters
+            if (isEventMatch && isOccasionMatch && isReceiptNumberMatch && isMonthMatch) {
+                searchResults.push({
+                    ...data, // Store all the data
+                    regDate, // Store the parsed date object for sorting
+                    formattedDate // Store the formatted date
+                });
+                registrationCount++;
+            }
+        });
+
+        // Sort the results by date (latest first)
+        searchResults.sort((a, b) => b.regDate - a.regDate);
+
+        // Display sorted results
+        searchResults.forEach((data) => {
+            const resultDiv = document.createElement('div');
+            resultDiv.classList.add('result');
+            resultDiv.innerHTML = `
+                <p><strong>Receipt Number:</strong> ${data.receiptNumber}</p>
+                <p><strong>Name:</strong> ${data.name}</p>
+                <p><strong>Flat Number:</strong> ${data.flatNumber}</p>
+                <p><strong>Event:</strong> ${data.event}</p>
+                <p><strong>Occasion:</strong> ${data.occasion}</p>
+                <p><strong>Date:</strong> ${data.formattedDate}</p> <!-- Display as "Month Dayth" -->
+            `;
+            resultsDiv.appendChild(resultDiv);
+        });
+
+        // Display total registrations at the top of results
+        const totalCountDiv = document.createElement('div');
+        totalCountDiv.innerHTML = `<p>Total Registrations: ${registrationCount}</p>`;
+        totalCountDiv.style.fontWeight = 'bold';
+        totalCountDiv.style.marginBottom = '10px';
+        resultsDiv.insertBefore(totalCountDiv, resultsDiv.firstChild);
+
+    } catch (error) {
+        console.error('Error fetching documents: ', error);
+    }
+});
+
+
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+    loading.style.visibility = 'visible';
+    if (searchResults.length === 0) {
+        alert('No results to export.');
+        loading.style.visibility = 'hidden';
+        return;
+    }
+
+    // Convert each registration date to a readable string (if needed)
+    const formattedResults = searchResults.map(result => ({
+        ...result,
+        regDate: result.regDate.toLocaleDateString() // Format the date object as a string
+    }));
+
+    // Convert the results into a sheet
+    const worksheet = XLSX.utils.json_to_sheet(formattedResults);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Results');
+
+    // Write the workbook to a file
+    XLSX.writeFile(workbook, 'search_results.xlsx');
+    loading.style.visibility = 'hidden';
+});
+
+    </script>
+    <script src="admin.js"></script>
+</body>
+</html>

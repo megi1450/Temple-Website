@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shri Varasiddhi Vinayaka Temple -- Login</title>
+    <link rel="icon" href="logo.png">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to left, #301838, #b81736);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            color: #333;
+            overflow-y: auto;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 20px;
+            animation: popIn 0.5s ease;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #007bff;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .greeting {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+            color: #007bff;
+            text-align: center;
+            width: 100%;
+        }
+
+        input {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input:focus {
+            border-color: #007bff;
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(to left, #301838, #b81736);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #bd0000;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            outline: none;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 5px 0;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+
+        /* Loading animation styling */
+        #loading {
+            height: 50px;
+            width: 50px;
+            border-radius: 75px;
+            margin-bottom: 10px;
+            visibility: hidden;
+            /* Hidden by default */
+        }
+
+        @media (max-width: 600px) {
+            h2 {
+                font-size: 1.3em;
+            }
+
+            input {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+
+            .greeting {
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 400px) {
+            h2 {
+                font-size: 1.1em;
+            }
+
+            input,
+            button {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="greeting">
+            <h4>Welcome Back, </h4>
+        </div>
+        <img src="ld.gif" id="loading">
+        <form id="loginForm">
+            <input type="text" id="flatNumber" placeholder="Flat Number (e.g., A001, F1904)" required maxlength="5"
+                pattern="^([A-F])?(00[1-4]|0?[1-9]0[1-4]|1[0-9]0[1-4])$"
+                title="Valid flat: 001–004 or 101–1904 (with optional A–F block prefix)">
+            <input type="text" id="residentName" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <p><strong>Please enter your flat number, name, and email carefully.</strong></p>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js';
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKtqm0KzMmX4cCqT3PhGI2aFcF3LSXnEk",
+            authDomain: "ao-temple.firebaseapp.com",
+            projectId: "ao-temple",
+            storageBucket: "ao-temple.appspot.com",
+            messagingSenderId: "426167530682",
+            appId: "1:426167530682:web:848a4cb0ceee2ce05cfe83"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pre-fill the form with data from local storage
+            const flatNumber = localStorage.getItem('flatNumber');
+            const residentName = localStorage.getItem('residentName');
+            const email = localStorage.getItem('email');
+
+            if (flatNumber && residentName && email) {
+                document.getElementById('flatNumber').value = flatNumber;
+                document.getElementById('residentName').value = residentName;
+                document.getElementById('email').value = email;
+
+                // Automatically submit the form
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const flatNumber = document.getElementById('flatNumber').value;
+            const residentName = document.getElementById('residentName').value;
+            const email = document.getElementById('email').value;
+
+            // Validate the flat number
+const flatNumberPattern = /^([A-F])?(00[1-4]|0?[1-9]0[1-4]|1[0-9]0[1-4])$/;
+if (!flatNumberPattern.test(flatNumber)) {
+    alert("Please enter a valid flat number (e.g., 001, A002, F101, B1904).");
+    return;
+}
+
+            const loading = document.getElementById('loading');
+            loading.style.visibility = 'visible'; // Show loading animation
+
+            try {
+                // Get the reference to the flat document
+                const flatRef = doc(db, 'users', flatNumber);
+                const flatSnap = await getDoc(flatRef);
+
+                if (flatSnap.exists()) {
+                    // Create a unique document ID using resident name and email
+                    const residentDocId = `${residentName.replace(/\s+/g, '_')}_${email}`;
+
+                    // Check if the resident document exists
+                    const residentRef = doc(flatRef, 'residents', residentDocId);
+                    const residentSnap = await getDoc(residentRef);
+
+                    if (residentSnap.exists()) {
+                        localStorage.setItem('input', 'true'); // Mark as signed in
+                        localStorage.setItem('flatNumber', flatNumber); // Store flat number
+                        localStorage.setItem('residentName', residentName); // Store resident name
+                        localStorage.setItem('email', email); // Store email
+                        window.location.href = 'main.html'; // Redirect to main page
+                    } else {
+                        alert('No account found with this name and email for the given flat number.'); // Show error message
+                    }
+                } else {
+                    alert('No flat found with this number.'); // Show error message
+                }
+            } catch (error) {
+                console.error("Error logging in: ", error);
+                alert("An error occurred while logging in. Please try again.");
+            } finally {
+                loading.style.visibility = 'hidden'; // Hide loading animation
+            }
+        });
+    </script>
+</body>
+
+</html>

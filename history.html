@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="logo.png">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header, footer {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            display: block; /* Allows scrolling */
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            th, td {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            button {
+                width: 100%;
+                padding: 10px;
+            }
+
+            /* Table layout adjustments for mobile */
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap; /* Prevent wrapping */
+            }
+
+            tr {
+                display: flex;
+                flex-direction: column; /* Stack rows vertically */
+                margin-bottom: 10px;
+                background: #fff; /* Card background */
+                border-radius: 8px; /* Rounded corners */
+                padding: 15px; /* Inner spacing */
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+                position: relative; /* For positioning the expand button */
+            }
+
+            th {
+                display: none; /* Hide header on small screens */
+            }
+
+            td {
+                display: flex;
+                justify-content: space-between; /* Space between labels and values */
+                padding: 5px; /* Adjust padding */
+                border: none; /* Remove borders */
+                font-size: 16px; /* Adjust font size */
+                margin-bottom: 5px; /* Space between each item */
+            }
+
+            .label {
+                font-weight: bold; /* Highlight labels */
+                color: #333; /* Label color */
+            }
+
+            .value {
+                text-align: right; /* Align values to the right */
+                color: #555; /* Value color */
+            }
+
+            .toggle-button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 20px; /* Increase size for visibility */
+                color: #5cb85c; /* Match with the theme color */
+                margin-top: 10px; /* Space above button */
+            }
+
+            .expandable-content {
+                display: none; /* Hidden by default */
+                padding-top: 10px; /* Spacing above the expandable content */
+                border-top: 1px solid #ccc; /* Divider for the expandable content */
+                margin-top: 10px; /* Space above expandable content */
+            }
+
+            .expanded {
+                display: block; /* Show content when expanded */
+            }
+        }
+/* Responsive Styles for Larger Screens */
+@media (min-width: 601px) {
+    table {
+        display: table; /* Standard table layout */
+        overflow-x: visible;
+        white-space: normal;
+    }
+
+    tr {
+        display: table-row;
+        margin-bottom: 0;
+        background: none;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+    }
+
+    td, th {
+        display: table-cell;
+        padding: 10px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    /* Hide the toggle button and expandable content for larger screens */
+    .toggle-button, .expandable-content {
+        display: none;
+    }
+}
+
+    </style>
+</head>
+<body onload="checksignin()">
+
+    <div class="hamburger2">
+        <img src="logo3.avif" class="hlogo">&nbsp;&nbsp;<p>Shri Varasiddhi Vinayaka Temple</p>
+    </div>
+    <div style="width: 100%; align-items: center; justify-items: center;">
+        <div style="width: 100%; align-items: center; justify-items: center;">
+            <div class="hamburger" onclick="home()">🏠︎ Go to Home</div>
+            </div>
+    </div>
+
+    <main class="container">
+        <h2>Registration History</h2>
+        <table id="registrationTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Mobile Number</th>
+                    <th>Event</th>
+                    <th>Occasion</th>
+                    <th>Receipt No.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic rows will be inserted here -->
+            </tbody>
+        </table>
+    </main>
+
+    <footer class="main-footer2">
+        <div class="container" style="width: 100%; align-items: center; justify-content: center;">
+            <p>&copy; 2024 Shri Varasiddhi Vinayaka Arvind Oasis Temple Committee | All Rights Reserved</p>
+            <hr>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js';
+        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKtqm0KzMmX4cCqT3PhGI2aFcF3LSXnEk",
+            authDomain: "ao-temple.firebaseapp.com",
+            projectId: "ao-temple",
+            storageBucket: "ao-temple.appspot.com",
+            messagingSenderId: "426167530682",
+            appId: "1:426167530682:web:848a4cb0ceee2ce05cfe83"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const flatNumber = localStorage.getItem('flatNumber'); // Retrieve flat number from local storage
+
+        // Fetch and display registration history
+        // Fetch and display registration history
+async function fetchRegistrationHistory() {
+    const registrationsRef = collection(db, 'users', flatNumber, 'registrations');
+    const snapshot = await getDocs(registrationsRef);
+    const tableBody = document.querySelector('#registrationTable tbody');
+    tableBody.innerHTML = ''; // Clear existing rows
+
+    const isLargeScreen = window.innerWidth >= 601; // Check if screen is larger than or equal to 601px
+
+    snapshot.forEach(doc => {
+        const data = doc.data();
+        const row = document.createElement('tr');
+
+        if (isLargeScreen) {
+            // For larger screens, display all fields directly in the table
+            row.innerHTML = `
+                <td>${data.name}</td>
+                <td>${data.date}</td>
+                <td>${data.mobileNumber}</td>
+                <td>${data.event}</td>
+                <td>${data.occasion}</td>
+                <td>${data.receiptNumber}</td>
+            `;
+        } else {
+            // For mobile, display only event and receipt number with expandable content
+            const toggleButton = document.createElement('button');
+            toggleButton.classList.add('toggle-button');
+            toggleButton.innerHTML = '➕'; // Plus icon
+
+            const expandableContent = document.createElement('div');
+            expandableContent.classList.add('expandable-content');
+            expandableContent.innerHTML = `
+                <div><span class="label">Name:</span> <span class="value">${data.name}</span></div>
+                <div><span class="label">Date:</span> <span class="value">${data.date}</span></div>
+                <div><span class="label">Mobile Number:</span> <span class="value">${data.mobileNumber}</span></div>
+                <div><span class="label">Event:</span> <span class="value">${data.event}</span></div>
+                <div><span class="label">Occasion:</span> <span class="value">${data.occasion}</span></div>
+                <div><span class="label">Receipt No:</span> <span class="value">${data.receiptNumber}</span></div>
+            `;
+
+            row.innerHTML = `
+                <td>${data.event}</td>
+                <td>${data.receiptNumber}</td>
+            `;
+            row.appendChild(toggleButton);
+            row.appendChild(expandableContent);
+
+            toggleButton.onclick = function (event) {
+                expandableContent.classList.toggle('expanded');
+                toggleButton.innerHTML = expandableContent.classList.contains('expanded') ? '➖' : '➕';
+                event.stopPropagation();
+            };
+
+            row.onclick = function () {
+                expandableContent.classList.remove('expanded');
+                toggleButton.innerHTML = '➕';
+            };
+        }
+
+        tableBody.appendChild(row);
+    });
+}
+
+// Fetch the registration history when the page loads
+fetchRegistrationHistory();
+
+// Ensure table updates when window is resized (optional)
+window.addEventListener('resize', fetchRegistrationHistory);
+
+
+        // Handle clicks outside of expandable rows to collapse them
+        document.addEventListener('click', function () {
+            const allExpandableContents = document.querySelectorAll('.expandable-content');
+            const allToggleButtons = document.querySelectorAll('.toggle-button');
+
+            allExpandableContents.forEach(content => {
+                content.classList.remove('expanded'); // Collapse all
+            });
+
+            allToggleButtons.forEach(button => {
+                button.innerHTML = '➕'; // Reset all buttons to plus
+            });
+        });
+    </script>
+
+</body>
+<script src="script.js"></script>
+</html>

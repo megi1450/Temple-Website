@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="icon" href="logo3.png">
+    <style>
+        /* Base styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        h1 {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 20px;
+            color: #555;
+        }
+
+        #buttonPanel {
+            display: flex;
+            flex-direction: column; /* Change to column for better mobile layout */
+            align-items: center; /* Center items */
+            margin: 40px 0;
+            gap: 20px; /* Space between cards */
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 90%; /* Use a percentage for responsive width */
+            max-width: 300px; /* Limit maximum width for larger screens */
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 20px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, background-color 0.3s;
+            margin-top: 15px;
+            width: 100%; /* Make the button full-width */
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            background-color: #45a049;
+        }
+
+        /* 3D effect */
+        .button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px;
+                padding: 10px 0;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            .button {
+                padding: 10px; /* Adjust padding for smaller screens */
+                font-size: 14px; /* Slightly smaller font size */
+            }
+
+            .card {
+                padding: 15px; /* Adjust padding for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body onload="admin()">
+
+    <h1>AO TEMPLE ADMIN</h1>
+    <h2>Features Available:</h2>
+    <div id="buttonPanel">
+        <div class="card">
+            <h3>Flat Info</h3>
+            <p>Access information of all entered flats, view user registrations, and export data to Excel.</p>
+            <button class="button" onclick="window.location.href='flatsort.html'">Go to Flat Info</button>
+        </div>
+        <div class="card">
+            <h3>Event Info</h3>
+            <p>Sort and manage events efficiently, with options to export data to Excel.</p>
+            <button class="button" onclick="window.location.href='event.html'">Go to Event Info</button>
+        </div>
+        <div class="card">
+            <h3>Contributions Info - Graph</h3>
+            <p>Sort and manage events efficiently, with options to export data to Excel.</p>
+            <button class="button" onclick="window.location.href='Chart.html'">Go to Event Info</button>
+        </div>
+    </div>
+
+</body>
+<script src="admin.js"></script>
+</html>
