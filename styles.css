@@ -894,3 +894,19 @@ iframe {
         top: 3%; /* 3% from the top for better alignment on mobile */
     }
 }
+
+.member-photo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+@media (max-width: 600px) {
+    .member-photo {
+        width: 70px;
+        height: 70px;
+    }
+}
