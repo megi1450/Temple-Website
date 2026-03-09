@@ -73,6 +73,8 @@ h2 {
     /* Remove any default margin */
     height: 70px;
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .hamburger {
@@ -835,9 +837,7 @@ h2 {
 }
 
 .page-menu {
-    width: 100%;
-    text-align: right;
-    padding: 8px 16px 0 16px;
+    display: none;
 }
 
 .page-menu .cta-button {
@@ -847,9 +847,7 @@ h2 {
 
 @media (max-width: 600px) {
     .page-menu {
-        position: static;
-        text-align: center;
-        padding: 8px 8px 0 8px;
+        display: none;
     }
 
     .page-menu .cta-button {

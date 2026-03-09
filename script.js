@@ -120,10 +120,12 @@ function redirectToUPI() {
 
 function toggleMenu() {
     const navLinks = document.querySelector('.nav-links');
-    const ctaButton = document.querySelector('.cta-button');
+    const ctaButton = document.querySelector('.hero-section .cta-button');
 
     navLinks.classList.toggle('show');
-    ctaButton.classList.toggle('hidden'); // Toggle visibility by adding/removing 'hidden' class
+    if (ctaButton) {
+        ctaButton.classList.toggle('hidden'); // Toggle visibility only for hero button on main page
+    }
 
     if (navLinks.classList.contains('show')) {
         setTimeout(() => {
@@ -134,19 +136,24 @@ function toggleMenu() {
 
 function closeMenu() {
     const navLinks = document.querySelector('.nav-links');
-    const ctaButton = document.querySelector('.cta-button');
+    const ctaButton = document.querySelector('.hero-section .cta-button');
 
     navLinks.classList.remove('show');
-    ctaButton.classList.remove('hidden'); // Ensure the button is visible again
+    if (ctaButton) {
+        ctaButton.classList.remove('hidden'); // Ensure the hero button is visible again
+    }
 }
 
 // Collapse the menu when clicking outside of the header and cta button
 document.addEventListener('click', function (event) {
     const header = document.querySelector('.main-header');
     const navLinks = document.querySelector('.nav-links');
-    const ctaButton = document.querySelector('.cta-button');
+    const ctaButton = document.querySelector('.hero-section .cta-button');
 
-    if (!header.contains(event.target) && !ctaButton.contains(event.target) && navLinks.classList.contains('show')) {
+    const clickOutsideHeader = header && !header.contains(event.target);
+    const clickOutsideHeroButton = !ctaButton || !ctaButton.contains(event.target);
+
+    if (clickOutsideHeader && clickOutsideHeroButton && navLinks && navLinks.classList.contains('show')) {
         closeMenu(); // Collapse the menu
     }
 });
