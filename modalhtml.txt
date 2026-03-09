@@ -1,0 +1,45 @@
+ HTML: {
+ 
+ <!-- Modal Popup -->
+<div id="imageModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal(event)">✖</span>
+        <img src="popup.jpeg" alt="Popup Image">
+    </div>
+</div>
+
+ }
+
+ js: {
+
+/// Function to show modal
+function showModal() {
+    const modal = document.getElementById("imageModal");
+    modal.style.display = "flex";
+    modal.style.opacity = "0"; // Initial opacity to zero for fade-in
+    setTimeout(() => {
+        modal.style.opacity = "1"; // Fade in after showing modal
+    }, 50); // Delay to apply opacity transition
+}
+
+// Function to close modal
+function closeModal(event) {
+    // If the click is on the modal background or the close button, close the modal
+    const modal = document.getElementById("imageModal");
+    
+    // Check if the clicked area is outside the modal content (the background)
+    if (event.target === modal || event.target === document.querySelector(".close-btn")) {
+        modal.style.display = "none";
+    }
+}
+
+// Show modal when page loads
+window.onload = function() {
+    showModal();
+};
+
+// Add event listener to close modal when clicking outside the modal content
+document.getElementById("imageModal").addEventListener('click', closeModal);
+
+
+ }
