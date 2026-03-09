@@ -73,8 +73,6 @@ h2 {
     /* Remove any default margin */
     height: 70px;
     display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .hamburger {
@@ -826,34 +824,11 @@ h2 {
     cursor: pointer;
     font-size: 0.8em;
     border-radius: 60px;
+    margin-top: 400px;
     visibility: visible;
     opacity: 1;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 12px 45px rgb(255, 25, 0);
     transition: all 0.3s ease;
-}
-
-.hero-section .cta-button {
-    margin-top: 400px;
-}
-
-.page-menu {
-    display: none;
-}
-
-.page-menu .cta-button {
-    margin-top: 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-@media (max-width: 600px) {
-    .page-menu {
-        display: none;
-    }
-
-    .page-menu .cta-button {
-        width: auto;
-        max-width: none;
-    }
 }
 
 .cta-button.hidden {
@@ -866,24 +841,33 @@ h2 {
     /* Darker on hover */
     color: white;
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 18px 60px rgba(255, 65, 43, 1);
 }
 
 
 /* Styles for the navigation links */
 .nav-links {
     list-style: none;
-    padding: 8px 0;
+    padding: 0;
     margin: 0;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 4px 12px;
+    flex-direction: column;
     background-color: #ffffff;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    height: fit-content;
+    padding-bottom: 10px;
+    width: 200px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    border-bottom-right-radius: 15px;
+
 }
 
 .nav-links.show {
-    /* No special behavior needed now that nav is always visible */
+    left: 0;
 }
 
 .li {
