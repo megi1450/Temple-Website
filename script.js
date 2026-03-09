@@ -70,15 +70,41 @@ function link5() {
 }
 
 
-function showOccasion(occasion) {
-    // Hide both occasion galleries initially
+function showOccasion(occasion, button) {
+    // Hide all occasion galleries
     document.getElementById('occasion-1').style.display = 'none';
     document.getElementById('occasion-2').style.display = 'none';
     document.getElementById('occasion-3').style.display = 'none';
     document.getElementById('occasion-4').style.display = 'none';
 
     // Show the selected occasion gallery
-    document.getElementById(`occasion-${occasion}`).style.display = 'block';
+    const targetSection = document.getElementById(`occasion-${occasion}`);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+        // Smooth scroll to the top of the selected section
+        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Highlight the active occasion button (desktop)
+    document.querySelectorAll('.toggle-buttons .occasion-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    if (button) {
+        button.classList.add('active');
+    }
+
+    // Keep mobile dropdown in sync
+    const select = document.getElementById('occasion-select');
+    if (select && select.value !== String(occasion)) {
+        select.value = String(occasion);
+    }
+}
+
+function handleOccasionSelect(value) {
+    const occasion = parseInt(value, 10);
+    if (!isNaN(occasion)) {
+        showOccasion(occasion, null);
+    }
 }
 
 function redirectToUPI() {

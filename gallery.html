@@ -23,10 +23,19 @@
     <section id="gallery" class="gallery-section">
         <div class="container">
             <div class="toggle-buttons">
-                <button onclick="showOccasion(1)" class="occasion-button">BHOOMI PUJA</button>
-                <button onclick="showOccasion(2)" class="occasion-button">PRANA PRATHISHTAPANA</button>
-                <button onclick="showOccasion(3)" class="occasion-button">NIRANTARA ABHISHEKA</button>
-                <button onclick="showOccasion(4)" class="occasion-button">TEMPLE'S FIRST ANNUAL DAY</button>
+                <button onclick="showOccasion(1, this)" class="occasion-button">BHOOMI PUJA</button>
+                <button onclick="showOccasion(2, this)" class="occasion-button">PRANA PRATHISHTAPANA</button>
+                <button onclick="showOccasion(3, this)" class="occasion-button active">NIRANTARA ABHISHEKA</button>
+                <button onclick="showOccasion(4, this)" class="occasion-button">TEMPLE'S FIRST ANNUAL DAY</button>
+            </div>
+            <div class="mobile-occasion-selector">
+                <label for="occasion-select">Select occasion</label>
+                <select id="occasion-select" onchange="handleOccasionSelect(this.value)">
+                    <option value="3" selected>NIRANTARA ABHISHEKA</option>
+                    <option value="1">BHOOMI PUJA</option>
+                    <option value="2">PRANA PRATHISHTAPANA</option>
+                    <option value="4">TEMPLE'S FIRST ANNUAL DAY</option>
+                </select>
             </div>
         </div>
     </section>
@@ -93,8 +102,8 @@
         </div>
     </section>
 
-    <!-- Occasion 3 Gallery -->
-    <section id="occasion-3" class="gallery-section" style="display:none;">
+    <!-- Occasion 3 Gallery (default visible) -->
+    <section id="occasion-3" class="gallery-section" style="display:block;">
         <div class="container">
             <h3 class="occasion-title">NIRANTARA ABHISHEKA</h3>
             <div class="gallery-grid">
@@ -1069,75 +1078,53 @@
                     </a>
                 </div>
                 
-                <div style="position: relative; display: inline-block;">
-                    <iframe src="https://www.dropbox.com/scl/fi/kxzu99k09pg6alxiprrx6/VID-20250308-WA0046.mp4?rlkey=5w4epn7enjbka2ip6bcg0wmdv&raw=1" 
-                        frameborder="0" width="560" height="315" allowfullscreen></iframe>
-                
-                    <!-- Transparent click layer -->
-                    <a href="https://www.dropbox.com/scl/fi/kxzu99k09pg6alxiprrx6/VID-20250308-WA0046.mp4?rlkey=5w4epn7enjbka2ip6bcg0wmdv&raw=1" 
-                       target="_blank"></a>
-                </div>
-<br>
-<br>
-                <div style="position: relative; display: inline-block;">
-                    <iframe src="https://www.dropbox.com/scl/fi/1kc24lekz38fsb9wkxq5e/VID-20250309-WA0017.mp4?rlkey=vck7krglx0tq0eysje6tj9d46&raw=1" 
-                        frameborder="0" width="560" height="315" allowfullscreen></iframe>
-                
-                    <!-- Transparent click layer -->
-                    <a href="https://www.dropbox.com/scl/fi/1kc24lekz38fsb9wkxq5e/VID-20250309-WA0017.mp4?rlkey=vck7krglx0tq0eysje6tj9d46&raw=1" 
-                       target="_blank"></a>
-                </div>
-<br>
-<br>
-
-                <div style="position: relative; display: inline-block;">
-                    <iframe src="https://www.dropbox.com/scl/fi/5egj65g2q0s0h3y4m68pp/VID-20250309-WA0087.mp4?rlkey=blv2d4xr4u8vmaq3sjbpvhtue&raw=1" 
-                        frameborder="0" width="560" height="315" allowfullscreen></iframe>
-                
-                    <!-- Transparent click layer -->
-                    <a href="https://www.dropbox.com/scl/fi/5egj65g2q0s0h3y4m68pp/VID-20250309-WA0087.mp4?rlkey=blv2d4xr4u8vmaq3sjbpvhtue&raw=1" 
-                       target="_blank"></a>
-                </div>
-<br>
-<br>
-                <div style="position: relative; display: inline-block;">
-                    <iframe src="https://www.dropbox.com/scl/fi/trwa6n6bq5ezt7lckrom8/VID-20250309-WA0048.mp4?rlkey=npekh4t6cusx9n340kvyxt141&raw=1" 
-                        frameborder="0" width="560" height="315" allowfullscreen></iframe>
-                
-                    <!-- Transparent click layer -->
-                    <a href="https://www.dropbox.com/scl/fi/trwa6n6bq5ezt7lckrom8/VID-20250309-WA0048.mp4?rlkey=npekh4t6cusx9n340kvyxt141&raw=1" 
-                       target="_blank"></a>
+                <div class="video-card">
+                    <video controls preload="metadata">
+                        <source src="https://www.dropbox.com/scl/fi/kxzu99k09pg6alxiprrx6/VID-20250308-WA0046.mp4?rlkey=5w4epn7enjbka2ip6bcg0wmdv&raw=1" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
 
-<br>
-<br>
-                <div style="position: relative; display: inline-block;">
-                    <iframe src="https://www.dropbox.com/scl/fi/bwu740rl4t3t42ei1hv95/VID-20250321-WA0007.mp4?rlkey=obcovm4unyoemxap14kiz7nx6&raw=1" 
-                        frameborder="0" width="560" height="315" allowfullscreen></iframe>
-                
-                    <!-- Transparent click layer -->
-                    <a href="https://www.dropbox.com/scl/fi/bwu740rl4t3t42ei1hv95/VID-20250321-WA0007.mp4?rlkey=obcovm4unyoemxap14kiz7nx6&raw=1" 
-                       target="_blank"></a>
+                <div class="video-card">
+                    <video controls preload="metadata">
+                        <source src="https://www.dropbox.com/scl/fi/1kc24lekz38fsb9wkxq5e/VID-20250309-WA0017.mp4?rlkey=vck7krglx0tq0eysje6tj9d46&raw=1" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
-<br>
-<br>
-                <div style="position: relative; display: inline-block;">
-                    <iframe src="https://dl.dropboxusercontent.com/scl/fi/8c436ypg3jkdhemn421tn/VID-20250322-WA0014.mp4?rlkey=kgpuwa1nwghrfhdf1tl57rrls&st=kdyodite" 
-                        frameborder="0" width="560" height="315" allowfullscreen></iframe>
-                
-                    <!-- Transparent click layer -->
-                    <a href="https://dl.dropboxusercontent.com/scl/fi/8c436ypg3jkdhemn421tn/VID-20250322-WA0014.mp4?rlkey=kgpuwa1nwghrfhdf1tl57rrls&st=kdyodite" 
-                       target="_blank"></a>
+
+                <div class="video-card">
+                    <video controls preload="metadata">
+                        <source src="https://www.dropbox.com/scl/fi/5egj65g2q0s0h3y4m68pp/VID-20250309-WA0087.mp4?rlkey=blv2d4xr4u8vmaq3sjbpvhtue&raw=1" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
-<br>
-<br>
-                <div style="position: relative; display: inline-block;">
-                    <iframe src="https://dl.dropboxusercontent.com/scl/fi/ngnjuo3jodrfdfxm3gokf/VID-20250322-WA0015.mp4?rlkey=p0q1delcxu4rg8o8b5sm46vgk&st=civnb4aa" 
-                        frameborder="0" width="560" height="315" allowfullscreen></iframe>
-                
-                    <!-- Transparent click layer -->
-                    <a href="https://dl.dropboxusercontent.com/scl/fi/ngnjuo3jodrfdfxm3gokf/VID-20250322-WA0015.mp4?rlkey=p0q1delcxu4rg8o8b5sm46vgk&st=civnb4aa" 
-                       target="_blank"></a>
+
+                <div class="video-card">
+                    <video controls preload="metadata">
+                        <source src="https://www.dropbox.com/scl/fi/trwa6n6bq5ezt7lckrom8/VID-20250309-WA0048.mp4?rlkey=npekh4t6cusx9n340kvyxt141&raw=1" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <div class="video-card">
+                    <video controls preload="metadata">
+                        <source src="https://www.dropbox.com/scl/fi/bwu740rl4t3t42ei1hv95/VID-20250321-WA0007.mp4?rlkey=obcovm4unyoemxap14kiz7nx6&raw=1" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <div class="video-card">
+                    <video controls preload="metadata">
+                        <source src="https://dl.dropboxusercontent.com/scl/fi/8c436ypg3jkdhemn421tn/VID-20250322-WA0014.mp4?rlkey=kgpuwa1nwghrfhdf1tl57rrls&st=kdyodite" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <div class="video-card">
+                    <video controls preload="metadata">
+                        <source src="https://dl.dropboxusercontent.com/scl/fi/ngnjuo3jodrfdfxm3gokf/VID-20250322-WA0015.mp4?rlkey=p0q1delcxu4rg8o8b5sm46vgk&st=civnb4aa" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
     </section>
 
