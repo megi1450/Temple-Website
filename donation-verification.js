@@ -30,6 +30,15 @@ function statusOf(record) {
   return text(record.verificationStatus || 'Pending manual verification');
 }
 function isVerified(record) { return statusOf(record).toLowerCase() === 'verified'; }
+function getDonationAdminKey() {
+  // Prefer a freshly typed key to any older key saved in this tab.
+  const field = $('sheetAdminKey');
+  const entered = field && field.value ? field.value.trim() : '';
+  const saved = sessionStorage.getItem('donationSheetAdminKey') || '';
+  const key = entered || saved;
+  if (key) sessionStorage.setItem('donationSheetAdminKey', key);
+  return key;
+}
 function timestampText(value) {
   if (!value) return '';
   const date = value && typeof value.toDate === 'function' ? value.toDate() : new Date(value);
@@ -53,7 +62,7 @@ function plainRecord(record) {
 async function requestSheetAction(action, record) {
   const endpoint = window.DONATION_SHEETS_WEB_APP_URL;
   const requiresAdminKey = ['verify', 'delete', 'sync'].includes(action);
-  const adminKey = sessionStorage.getItem('donationSheetAdminKey') || '';
+  const adminKey = getDonationAdminKey();
   if (requiresAdminKey && !adminKey) return { sent: false, reason: 'Enter the Donation Sheet Admin Key first.' };
   if (!endpoint || !endpoint.startsWith('https://script.google.com/macros/s/') || !endpoint.endsWith('/exec')) {
     return { sent: false, reason: 'Google Sheets web app URL is not configured.' };
@@ -76,13 +85,13 @@ async function requestSheetAction(action, record) {
 async function loadDonations() {
   if (sessionStorage.getItem('login') !== 'true') { window.location.replace('pass.html'); return; }
   $('refreshButton').disabled = true;
-  setMessage('Loading donation records…');
+  setMessage('Loading donation recordsâ¦');
   $('donationRows').replaceChildren();
   const loadingRow = document.createElement('tr');
   const loadingCell = document.createElement('td');
   loadingCell.colSpan = 7;
   loadingCell.className = 'empty';
-  loadingCell.textContent = 'Loading donation records…';
+  loadingCell.textContent = 'Loading donation recordsâ¦';
   loadingRow.appendChild(loadingCell);
   $('donationRows').appendChild(loadingRow);
   try {
@@ -178,11 +187,11 @@ function renderDonations() {
   }
   records.forEach((record) => {
     const row = document.createElement('tr');
-    addCell(row, record.serialNumber || '—', 'receipt-id');
-    addCell(row, record.name || '—');
-    addCell(row, record.flatNumber || '—');
-    addCell(row, record.date || '—');
-    addCell(row, record.utrNumber || '—');
+    addCell(row, record.serialNumber || 'â', 'receipt-id');
+    addCell(row, record.name || 'â');
+    addCell(row, record.flatNumber || 'â');
+    addCell(row, record.date || 'â');
+    addCell(row, record.utrNumber || 'â');
     const statusCell = document.createElement('td');
     const pill = document.createElement('span');
     pill.className = 'pill' + (isVerified(record) ? ' verified' : '');
@@ -226,7 +235,7 @@ function openDetails(record) {
     const caption = document.createElement('span');
     caption.textContent = label;
     const strong = document.createElement('strong');
-    strong.textContent = text(value) || '—';
+    strong.textContent = text(value) || 'â';
     wrap.append(caption, strong);
     grid.appendChild(wrap);
   });
@@ -238,7 +247,7 @@ function openDetails(record) {
   $('detailsDialog').showModal();
 }
 async function verifyDonation(record) {
-  if (!sessionStorage.getItem('donationSheetAdminKey')) { setMessage('Enter the Donation Sheet Admin Key first; no record was changed.', true); return; }
+  if (!getDonationAdminKey()) { setMessage('Enter the Donation Sheet Admin Key first; no record was changed.', true); return; }
   if (!sessionStorage.getItem('login') || sessionStorage.getItem('login') !== 'true') {
     window.location.replace('pass.html');
     return;
@@ -248,7 +257,7 @@ async function verifyDonation(record) {
     return;
   }
   if (!window.confirm('Confirm that you have checked the temple bank/UPI account and verified receipt ' + text(record.serialNumber) + '?')) return;
-  setMessage('Updating Firestore and requesting the Google Sheets status update…');
+  setMessage('Updating Firestore and requesting the Google Sheets status updateâ¦');
   try {
     const rootRef = doc(db, 'Donations', record.id);
     const flatRef = doc(db, 'users', text(record.flatNumber), 'Donations', record.id);
@@ -281,8 +290,8 @@ async function verifyDonation(record) {
 }
 async function syncOneRecord(record) {
   if (sessionStorage.getItem('login') !== 'true') { window.location.replace('pass.html'); return; }
-  if (!sessionStorage.getItem('donationSheetAdminKey')) { setMessage('Enter the Donation Sheet Admin Key first.', true); return; }
-  setMessage('Sending receipt ' + text(record.serialNumber) + ' to the Google Sheets sync endpoint…');
+  if (!getDonationAdminKey()) { setMessage('Enter the Donation Sheet Admin Key first.', true); return; }
+  setMessage('Sending receipt ' + text(record.serialNumber) + ' to the Google Sheets sync endpointâ¦');
   const action = isVerified(record) ? 'verify' : 'sync';
   const sync = await requestSheetAction(action, record);
   setMessage(sync.sent
@@ -291,12 +300,12 @@ async function syncOneRecord(record) {
 }
 async function deleteDonation(record) {
   if (sessionStorage.getItem('login') !== 'true') { window.location.replace('pass.html'); return; }
-  if (!sessionStorage.getItem('donationSheetAdminKey')) { setMessage('Enter the Donation Sheet Admin Key first; no record was deleted.', true); return; }
+  if (!getDonationAdminKey()) { setMessage('Enter the Donation Sheet Admin Key first; no record was deleted.', true); return; }
   if (!window.confirm(
     'Permanently delete receipt ' + text(record.serialNumber) + ' (UPI reference ' + text(record.utrNumber) + ')?\n\n' +
     'This deletes its root and per-flat donation records in Firestore and requests row deletion in Google Sheets. The receipt serial remains retired and will not be reused.'
   )) return;
-  setMessage('Deleting the donation from Firestore and requesting Google Sheets row deletion…');
+  setMessage('Deleting the donation from Firestore and requesting Google Sheets row deletionâ¦');
   try {
     const rootRef = doc(db, 'Donations', record.id);
     const flatRef = doc(db, 'users', text(record.flatNumber), 'Donations', record.id);
