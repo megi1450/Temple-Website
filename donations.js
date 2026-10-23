@@ -241,6 +241,7 @@ async function initializeDonationPage() {
     console.error('Unable to verify the resident session:', error);
     $('formStatus').textContent = 'Unable to verify the signed-in resident. Please sign in again before donating.';
     $('formStatus').style.color = '#a00000';
+    return;
   } finally {
     setLoading(false);
   }
