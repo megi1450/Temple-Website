@@ -1,6 +1,6 @@
 /*
- * After deploying scripts/Donations.gs as a Google Apps Script Web App,
- * paste its /exec URL below. Do not expose OAuth tokens or private credentials here.
+ * Google Apps Script Web App endpoint for mirroring donation submissions.
+ * Do not expose OAuth tokens or private Google credentials here.
  */
-window.DONATION_SHEETS_WEB_APP_URL = '';
+window.DONATION_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwGLHW6yVuLmKOCDsl2o012qQSSfUpOqPtQ7p04CsEcBwIlupSzKMK09ZGgOK9Fb3tR/exec';
 window.DONATION_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1QTmLXMIjXSDtmUDwM0-S9ZL88C-_ny2aY1lww2VZmcI/edit';
