@@ -19,9 +19,11 @@
             background-color: #4CAF50;
             color: white;
             text-align: center;
-            padding: 15px 0;
+            padding: 18px 16px;
             margin: 0;
-            font-size: 24px;
+            font-size: clamp(20px, 3vw, 26px);
+            line-height: 1.25;
+            overflow-wrap: anywhere;
         }
 
         h2 {
@@ -32,19 +34,24 @@
         }
 
         #buttonPanel {
-            display: flex;
-            flex-direction: column; /* Change to column for better mobile layout */
-            align-items: center; /* Center items */
-            margin: 40px 0;
-            gap: 20px; /* Space between cards */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+            align-items: stretch;
+            max-width: 1180px;
+            margin: 28px auto 48px;
+            padding: 0 20px;
+            gap: 20px;
         }
 
         .card {
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            width: 90%; /* Use a percentage for responsive width */
-            max-width: 300px; /* Limit maximum width for larger screens */
+            width: 100%;
+            max-width: none;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
             text-align: center;
             transition: transform 0.3s, box-shadow 0.3s;
             padding: 20px;
@@ -66,7 +73,9 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s, background-color 0.3s;
             margin-top: 15px;
-            width: 100%; /* Make the button full-width */
+            width: 100%;
+            margin-top: auto;
+            min-height: 44px;
         }
 
         .button:hover {
@@ -97,7 +106,13 @@
             }
 
             .card {
-                padding: 15px; /* Adjust padding for smaller screens */
+                padding: 16px;
+            }
+            #buttonPanel {
+                grid-template-columns: minmax(0, 1fr);
+                padding: 0 12px;
+                margin: 20px auto 32px;
+                gap: 14px;
             }
         }
     </style>
