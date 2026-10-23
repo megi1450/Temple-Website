@@ -25,6 +25,43 @@ function setMessage(message, isError = false) {
   $('statusMessage').textContent = message;
   $('statusMessage').classList.toggle('error', isError);
 }
+function startActionProgress(button, busyLabel, progressMessage) {
+  const originalText = button ? button.textContent : '';
+  const originalDisabled = button ? button.disabled : false;
+  const container = button ? button.closest('.actions, .dialog-actions') : null;
+  const peers = container ? [...container.querySelectorAll('button')].filter(item => item !== button).map(item => ({ item, disabled: item.disabled })) : [];
+
+  if (button) {
+    button.disabled = true;
+    button.classList.add('is-busy');
+    button.setAttribute('aria-busy', 'true');
+    const spinner = document.createElement('span');
+    spinner.className = 'inline-spinner';
+    spinner.setAttribute('aria-hidden', 'true');
+    const label = document.createElement('span');
+    label.textContent = busyLabel;
+    button.replaceChildren(spinner, label);
+  }
+  peers.forEach(({ item }) => { item.disabled = true; });
+  $('actionProgressText').textContent = progressMessage;
+  $('actionProgress').hidden = false;
+
+  let finished = false;
+  return function finishActionProgress() {
+    if (finished) return;
+    finished = true;
+    if (button) {
+      button.classList.remove('is-busy');
+      button.removeAttribute('aria-busy');
+      if (button.isConnected) {
+        button.textContent = originalText;
+        button.disabled = originalDisabled;
+      }
+    }
+    peers.forEach(({ item, disabled }) => { if (item.isConnected) item.disabled = disabled; });
+    $('actionProgress').hidden = true;
+  };
+}
 function text(value) { return String(value == null ? '' : value); }
 function formatAmount(value) {
   const amount = Number(value);
@@ -170,7 +207,7 @@ function makeButton(label, className, handler, disabled = false) {
   button.className = 'btn ' + (className || 'light');
   button.textContent = label;
   button.disabled = disabled;
-  button.addEventListener('click', handler);
+  button.addEventListener('click', () => handler(button));
   return button;
 }
 function renderDonations() {
@@ -208,9 +245,9 @@ function renderDonations() {
     const actionWrap = document.createElement('div');
     actionWrap.className = 'actions';
     actionWrap.appendChild(makeButton('Details', 'light', () => openDetails(record)));
-    actionWrap.appendChild(makeButton('Verify', 'success', () => verifyDonation(record), isVerified(record)));
-    actionWrap.appendChild(makeButton('Sync Sheet', 'light', () => syncOneRecord(record)));
-    actionWrap.appendChild(makeButton('Delete', 'danger', () => deleteDonation(record)));
+    actionWrap.appendChild(makeButton('Verify', 'success', button => verifyDonation(record, button), isVerified(record)));
+    actionWrap.appendChild(makeButton('Sync Sheet', 'light', button => syncOneRecord(record, button)));
+    actionWrap.appendChild(makeButton('Delete', 'danger', button => deleteDonation(record, button)));
     actions.appendChild(actionWrap);
     row.appendChild(actions);
     tbody.appendChild(row);
@@ -248,14 +285,14 @@ function openDetails(record) {
   });
   const actionWrap = $('detailsActions');
   actionWrap.replaceChildren();
-  if (!isVerified(record)) actionWrap.appendChild(makeButton('Verify Payment', 'success', () => verifyDonation(record)));
+  if (!isVerified(record)) actionWrap.appendChild(makeButton('Verify Payment', 'success', button => verifyDonation(record, button)));
   actionWrap.appendChild(makeButton('Share Group Link', 'light', () => window.open(WHATSAPP_GROUP_URL, '_blank', 'noopener,noreferrer')));
-  actionWrap.appendChild(makeButton('Delete Donation', 'danger', () => deleteDonation(record)));
+  actionWrap.appendChild(makeButton('Delete Donation', 'danger', button => deleteDonation(record, button)));
   $('detailsDialog').showModal();
 }
-async function verifyDonation(record) {
+async function verifyDonation(record, button) {
   if (!getDonationAdminKey()) { setMessage('Enter the Donation Sheet Admin Key first; no record was changed.', true); return; }
-  if (!sessionStorage.getItem('login') || sessionStorage.getItem('login') !== 'true') {
+  if (sessionStorage.getItem('login') !== 'true') {
     window.location.replace('pass.html');
     return;
   }
@@ -264,7 +301,13 @@ async function verifyDonation(record) {
     return;
   }
   if (!window.confirm('Confirm that you have checked the temple bank/UPI account and verified receipt ' + text(record.serialNumber) + '?')) return;
-  setMessage('Updating Firestore and requesting the Google Sheets status updateâ¦');
+
+  const finishProgress = startActionProgress(
+    button,
+    'Verifying…',
+    'Verifying receipt ' + text(record.serialNumber) + ' in Firestore and sending the Google Sheets update. Please wait…'
+  );
+  setMessage('Verification is in progress for receipt ' + text(record.serialNumber) + '. Please do not click again.');
   try {
     const rootRef = doc(db, 'Donations', record.id);
     const flatRef = doc(db, 'users', text(record.flatNumber), 'Donations', record.id);
@@ -288,31 +331,49 @@ async function verifyDonation(record) {
     renderDonations();
     if ($('detailsDialog').open) openDetails(updated);
     setMessage(sync.sent
-      ? 'Receipt ' + text(record.serialNumber) + ' is Verified in Firestore. The Google Sheets update request was sent; Apps Script response cannot be read by this browser.'
+      ? 'Receipt ' + text(record.serialNumber) + ' is verified in Firestore. Google Sheets was asked to update; refresh the sheet to confirm.'
       : 'Receipt was verified in Firestore, but the Google Sheets request failed: ' + sync.reason + ' Use Sync Sheet to retry.', !sync.sent);
   } catch (error) {
     console.error('Verification failed:', error);
     setMessage('Could not verify the donation in Firestore: ' + text(error.message || error), true);
+  } finally {
+    finishProgress();
   }
 }
-async function syncOneRecord(record) {
+async function syncOneRecord(record, button) {
   if (sessionStorage.getItem('login') !== 'true') { window.location.replace('pass.html'); return; }
   if (!getDonationAdminKey()) { setMessage('Enter the Donation Sheet Admin Key first.', true); return; }
-  setMessage('Sending receipt ' + text(record.serialNumber) + ' to the Google Sheets sync endpointâ¦');
-  const action = isVerified(record) ? 'verify' : 'sync';
-  const sync = await requestSheetAction(action, record);
-  setMessage(sync.sent
-    ? 'Google Sheets sync request sent for receipt ' + text(record.serialNumber) + '. The current Apps Script deployment must contain the latest donation actions.'
-    : sync.reason, !sync.sent);
+  const finishProgress = startActionProgress(
+    button,
+    'Syncing…',
+    'Syncing receipt ' + text(record.serialNumber) + ' with Google Sheets. Please wait…'
+  );
+  try {
+    const action = isVerified(record) ? 'verify' : 'sync';
+    const sync = await requestSheetAction(action, record);
+    setMessage(sync.sent
+      ? 'Google Sheets sync request sent for receipt ' + text(record.serialNumber) + '. Refresh the sheet to confirm the update.'
+      : sync.reason, !sync.sent);
+  } catch (error) {
+    setMessage('Could not sync receipt ' + text(record.serialNumber) + ': ' + text(error.message || error), true);
+  } finally {
+    finishProgress();
+  }
 }
-async function deleteDonation(record) {
+async function deleteDonation(record, button) {
   if (sessionStorage.getItem('login') !== 'true') { window.location.replace('pass.html'); return; }
   if (!getDonationAdminKey()) { setMessage('Enter the Donation Sheet Admin Key first; no record was deleted.', true); return; }
   if (!window.confirm(
     'Permanently delete receipt ' + text(record.serialNumber) + ' (UPI reference ' + text(record.utrNumber) + ')?\n\n' +
     'This deletes its root and per-flat donation records in Firestore and requests row deletion in Google Sheets. The receipt serial remains retired and will not be reused.'
   )) return;
-  setMessage('Deleting the donation from Firestore and requesting Google Sheets row deletionâ¦');
+
+  const finishProgress = startActionProgress(
+    button,
+    'Deleting…',
+    'Deleting receipt ' + text(record.serialNumber) + ' from Firestore and requesting its Google Sheets row deletion. Please wait…'
+  );
+  setMessage('Deletion is in progress for receipt ' + text(record.serialNumber) + '. Please do not click again.');
   try {
     const rootRef = doc(db, 'Donations', record.id);
     const flatRef = doc(db, 'users', text(record.flatNumber), 'Donations', record.id);
@@ -328,11 +389,13 @@ async function deleteDonation(record) {
     const sync = await requestSheetAction('delete', record);
     renderDonations();
     setMessage(sync.sent
-      ? 'Receipt ' + text(record.serialNumber) + ' was deleted from Firestore. A Google Sheets row-deletion request was sent; check the sheet if the row remains.'
+      ? 'Receipt ' + text(record.serialNumber) + ' was deleted from Firestore. A Google Sheets row-deletion request was sent; refresh the sheet to confirm.'
       : 'Receipt was deleted from Firestore, but Google Sheets sync failed (' + sync.reason + '). Remove its row from the sheet manually if it remains.', !sync.sent);
   } catch (error) {
     console.error('Donation deletion failed:', error);
     setMessage('Could not delete the donation from Firestore: ' + text(error.message || error), true);
+  } finally {
+    finishProgress();
   }
 }
 

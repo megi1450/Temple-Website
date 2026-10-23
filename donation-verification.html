@@ -60,6 +60,14 @@
     footer { text-align:center; color:var(--muted); font-size:.82rem; padding:14px; }
     @media(max-width:900px) { .filters { grid-template-columns:repeat(2,minmax(0,1fr)); } .filters .field:first-child { grid-column:1/-1; } }
     @media(max-width:560px) { header { align-items:flex-start; } main { margin-top:18px; } .stats { grid-template-columns:1fr; } .stat { padding:14px; } .filters { grid-template-columns:1fr; } .filters .field:first-child { grid-column:auto; } .panel { padding:12px; } .detail-grid { grid-template-columns:1fr; } }
+
+     .btn.is-busy { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-width:104px; opacity:1; cursor:wait; }
+     .inline-spinner { width:14px; height:14px; flex:0 0 14px; display:inline-block; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:actionSpin .7s linear infinite; }
+     .action-progress { display:flex; align-items:center; gap:10px; margin:10px 0; padding:12px 14px; border:1px solid #e3c77c; border-radius:9px; background:#fff7df; color:#6e3d00; font-size:.92rem; font-weight:700; line-height:1.45; }
+     .action-progress[hidden] { display:none !important; }
+     .action-progress .inline-spinner { width:18px; height:18px; flex-basis:18px; }
+     @keyframes actionSpin { to { transform:rotate(360deg); } }
+     @media (prefers-reduced-motion: reduce) { .inline-spinner { animation-duration:1.8s; } }
   </style>
 </head>
 <body>
@@ -97,6 +105,7 @@
         <div class="field"><label for="toDate">Donation date to</label><input id="toDate" type="date"></div>
       </div>
       <div class="filter-actions"><button id="clearFiltersButton" class="btn light" type="button">Clear Filters</button></div>
+      <div id="actionProgress" class="action-progress" role="status" aria-live="polite" hidden><span class="inline-spinner" aria-hidden="true"></span><span id="actionProgressText">Working…</span></div>
       <div id="statusMessage" class="status-line" role="status" aria-live="polite">Loading donation records…</div>
       <div class="table-wrap">
         <table>
