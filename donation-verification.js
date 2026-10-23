@@ -72,15 +72,11 @@ function statusOf(record) {
   return text(record.verificationStatus || 'Pending manual verification');
 }
 function isVerified(record) { return statusOf(record).toLowerCase() === 'verified'; }
-function getDonationAdminKey() {
-  // Prefer a freshly typed key to any older key saved in this tab.
-  const field = $('sheetAdminKey');
-  const entered = field && field.value ? field.value.trim() : '';
-  const saved = sessionStorage.getItem('donationSheetAdminKey') || '';
-  const key = entered || saved;
-  if (key) sessionStorage.setItem('donationSheetAdminKey', key);
-  return key;
-}
+// The legacy Apps Script deployment validates this key for protected Sheet actions.
+// It is kept out of the UI by the user's request; note that any static-site key is public.
+const DONATION_SHEETS_ADMIN_KEY = 'deleteaccess';
+function getDonationAdminKey() { return DONATION_SHEETS_ADMIN_KEY; }
+
 function timestampText(value) {
   if (!value) return '';
   const date = value && typeof value.toDate === 'function' ? value.toDate() : new Date(value);
@@ -400,18 +396,6 @@ async function deleteDonation(record, button) {
 }
 
 $('refreshButton').addEventListener('click', loadDonations);
-$('saveKeyButton').addEventListener('click', () => {
-  const key = $('sheetAdminKey').value.trim();
-  if (!key) { setMessage('Enter a non-empty Donation Sheet Admin Key.', true); return; }
-  sessionStorage.setItem('donationSheetAdminKey', key);
-  $('sheetAdminKey').value = '';
-  setMessage('Donation Sheet Admin Key saved for this browser tab.');
-});
-$('clearKeyButton').addEventListener('click', () => {
-  sessionStorage.removeItem('donationSheetAdminKey');
-  $('sheetAdminKey').value = '';
-  setMessage('Donation Sheet Admin Key cleared from this tab.');
-});
 ['searchInput', 'statusFilter', 'flatFilter', 'fromDate', 'toDate'].forEach((id) => {
   $(id).addEventListener('input', renderDonations);
   $(id).addEventListener('change', renderDonations);
