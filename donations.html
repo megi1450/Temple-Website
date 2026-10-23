@@ -11,9 +11,8 @@
   <style>
     .donation-page { flex:1; width:100%; padding:28px 16px 42px; background:#fff8dc; }
     .donation-wrap { max-width:1000px; margin:0 auto; }
-    .donation-top { display:flex; flex-direction:column; align-items:flex-start; gap:14px; margin-bottom:24px; width:100%; }
-     .donation-top .donation-home { align-self:flex-start; max-width:100%; white-space:normal; }
-     .donation-top h1 { display:block; width:100%; flex:none !important; margin:0; text-align:left; line-height:1.2; overflow-wrap:anywhere; }
+    .donation-top { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:22px; min-width:0; }
+    .donation-top h1 { min-width:0; overflow-wrap:anywhere; line-height:1.2; }
     .donation-home { border:0; border-radius:24px; padding:10px 18px; background:#8b0000; color:#fff; cursor:pointer; font-weight:700; }
     .donation-subtitle { text-align:center; max-width:720px; margin:0 auto 24px; color:#55412e; }
     .donation-card { background:#fff; border:1px solid #e8d9b7; border-radius:16px; box-shadow:0 8px 28px rgba(70,30,0,.09); padding:24px; margin:18px 0 24px; }
@@ -58,8 +57,9 @@
       .donation-grid { grid-template-columns:1fr; }
       .donation-field.full { grid-column:auto; }
       .receipt-details { grid-template-columns:1fr; }
-      .donation-top { justify-content:center; }
-      .donation-top h1 { width:100%; }
+      .donation-top { justify-content:flex-start; align-items:flex-start; gap:12px; }
+      .donation-top .donation-home { max-width:100%; }
+      .donation-top h1 { width:100%; flex:0 0 100% !important; text-align:left; }
       .donation-upi { align-items:flex-start; }
       .donation-upi .donation-action { width:100%; }
     }
@@ -81,7 +81,7 @@
     <div class="donation-wrap">
       <div class="donation-top">
         <button class="donation-home" type="button" onclick="goHome()">🏠 Go to Home</button>
-        <h1>Temple Donations</h1>
+        <h1 style="flex:1;margin:0;">Temple Donations</h1>
       </div>
       <p class="donation-subtitle">Support the daily poojas, rituals and essential activities of Shri Varasiddhi Vinayaka Temple.</p>
 

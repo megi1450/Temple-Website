@@ -9,21 +9,19 @@
     :root { color-scheme: light; --maroon:#8b0000; --maroon-dark:#620000; --gold:#c79b35; --ink:#2c241f; --muted:#70645a; --line:#eadfce; --paper:#fffdf8; }
     * { box-sizing:border-box; }
     body { margin:0; font-family:Arial,sans-serif; background:#f6f4ef; color:var(--ink); }
-     header.admin-page-header { background:var(--maroon); color:#fff; padding:20px max(16px,calc((100% - 1240px)/2)); display:flex; flex-direction:column; align-items:flex-start; gap:13px; }
-     .admin-page-header h1 { display:block; width:100%; max-width:100%; font-size:clamp(1.05rem,2.4vw,1.3rem); line-height:1.3; margin:0; letter-spacing:.03em; overflow-wrap:anywhere; }
-     .admin-page-header .btn { max-width:100%; white-space:normal; }
-     .admin-page-header .btn:focus-visible, .page-heading .btn:focus-visible { outline:3px solid #e6c86c; outline-offset:3px; }
+    header { background:var(--maroon); color:#fff; padding:18px max(16px,calc((100% - 1240px)/2)); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    header h1 { font-size:1.2rem; line-height:1.3; margin:0; letter-spacing:.03em; min-width:0; overflow-wrap:anywhere; }
+    header .btn { flex-shrink:0; }
     .btn { border:0; border-radius:8px; padding:10px 14px; background:var(--maroon); color:#fff; cursor:pointer; font-weight:700; font-size:.92rem; }
     .btn:hover { background:var(--maroon-dark); }
+    .btn:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
     .btn:disabled { opacity:.45; cursor:not-allowed; }
     .btn.light { color:var(--maroon); background:#fff; border:1px solid #ead9bc; }
     .btn.light:hover { background:#fff5e6; }
     .btn.danger { background:#a32121; }
     .btn.success { background:#236739; }
     main { max-width:1240px; margin:26px auto 50px; padding:0 16px; }
-    .page-heading { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; gap:14px; margin-bottom:20px; }
-     .page-heading > div { min-width:0; }
-     .page-heading .btn { justify-self:end; }
+    .page-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap; margin-bottom:18px; }
     .page-heading h2 { margin:0 0 8px; color:var(--maroon); font-size:1.65rem; }
     .page-heading p { margin:0; color:var(--muted); line-height:1.5; }
     .note { border-left:4px solid var(--gold); background:#fff9e9; padding:12px 14px; border-radius:4px 8px 8px 4px; margin:16px 0 22px; color:#5a4830; line-height:1.5; font-size:.92rem; }
@@ -63,8 +61,7 @@
     .dialog-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
     footer { text-align:center; color:var(--muted); font-size:.82rem; padding:14px; }
     @media(max-width:900px) { .filters { grid-template-columns:repeat(2,minmax(0,1fr)); } .filters .field:first-child { grid-column:1/-1; } }
-    @media(max-width:680px) { .page-heading { grid-template-columns:minmax(0,1fr); } .page-heading .btn { justify-self:stretch; width:100%; } }
-     @media(max-width:560px) { .admin-page-header { padding:16px; gap:12px; } main { margin-top:18px; padding:0 12px; } .stats { grid-template-columns:1fr; } .stat { padding:14px; } .filters { grid-template-columns:1fr; } .filters .field:first-child { grid-column:auto; } .panel { padding:12px; } .detail-grid { grid-template-columns:1fr; } }
+    @media(max-width:560px) { header { align-items:flex-start; flex-direction:column; gap:12px; padding:16px; } header h1 { font-size:clamp(1rem,4vw,1.2rem); } header .btn { max-width:100%; white-space:normal; } main { margin-top:18px; padding:0 12px; } .page-heading { flex-direction:column; align-items:stretch; } .page-heading .btn { align-self:flex-start; max-width:100%; } .stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .stat { padding:14px; min-width:0; } .stat:last-child { grid-column:1/-1; } .stat strong { font-size:1.6rem; } .filters { grid-template-columns:1fr; } .filters .field:first-child { grid-column:auto; } .panel { padding:12px; } .detail-grid { grid-template-columns:1fr; } }
 
      .btn.is-busy { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-width:104px; opacity:1; cursor:wait; }
      .inline-spinner { width:14px; height:14px; flex:0 0 14px; display:inline-block; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:actionSpin .7s linear infinite; }
@@ -76,9 +73,9 @@
   </style>
 </head>
 <body>
-  <header class="admin-page-header">
-    <button class="btn light" type="button" onclick="window.location.href='adminhome.html'">← Admin Dashboard</button>
+  <header>
     <h1>AO TEMPLE ADMIN · DONATION VERIFICATION</h1>
+    <button class="btn light" type="button" onclick="window.location.href='adminhome.html'">← Admin Dashboard</button>
   </header>
   <main>
     <div class="page-heading">
