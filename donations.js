@@ -233,41 +233,18 @@ async function shareReceipt(record) {
   const filename = 'Temple-Donation-Receipt-' + String(record.serialNumber) + '.pdf';
   try {
     const pdf = buildReceiptPdf(record);
-    const blob = pdf.output('blob');
-    const file = new File([blob], filename, { type: 'application/pdf' });
-    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        files: [file],
-        title: 'Temple Donation Receipt ' + String(record.serialNumber),
-        text: 'Shri Varasiddhi Vinayaka Temple — donation receipt ' + String(record.serialNumber) +
-          '. Payment status: ' + String(record.verificationStatus || 'Pending manual verification') + '.'
-      });
-      $('receiptStatus').textContent = 'Share sheet opened. Select WhatsApp and the AO Temple Well-Wishers group to share the PDF.';
-      $('goBackButton').disabled = false;
-      return;
-    }
-    // Desktop browsers without file sharing: download the PDF, then open the exact group link
-    // already used in annon cements.html. The user attaches the downloaded file in WhatsApp.
+    // Keep the receipt available for attachment while opening the exact group link
+    // already used by annon cements.html. Browser WhatsApp links cannot pre-attach
+    // a locally generated PDF; the donor attaches the downloaded file in the chat.
     pdf.save(filename);
-    window.open(TEMPLE_WHATSAPP_GROUP_URL, '_blank', 'noopener,noreferrer');
-    $('receiptStatus').textContent = 'Receipt downloaded and WhatsApp group opened. Attach the downloaded PDF in the group to share it.';
+    const groupTab = window.open(TEMPLE_WHATSAPP_GROUP_URL, '_blank', 'noopener,noreferrer');
+    $('receiptStatus').textContent = groupTab === null
+      ? 'Receipt downloaded. Your browser blocked the WhatsApp group tab; allow pop-ups or open the AO Temple Well-Wishers link from the Announcements page, then attach the downloaded PDF.'
+      : 'Receipt downloaded and the AO Temple Well-Wishers WhatsApp group opened. Attach the downloaded PDF in the group to share it.';
     $('goBackButton').disabled = false;
   } catch (error) {
-    if (error && error.name === 'AbortError') {
-      $('receiptStatus').textContent = 'Sharing was cancelled. You can download the receipt or try sharing again.';
-      return;
-    }
-    console.warn('Direct PDF sharing failed; using the download-and-open-group fallback.', error);
-    try {
-      buildReceiptPdf(record).save(filename);
-      window.open(TEMPLE_WHATSAPP_GROUP_URL, '_blank', 'noopener,noreferrer');
-      $('receiptStatus').textContent = 'Receipt downloaded and WhatsApp group opened. Attach the downloaded PDF in the group.';
-      $('goBackButton').disabled = false;
-    } catch (fallbackError) {
-      window.print();
-      $('receiptStatus').textContent = 'Choose Save as PDF in the print dialog, then open the AO Temple Well-Wishers WhatsApp group to share it.';
-      $('goBackButton').disabled = false;
-    }
+    console.error('Unable to create a shareable receipt PDF:', error);
+    $('receiptStatus').textContent = 'Could not create the PDF. Use Download Receipt PDF, then open the AO Temple Well-Wishers WhatsApp group and attach the receipt.';
   }
 }
 
