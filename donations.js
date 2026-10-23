@@ -109,13 +109,16 @@ async function requestSheetSync(record) {
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
       body: JSON.stringify({
+        action: 'submit',
         serialNumber: record.serialNumber,
         name: record.name,
         flatNumber: record.flatNumber,
         mobileNumber: record.mobileNumber,
         donationType: record.donationType,
         utrNumber: record.utrNumber,
-        date: record.date
+        date: record.date,
+        verificationStatus: record.verificationStatus || 'Pending manual verification',
+        verifiedAt: record.verifiedAt || ''
       })
     });
   } catch (error) {
@@ -137,6 +140,7 @@ function showReceipt(record) {
   receiptSection.hidden = false;
   window.scrollTo({ top: 0, behavior: 'smooth' });
   $('downloadReceiptButton').onclick = () => downloadReceipt(record);
+  $('shareReceiptButton').onclick = () => shareReceipt(record);
   $('goBackButton').onclick = () => {
     receiptSection.hidden = true;
     donationSection.hidden = false;
@@ -150,58 +154,70 @@ function showReceipt(record) {
   };
 }
 
+const TEMPLE_WHATSAPP_GROUP_URL = 'https://chat.whatsapp.com/BOurgzSlABs9vGatqsFbBc';
+
+function buildReceiptPdf(record) {
+  if (!window.jspdf || !window.jspdf.jsPDF) throw new Error('PDF library unavailable');
+  const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  pdf.setFillColor(255, 248, 220);
+  pdf.rect(0, 0, pageWidth, 297, 'F');
+  pdf.setDrawColor(183, 138, 43);
+  pdf.setLineWidth(1.2);
+  pdf.roundedRect(15, 18, pageWidth - 30, 250, 4, 4, 'S');
+  pdf.setTextColor(139, 0, 0);
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(17);
+  pdf.text('Shri Varasiddhi Vinayaka Temple', pageWidth / 2, 36, { align: 'center' });
+  pdf.setFontSize(12);
+  pdf.setTextColor(85, 65, 45);
+  pdf.text('Donation Acknowledgement', pageWidth / 2, 45, { align: 'center' });
+  pdf.setFillColor(255, 241, 197);
+  pdf.roundedRect(55, 54, pageWidth - 110, 20, 3, 3, 'FD');
+  pdf.setTextColor(139, 0, 0);
+  pdf.setFontSize(21);
+  pdf.text(String(record.serialNumber), pageWidth / 2, 67, { align: 'center' });
+  const fields = [
+    ['Donor Name', record.name],
+    ['Flat Number', record.flatNumber],
+    ['Mobile Number', record.mobileNumber],
+    ['Donation Date', record.date],
+    ['Donation Type', record.donationType],
+    ['UPI Transaction Reference', record.utrNumber]
+  ];
+  let y = 92;
+  fields.forEach((field) => {
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(80, 50, 30);
+    pdf.setFontSize(10);
+    pdf.text(field[0], 28, y);
+    pdf.setFont('helvetica', 'normal');
+    const lines = pdf.splitTextToSize(safeText(field[1]), pageWidth - 62);
+    pdf.text(lines, 82, y);
+    y += Math.max(12, lines.length * 5 + 3);
+  });
+  pdf.setDrawColor(210, 190, 150);
+  pdf.line(25, y + 3, pageWidth - 25, y + 3);
+  pdf.setFont('helvetica', 'bold');
+  pdf.setTextColor(139, 0, 0);
+  pdf.setFontSize(10);
+  pdf.text(
+    String(record.verificationStatus || 'Pending manual verification').toLowerCase() === 'verified'
+      ? 'Payment verified by Temple Committee'
+      : 'Payment verification pending',
+    pageWidth / 2, y + 13, { align: 'center' }
+  );
+  pdf.setFont('helvetica', 'normal');
+  pdf.setTextColor(75, 65, 55);
+  pdf.setFontSize(9);
+  pdf.text('This document acknowledges submission of donation details.', pageWidth / 2, y + 20, { align: 'center' });
+  pdf.text('Payment status is subject to Temple Committee verification.', pageWidth / 2, y + 26, { align: 'center' });
+  return pdf;
+}
+
 function downloadReceipt(record) {
   try {
-    if (!window.jspdf || !window.jspdf.jsPDF) throw new Error('PDF library unavailable');
-    const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    pdf.setFillColor(255, 248, 220);
-    pdf.rect(0, 0, pageWidth, 297, 'F');
-    pdf.setDrawColor(183, 138, 43);
-    pdf.setLineWidth(1.2);
-    pdf.roundedRect(15, 18, pageWidth - 30, 250, 4, 4, 'S');
-    pdf.setTextColor(139, 0, 0);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(17);
-    pdf.text('Shri Varasiddhi Vinayaka Temple', pageWidth / 2, 36, { align: 'center' });
-    pdf.setFontSize(12);
-    pdf.setTextColor(85, 65, 45);
-    pdf.text('Donation Acknowledgement', pageWidth / 2, 45, { align: 'center' });
-    pdf.setFillColor(255, 241, 197);
-    pdf.roundedRect(55, 54, pageWidth - 110, 20, 3, 3, 'FD');
-    pdf.setTextColor(139, 0, 0);
-    pdf.setFontSize(21);
-    pdf.text(String(record.serialNumber), pageWidth / 2, 67, { align: 'center' });
-    const fields = [
-      ['Donor Name', record.name],
-      ['Flat Number', record.flatNumber],
-      ['Mobile Number', record.mobileNumber],
-      ['Donation Date', record.date],
-      ['Donation Type', record.donationType],
-      ['UPI Transaction Reference', record.utrNumber]
-    ];
-    let y = 92;
-    fields.forEach((field) => {
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor(80, 50, 30);
-      pdf.setFontSize(10);
-      pdf.text(field[0], 28, y);
-      pdf.setFont('helvetica', 'normal');
-      const lines = pdf.splitTextToSize(safeText(field[1]), pageWidth - 62);
-      pdf.text(lines, 82, y);
-      y += Math.max(12, lines.length * 5 + 3);
-    });
-    pdf.setDrawColor(210, 190, 150);
-    pdf.line(25, y + 3, pageWidth - 25, y + 3);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(139, 0, 0);
-    pdf.setFontSize(10);
-    pdf.text('Payment verification pending', pageWidth / 2, y + 13, { align: 'center' });
-    pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(75, 65, 55);
-    pdf.setFontSize(9);
-    pdf.text('This document acknowledges submission of donation details only.', pageWidth / 2, y + 20, { align: 'center' });
-    pdf.text('The Temple Committee must verify the actual UPI payment.', pageWidth / 2, y + 26, { align: 'center' });
+    const pdf = buildReceiptPdf(record);
     pdf.save('Temple-Donation-Receipt-' + String(record.serialNumber) + '.pdf');
     $('receiptStatus').textContent = 'Receipt downloaded. Keep it for your records.';
     $('goBackButton').disabled = false;
@@ -210,6 +226,48 @@ function downloadReceipt(record) {
     window.print();
     $('receiptStatus').textContent = 'If the print dialog opened, choose Save as PDF. You can now go back.';
     $('goBackButton').disabled = false;
+  }
+}
+
+async function shareReceipt(record) {
+  const filename = 'Temple-Donation-Receipt-' + String(record.serialNumber) + '.pdf';
+  try {
+    const pdf = buildReceiptPdf(record);
+    const blob = pdf.output('blob');
+    const file = new File([blob], filename, { type: 'application/pdf' });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: 'Temple Donation Receipt ' + String(record.serialNumber),
+        text: 'Shri Varasiddhi Vinayaka Temple — donation receipt ' + String(record.serialNumber) +
+          '. Payment status: ' + String(record.verificationStatus || 'Pending manual verification') + '.'
+      });
+      $('receiptStatus').textContent = 'Share sheet opened. Select WhatsApp and the AO Temple Well-Wishers group to share the PDF.';
+      $('goBackButton').disabled = false;
+      return;
+    }
+    // Desktop browsers without file sharing: download the PDF, then open the exact group link
+    // already used in annon cements.html. The user attaches the downloaded file in WhatsApp.
+    pdf.save(filename);
+    window.open(TEMPLE_WHATSAPP_GROUP_URL, '_blank', 'noopener,noreferrer');
+    $('receiptStatus').textContent = 'Receipt downloaded and WhatsApp group opened. Attach the downloaded PDF in the group to share it.';
+    $('goBackButton').disabled = false;
+  } catch (error) {
+    if (error && error.name === 'AbortError') {
+      $('receiptStatus').textContent = 'Sharing was cancelled. You can download the receipt or try sharing again.';
+      return;
+    }
+    console.warn('Direct PDF sharing failed; using the download-and-open-group fallback.', error);
+    try {
+      buildReceiptPdf(record).save(filename);
+      window.open(TEMPLE_WHATSAPP_GROUP_URL, '_blank', 'noopener,noreferrer');
+      $('receiptStatus').textContent = 'Receipt downloaded and WhatsApp group opened. Attach the downloaded PDF in the group.';
+      $('goBackButton').disabled = false;
+    } catch (fallbackError) {
+      window.print();
+      $('receiptStatus').textContent = 'Choose Save as PDF in the print dialog, then open the AO Temple Well-Wishers WhatsApp group to share it.';
+      $('goBackButton').disabled = false;
+    }
   }
 }
 

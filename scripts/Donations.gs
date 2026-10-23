@@ -1,31 +1,32 @@
 /**
- * Web app endpoint that mirrors donation submissions into the temple donations sheet.
- * Deploy this script as a Web App, execute as the spreadsheet owner, and set access
- * to "Anyone". The website's public URL does not contain spreadsheet credentials.
+ * Donation sheet synchronizer for Shri Varasiddhi Vinayaka Temple.
+ *
+ * Deploy as a Web App (execute as the spreadsheet owner; access: Anyone).
+ * Set Script Property DONATIONS_ADMIN_KEY in Project Settings. Public "submit"
+ * requests can only append a new pending UPI reference. "sync", "verify", and
+ * "delete" require the admin key and are used by the admin verification page.
  */
 const DONATIONS_SPREADSHEET_ID = '1QTmLXMIjXSDtmUDwM0-S9ZL88C-_ny2aY1lww2VZmcI';
 const DONATIONS_SHEET_NAME = 'Sheet1';
+const DONATIONS_HEADERS = [
+  'Serial Number', 'Name', 'Flat Number', 'Mobile', 'Donation Type',
+  'UTR Number', 'Date', 'Verification Status', 'Verified At', 'Admin Notes'
+];
+
+function doGet() {
+  return ContentService.createTextOutput('Shri Varasiddhi Vinayaka Temple donation sheet endpoint is active.');
+}
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
   try {
     const payload = JSON.parse((e && e.postData && e.postData.contents) || '{}');
-    const serialNumber = String(payload.serialNumber || '').trim();
-    const name = String(payload.name || '').trim();
-    const flatNumber = String(payload.flatNumber || '').trim().toUpperCase();
-    const mobileNumber = String(payload.mobileNumber || '').trim();
-    const donationType = String(payload.donationType || '').trim();
-    const utrNumber = String(payload.utrNumber || '').trim();
-    const date = String(payload.date || '').trim();
-
-    if (!/^\d{3,}$/.test(serialNumber) ||
-        !name || name.length > 100 ||
-        !/^([A-F])?(00[1-4]|0?[1-9]0[1-4]|1[0-9]0[1-4])$/.test(flatNumber) ||
-        !/^[6-9]\d{9}$/.test(mobileNumber) ||
-        donationType !== 'Donate for Temple Daily Activities' ||
-        !/^\d{12}$/.test(utrNumber) ||
-        !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      return jsonResponse({ ok: false, message: 'Invalid donation data.' });
+    const action = String(payload.action || 'submit').trim().toLowerCase();
+    if (!['submit', 'sync', 'verify', 'delete'].includes(action)) {
+      return jsonResponse({ ok: false, message: 'Unsupported action.' });
+    }
+    if (['sync', 'verify', 'delete'].includes(action) && !isAuthorizedAdmin_(payload.adminKey)) {
+      return jsonResponse({ ok: false, message: 'Admin key is missing or invalid.' });
     }
 
     lock.waitLock(10000);
@@ -33,26 +34,41 @@ function doPost(e) {
       const spreadsheet = SpreadsheetApp.openById(DONATIONS_SPREADSHEET_ID);
       const sheet = spreadsheet.getSheetByName(DONATIONS_SHEET_NAME);
       if (!sheet) return jsonResponse({ ok: false, message: 'Donation sheet tab not found.' });
+      ensureDonationHeaders_(sheet);
 
-      const lastRow = sheet.getLastRow();
-      if (lastRow >= 2) {
-        const existingReferences = sheet.getRange(2, 6, lastRow - 1, 1).getDisplayValues();
-        for (let i = 0; i < existingReferences.length; i++) {
-          if (String(existingReferences[i][0]).trim() === utrNumber) {
-            return jsonResponse({ ok: false, message: 'This UPI reference is already present.' });
-          }
-        }
+      const utrNumber = String(payload.utrNumber || '').trim();
+      const serialNumber = String(payload.serialNumber || '').trim();
+      const rowNumber = findDonationRow_(sheet, utrNumber, serialNumber);
+
+      if (action === 'delete') {
+        if (rowNumber > 1) sheet.deleteRow(rowNumber);
+        return jsonResponse({ ok: true, message: rowNumber > 1 ? 'Donation row deleted.' : 'Donation row already absent.' });
       }
 
-      sheet.appendRow([
-        serialNumber,
-        safeCell(name),
-        safeCell(flatNumber),
-        safeCell(mobileNumber),
-        safeCell(donationType),
-        utrNumber,
-        date
-      ]);
+      if (action === 'verify') {
+        if (rowNumber > 1) {
+          const current = sheet.getRange(rowNumber, 1, 1, DONATIONS_HEADERS.length).getValues()[0];
+          current[7] = 'Verified';
+          current[8] = String(payload.verifiedAt || new Date().toISOString());
+          current[9] = safeCell(payload.adminNotes || current[9] || '');
+          sheet.getRange(rowNumber, 1, 1, DONATIONS_HEADERS.length).setValues([current]);
+          return jsonResponse({ ok: true, message: 'Donation marked Verified.' });
+        }
+        writeDonationRow_(sheet, payload, 'Verified', String(payload.verifiedAt || new Date().toISOString()));
+        return jsonResponse({ ok: true, message: 'Missing donation row recreated as Verified.' });
+      }
+
+      if (action === 'sync') {
+        writeDonationRow_(sheet, payload, String(payload.verificationStatus || 'Pending manual verification'), String(payload.verifiedAt || ''));
+        return jsonResponse({ ok: true, message: 'Donation row synchronized.' });
+      }
+
+      // Public submit: validate and reject duplicate UTRs rather than overwriting existing rows.
+      validateDonation_(payload);
+      if (rowNumber > 1) {
+        return jsonResponse({ ok: false, message: 'This UPI reference is already present.' });
+      }
+      writeDonationRow_(sheet, payload, 'Pending manual verification', '');
       return jsonResponse({ ok: true, message: 'Donation row appended.' });
     } finally {
       lock.releaseLock();
@@ -62,13 +78,84 @@ function doPost(e) {
   }
 }
 
+function isAuthorizedAdmin_(providedKey) {
+  const expected = PropertiesService.getScriptProperties().getProperty('DONATIONS_ADMIN_KEY');
+  return !!expected && !!providedKey && String(providedKey) === expected;
+}
+
+function ensureDonationHeaders_(sheet) {
+  sheet.getRange(1, 1, 1, DONATIONS_HEADERS.length).setValues([DONATIONS_HEADERS]);
+  sheet.setFrozenRows(1);
+}
+
+function validateDonation_(payload) {
+  const serialNumber = String(payload.serialNumber || '').trim();
+  const name = String(payload.name || '').trim();
+  const flatNumber = String(payload.flatNumber || '').trim().toUpperCase();
+  const mobileNumber = String(payload.mobileNumber || '').trim();
+  const donationType = String(payload.donationType || '').trim();
+  const utrNumber = String(payload.utrNumber || '').trim();
+  const date = String(payload.date || '').trim();
+
+  if (!/^\d{3,}$/.test(serialNumber) ||
+      !name || name.length > 100 ||
+      !/^([A-F])?(00[1-4]|0?[1-9]0[1-4]|1[0-9]0[1-4])$/.test(flatNumber) ||
+      !/^[6-9]\d{9}$/.test(mobileNumber) ||
+      donationType !== 'Donate for Temple Daily Activities' ||
+      !/^\d{12}$/.test(utrNumber) ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    throw new Error('Invalid donation data.');
+  }
+}
+
+function writeDonationRow_(sheet, payload, statusOverride, verifiedAtOverride) {
+  validateDonation_(payload);
+  const utrNumber = String(payload.utrNumber).trim();
+  const serialNumber = String(payload.serialNumber).trim();
+  const rowNumber = findDonationRow_(sheet, utrNumber, serialNumber);
+  const current = rowNumber > 1
+    ? sheet.getRange(rowNumber, 1, 1, DONATIONS_HEADERS.length).getValues()[0]
+    : [];
+  const existingStatus = String(current[7] || '').trim();
+  const incomingStatus = String(statusOverride || payload.verificationStatus || 'Pending manual verification');
+  const status = existingStatus.toLowerCase() === 'verified' && incomingStatus.toLowerCase() !== 'verified'
+    ? existingStatus
+    : incomingStatus;
+  const verifiedAt = verifiedAtOverride || current[8] || '';
+  const notes = payload.adminNotes || current[9] || '';
+  const values = [
+    serialNumber,
+    safeCell(payload.name),
+    safeCell(String(payload.flatNumber).trim().toUpperCase()),
+    safeCell(payload.mobileNumber),
+    safeCell(payload.donationType),
+    utrNumber,
+    String(payload.date),
+    status,
+    verifiedAt,
+    safeCell(notes)
+  ];
+  if (rowNumber > 1) sheet.getRange(rowNumber, 1, 1, DONATIONS_HEADERS.length).setValues([values]);
+  else sheet.appendRow(values);
+}
+
+function findDonationRow_(sheet, utrNumber, serialNumber) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return 0;
+  const values = sheet.getRange(2, 1, lastRow - 1, DONATIONS_HEADERS.length).getDisplayValues();
+  for (let i = 0; i < values.length; i++) {
+    const matchesUtr = utrNumber && String(values[i][5]).trim() === String(utrNumber).trim();
+    const matchesSerial = serialNumber && String(values[i][0]).trim().padStart(3, '0') === String(serialNumber).trim().padStart(3, '0');
+    if (matchesUtr || matchesSerial) return i + 2;
+  }
+  return 0;
+}
+
 function safeCell(value) {
   const text = String(value == null ? '' : value);
   return /^[=+\-@]/.test(text) ? "'" + text : text;
 }
 
 function jsonResponse(value) {
-  return ContentService
-    .createTextOutput(JSON.stringify(value))
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
 }

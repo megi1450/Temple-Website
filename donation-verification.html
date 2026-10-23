@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Donation Verification - AO Temple Admin</title>
+  <link rel="icon" href="assets/logos/logo3.png">
+  <style>
+    :root { color-scheme: light; --maroon:#8b0000; --maroon-dark:#620000; --gold:#c79b35; --ink:#2c241f; --muted:#70645a; --line:#eadfce; --paper:#fffdf8; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial,sans-serif; background:#f6f4ef; color:var(--ink); }
+    header { background:var(--maroon); color:#fff; padding:18px max(16px,calc((100% - 1240px)/2)); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    header h1 { font-size:1.2rem; margin:0; letter-spacing:.03em; }
+    .btn { border:0; border-radius:8px; padding:10px 14px; background:var(--maroon); color:#fff; cursor:pointer; font-weight:700; font-size:.92rem; }
+    .btn:hover { background:var(--maroon-dark); }
+    .btn:disabled { opacity:.45; cursor:not-allowed; }
+    .btn.light { color:var(--maroon); background:#fff; border:1px solid #ead9bc; }
+    .btn.light:hover { background:#fff5e6; }
+    .btn.danger { background:#a32121; }
+    .btn.success { background:#236739; }
+    main { max-width:1240px; margin:26px auto 50px; padding:0 16px; }
+    .page-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap; margin-bottom:18px; }
+    .page-heading h2 { margin:0 0 8px; color:var(--maroon); font-size:1.65rem; }
+    .page-heading p { margin:0; color:var(--muted); line-height:1.5; }
+    .note { border-left:4px solid var(--gold); background:#fff9e9; padding:12px 14px; border-radius:4px 8px 8px 4px; margin:16px 0 22px; color:#5a4830; line-height:1.5; font-size:.92rem; }
+    .stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:18px 0; }
+    .stat { background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px; box-shadow:0 3px 12px rgba(40,20,0,.04); }
+    .stat span { display:block; color:var(--muted); font-size:.9rem; }
+    .stat strong { display:block; color:var(--maroon); font-size:1.8rem; margin-top:7px; }
+    .panel { background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow:0 5px 20px rgba(40,20,0,.04); margin:18px 0; }
+    .filters { display:grid; grid-template-columns:2fr repeat(4,minmax(130px,1fr)); gap:12px; align-items:end; }
+    .field { display:flex; flex-direction:column; gap:6px; min-width:0; }
+    .field label { font-size:.84rem; font-weight:700; color:#5a483c; }
+    .field input,.field select { width:100%; min-height:42px; border:1px solid #d8ccbc; border-radius:8px; padding:10px; background:var(--paper); font:inherit; color:var(--ink); }
+    .filter-actions { display:flex; gap:9px; flex-wrap:wrap; margin-top:14px; }
+    .status-line { min-height:24px; color:var(--muted); font-size:.92rem; line-height:1.5; margin:12px 0; }
+    .status-line.error { color:#a00000; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+    table { width:100%; min-width:980px; border-collapse:collapse; }
+    th { background:var(--maroon); color:#fff; text-align:left; font-size:.84rem; padding:12px 10px; white-space:nowrap; }
+    td { border-bottom:1px solid #eee4d6; padding:11px 10px; font-size:.88rem; vertical-align:top; }
+    tbody tr:nth-child(even) { background:#fffaf1; }
+    tbody tr:last-child td { border-bottom:0; }
+    .receipt-id { color:var(--maroon); font-weight:900; letter-spacing:.04em; }
+    .pill { display:inline-block; border-radius:999px; padding:5px 8px; font-size:.78rem; font-weight:700; background:#fff0ce; color:#714d00; }
+    .pill.verified { background:#e4f4e8; color:#1f6333; }
+    .actions { display:flex; gap:6px; flex-wrap:wrap; }
+    .actions .btn { padding:7px 9px; font-size:.8rem; }
+    .empty { text-align:center; padding:32px 12px; color:var(--muted); }
+    dialog { width:min(620px,calc(100% - 24px)); border:1px solid var(--line); border-radius:14px; padding:0; box-shadow:0 24px 70px rgba(0,0,0,.25); color:var(--ink); }
+    dialog::backdrop { background:rgba(25,10,5,.5); }
+    .dialog-head { background:var(--maroon); color:white; padding:18px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .dialog-head h3 { margin:0; }
+    .dialog-body { padding:20px; }
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .detail { border-bottom:1px solid var(--line); padding:9px 2px; overflow-wrap:anywhere; }
+    .detail span { display:block; color:var(--muted); font-size:.82rem; margin-bottom:5px; }
+    .detail strong { font-size:.95rem; }
+    .dialog-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
+    footer { text-align:center; color:var(--muted); font-size:.82rem; padding:14px; }
+    @media(max-width:900px) { .filters { grid-template-columns:repeat(2,minmax(0,1fr)); } .filters .field:first-child { grid-column:1/-1; } }
+    @media(max-width:560px) { header { align-items:flex-start; } main { margin-top:18px; } .stats { grid-template-columns:1fr; } .stat { padding:14px; } .filters { grid-template-columns:1fr; } .filters .field:first-child { grid-column:auto; } .panel { padding:12px; } .detail-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AO TEMPLE ADMIN · DONATION VERIFICATION</h1>
+    <button class="btn light" type="button" onclick="window.location.href='adminhome.html'">← Admin Dashboard</button>
+  </header>
+  <main>
+    <div class="page-heading">
+      <div>
+        <h2>Donation Verification</h2>
+        <p>Search receipts, review UPI details, verify received payments, and manage the associated Firestore and Google Sheets rows.</p>
+      </div>
+      <button class="btn" id="refreshButton" type="button">↻ Refresh Records</button>
+    </div>
+    <div class="note">
+      <strong>Verification rule:</strong> mark a donation as Verified only after checking the UPI transaction in the temple bank/UPI account. A valid-looking UTR by itself is not proof of payment. Deleting a receipt removes the Firestore donation documents and requests deletion of its Google Sheets row; its serial number remains retired and will not be reused.
+    </div>
+    <div class="stats">
+      <div class="stat"><span>Total donation records</span><strong id="totalCount">—</strong></div>
+      <div class="stat"><span>Pending verification</span><strong id="pendingCount">—</strong></div>
+      <div class="stat"><span>Verified donations</span><strong id="verifiedCount">—</strong></div>
+    </div>
+    <section class="panel">
+      <div class="filters" style="grid-template-columns:minmax(220px,2fr) auto; margin-bottom:16px;">
+        <div class="field"><label for="sheetAdminKey">Donation Sheet Admin Key</label><input id="sheetAdminKey" type="password" autocomplete="off" placeholder="Enter the key stored in Apps Script Script Properties"></div>
+        <div><button class="btn light" id="saveKeyButton" type="button">Use Key for This Tab</button><button class="btn light" id="clearKeyButton" type="button" style="margin-left:6px;">Clear Key</button></div>
+      </div>
+      <p style="color:#70645a;font-size:.84rem;margin:0 0 18px;">The key is stored in session memory for this browser tab only. It is required for Google Sheets verify/delete/sync actions. Configure <code>DONATIONS_ADMIN_KEY</code> in the Apps Script project settings and redeploy the updated script.</p>
+      <div class="filters">
+        <div class="field"><label for="searchInput">Search receipt / UTR / name / flat / mobile</label><input id="searchInput" type="search" placeholder="e.g. 001, 312345678901, A1404"></div>
+        <div class="field"><label for="statusFilter">Verification status</label><select id="statusFilter"><option value="all">All statuses</option><option value="pending">Pending</option><option value="verified">Verified</option></select></div>
+        <div class="field"><label for="flatFilter">Flat number</label><select id="flatFilter"><option value="">All flats</option></select></div>
+        <div class="field"><label for="fromDate">Donation date from</label><input id="fromDate" type="date"></div>
+        <div class="field"><label for="toDate">Donation date to</label><input id="toDate" type="date"></div>
+      </div>
+      <div class="filter-actions"><button id="clearFiltersButton" class="btn light" type="button">Clear Filters</button></div>
+      <div id="statusMessage" class="status-line" role="status" aria-live="polite">Loading donation records…</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Receipt No.</th><th>Donor</th><th>Flat</th><th>Date</th><th>UPI Reference</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="donationRows"><tr><td colspan="7" class="empty">Loading donation records…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <dialog id="detailsDialog">
+    <div class="dialog-head"><h3>Donation Details</h3><button class="btn light" id="closeDetailsButton" type="button">Close</button></div>
+    <div class="dialog-body"><div id="detailsGrid" class="detail-grid"></div><div id="detailsActions" class="dialog-actions"></div></div>
+  </dialog>
+  <footer>Shri Varasiddhi Vinayaka Temple · Admin tools</footer>
+  <script src="donations-config.js"></script>
+  <script type="module" src="donation-verification.js"></script>
+</body>
+</html>
