@@ -26,6 +26,11 @@ function setMessage(message, isError = false) {
   $('statusMessage').classList.toggle('error', isError);
 }
 function text(value) { return String(value == null ? '' : value); }
+function formatAmount(value) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount) || amount <= 0) return '—';
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount);
+}
 function statusOf(record) {
   return text(record.verificationStatus || 'Pending manual verification');
 }
@@ -48,6 +53,7 @@ function plainRecord(record) {
   return {
     serialNumber: text(record.serialNumber),
     name: text(record.name),
+    amount: record.amount == null || record.amount === '' ? '' : Number(record.amount),
     flatNumber: text(record.flatNumber),
     mobileNumber: text(record.mobileNumber),
     donationType: text(record.donationType || 'Donate for Temple Daily Activities'),
@@ -89,7 +95,7 @@ async function loadDonations() {
   $('donationRows').replaceChildren();
   const loadingRow = document.createElement('tr');
   const loadingCell = document.createElement('td');
-  loadingCell.colSpan = 7;
+  loadingCell.colSpan = 8;
   loadingCell.className = 'empty';
   loadingCell.textContent = 'Loading donation recordsâ¦';
   loadingRow.appendChild(loadingCell);
@@ -139,7 +145,7 @@ function filteredDonations() {
   const from = $('fromDate').value;
   const to = $('toDate').value;
   return allDonations.filter((record) => {
-    const searchable = [record.serialNumber, record.name, record.flatNumber, record.mobileNumber, record.utrNumber, record.donationType, record.id]
+    const searchable = [record.serialNumber, record.name, record.amount, record.flatNumber, record.mobileNumber, record.utrNumber, record.donationType, record.id]
       .map((v) => text(v).toLowerCase()).join(' ');
     if (query && !searchable.includes(query)) return false;
     if (status === 'pending' && isVerified(record)) return false;
@@ -178,7 +184,7 @@ function renderDonations() {
   if (!records.length) {
     const row = document.createElement('tr');
     const cell = document.createElement('td');
-    cell.colSpan = 7;
+    cell.colSpan = 8;
     cell.className = 'empty';
     cell.textContent = allDonations.length ? 'No donations match these search and filter settings.' : 'No donation records found.';
     row.appendChild(cell);
@@ -218,6 +224,7 @@ function openDetails(record) {
     ['Receipt Number', record.serialNumber],
     ['Firestore Document ID', record.id],
     ['Donor Name', record.name],
+    ['Donation Amount', formatAmount(record.amount)],
     ['Flat Number', record.flatNumber],
     ['Mobile Number', record.mobileNumber],
     ['Donation Date', record.date],

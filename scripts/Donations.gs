@@ -9,7 +9,7 @@
 const DONATIONS_SPREADSHEET_ID = '1QTmLXMIjXSDtmUDwM0-S9ZL88C-_ny2aY1lww2VZmcI';
 const DONATIONS_SHEET_NAME = 'Sheet1';
 const DONATIONS_HEADERS = [
-  'Serial Number', 'Name', 'Flat Number', 'Mobile', 'Donation Type',
+  'Serial Number', 'Name', 'Amount', 'Flat Number', 'Mobile', 'Donation Type',
   'UTR Number', 'Date', 'Verification Status', 'Verified At', 'Admin Notes'
 ];
 
@@ -48,9 +48,10 @@ function doPost(e) {
       if (action === 'verify') {
         if (rowNumber > 1) {
           const current = sheet.getRange(rowNumber, 1, 1, DONATIONS_HEADERS.length).getValues()[0];
-          current[7] = 'Verified';
-          current[8] = String(payload.verifiedAt || new Date().toISOString());
-          current[9] = safeCell(payload.adminNotes || current[9] || '');
+          if (payload.amount != null && payload.amount !== '') current[2] = Number(payload.amount);
+          current[8] = 'Verified';
+          current[9] = String(payload.verifiedAt || new Date().toISOString());
+          current[10] = safeCell(payload.adminNotes || current[10] || '');
           sheet.getRange(rowNumber, 1, 1, DONATIONS_HEADERS.length).setValues([current]);
           return jsonResponse({ ok: true, message: 'Donation marked Verified.' });
         }
@@ -64,7 +65,7 @@ function doPost(e) {
       }
 
       // Public submit: validate and reject duplicate UTRs rather than overwriting existing rows.
-      validateDonation_(payload);
+      validateDonation_(payload, true);
       if (rowNumber > 1) {
         return jsonResponse({ ok: false, message: 'This UPI reference is already present.' });
       }
@@ -84,11 +85,20 @@ function isAuthorizedAdmin_(providedKey) {
 }
 
 function ensureDonationHeaders_(sheet) {
+  const oldHeaders = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1)).getDisplayValues()[0]
+    .map(value => String(value || '').trim().toLowerCase());
+  // One-time migration: insert Amount at column C without shifting or overwriting existing data.
+  if (oldHeaders[0] === 'serial number' && oldHeaders[1] === 'name' && oldHeaders[2] === 'flat number' && !oldHeaders.includes('amount')) {
+    sheet.insertColumnAfter(2);
+  }
   sheet.getRange(1, 1, 1, DONATIONS_HEADERS.length).setValues([DONATIONS_HEADERS]);
   sheet.setFrozenRows(1);
 }
 
-function validateDonation_(payload) {
+function validateDonation_(payload, requireAmount = false) {
+  const amountText = String(payload.amount == null ? '' : payload.amount).trim();
+  const amount = Number(amountText);
+  const invalidAmount = amountText ? (!Number.isFinite(amount) || amount <= 0 || Math.abs(amount * 100 - Math.round(amount * 100)) > 0.00001) : requireAmount;
   const serialNumber = String(payload.serialNumber || '').trim();
   const name = String(payload.name || '').trim();
   const flatNumber = String(payload.flatNumber || '').trim().toUpperCase();
@@ -99,6 +109,7 @@ function validateDonation_(payload) {
 
   if (!/^\d{3,}$/.test(serialNumber) ||
       !name || name.length > 100 ||
+      invalidAmount ||
       !/^([A-F])?(00[1-4]|0?[1-9]0[1-4]|1[0-9]0[1-4])$/.test(flatNumber) ||
       !/^[6-9]\d{9}$/.test(mobileNumber) ||
       donationType !== 'Donate for Temple Daily Activities' ||
@@ -116,16 +127,23 @@ function writeDonationRow_(sheet, payload, statusOverride, verifiedAtOverride) {
   const current = rowNumber > 1
     ? sheet.getRange(rowNumber, 1, 1, DONATIONS_HEADERS.length).getValues()[0]
     : [];
-  const existingStatus = String(current[7] || '').trim();
+  const existingStatus = String(current[8] || '').trim();
   const incomingStatus = String(statusOverride || payload.verificationStatus || 'Pending manual verification');
   const status = existingStatus.toLowerCase() === 'verified' && incomingStatus.toLowerCase() !== 'verified'
     ? existingStatus
     : incomingStatus;
-  const verifiedAt = verifiedAtOverride || current[8] || '';
-  const notes = payload.adminNotes || current[9] || '';
+  const verifiedAt = verifiedAtOverride || current[9] || '';
+  const notes = payload.adminNotes || current[10] || '';
+  const amountValue = payload.amount != null && String(payload.amount).trim() !== ''
+    ? Number(payload.amount)
+    : (current[2] !== '' && Number(current[2]) > 0 ? Number(current[2]) : '');
+  if (payload.amount != null && String(payload.amount).trim() !== '' && (!Number.isFinite(amountValue) || amountValue <= 0 || Math.abs(amountValue * 100 - Math.round(amountValue * 100)) > 0.00001)) {
+    throw new Error('Donation amount must be a positive number with up to two decimal places.');
+  }
   const values = [
     serialNumber,
     safeCell(payload.name),
+    amountValue,
     safeCell(String(payload.flatNumber).trim().toUpperCase()),
     safeCell(payload.mobileNumber),
     safeCell(payload.donationType),
@@ -135,8 +153,10 @@ function writeDonationRow_(sheet, payload, statusOverride, verifiedAtOverride) {
     verifiedAt,
     safeCell(notes)
   ];
+  let targetRow = rowNumber;
   if (rowNumber > 1) sheet.getRange(rowNumber, 1, 1, DONATIONS_HEADERS.length).setValues([values]);
-  else sheet.appendRow(values);
+  else { sheet.appendRow(values); targetRow = sheet.getLastRow(); }
+  sheet.getRange(targetRow, 3).setNumberFormat('\"₹\"#,##0.00');
 }
 
 function findDonationRow_(sheet, utrNumber, serialNumber) {
@@ -144,7 +164,7 @@ function findDonationRow_(sheet, utrNumber, serialNumber) {
   if (lastRow < 2) return 0;
   const values = sheet.getRange(2, 1, lastRow - 1, DONATIONS_HEADERS.length).getDisplayValues();
   for (let i = 0; i < values.length; i++) {
-    const matchesUtr = utrNumber && String(values[i][5]).trim() === String(utrNumber).trim();
+    const matchesUtr = utrNumber && String(values[i][6]).trim() === String(utrNumber).trim();
     const matchesSerial = serialNumber && String(values[i][0]).trim().padStart(3, '0') === String(serialNumber).trim().padStart(3, '0');
     if (matchesUtr || matchesSerial) return i + 2;
   }

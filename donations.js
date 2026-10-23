@@ -35,6 +35,24 @@ function todayInIndia() {
 function safeText(value) {
   return String(value == null ? '' : value);
 }
+function formatAmount(value) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount) || amount <= 0) return '—';
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount);
+}
+function formatAmountForPdf(value) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount) || amount <= 0) return '—';
+  // jsPDF's built-in Helvetica font may not include the Indian rupee glyph.
+  return 'INR ' + new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount);
+}
+const UPI_PAYMENT_BASE = 'upi://pay?pa=0798062a0170493.bqr%40kotak&pn=ARVIND%20OASIS%20APARTMENTS%20OWNERS%20ASSOCIATION%20TEMPLE&cu=INR';
+function refreshUpiPaymentLink() {
+  const amountText = $('donationAmount').value.trim();
+  const amount = Number(amountText);
+  const valid = amountText && Number.isFinite(amount) && amount >= 1;
+  $('openUpiButton').href = UPI_PAYMENT_BASE + (valid ? '&am=' + encodeURIComponent(amount.toFixed(2)) : '');
+}
 function setStatus(message, isError) {
   $('formStatus').textContent = message || '';
   $('formStatus').style.color = isError ? '#a00000' : '#256029';
@@ -77,6 +95,7 @@ async function loadHistory(flatNumber) {
       [
         record.date || '',
         record.serialNumber ? String(record.serialNumber) : '',
+        formatAmount(record.amount),
         record.donationType || 'Donate for Temple Daily Activities',
         record.utrNumber || '',
         record.verificationStatus || 'Pending manual verification'
@@ -112,6 +131,7 @@ async function requestSheetSync(record) {
         action: 'submit',
         serialNumber: record.serialNumber,
         name: record.name,
+        amount: record.amount,
         flatNumber: record.flatNumber,
         mobileNumber: record.mobileNumber,
         donationType: record.donationType,
@@ -129,6 +149,7 @@ async function requestSheetSync(record) {
 function showReceipt(record) {
   $('receiptSerial').textContent = record.serialNumber;
   $('receiptName').textContent = record.name;
+  $('receiptAmount').textContent = formatAmount(record.amount);
   $('receiptFlat').textContent = record.flatNumber;
   $('receiptMobile').textContent = record.mobileNumber;
   $('receiptDate').textContent = record.date;
@@ -146,6 +167,8 @@ function showReceipt(record) {
     donationSection.hidden = false;
     donationForm.reset();
     $('donationDate').value = todayInIndia();
+    $('donationAmount').value = '';
+    refreshUpiPaymentLink();
     $('flatNumber').value = localStorage.getItem('flatNumber') || '';
     $('donorName').value = localStorage.getItem('residentName') || '';
     setStatus('', false);
@@ -153,8 +176,6 @@ function showReceipt(record) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 }
-
-const TEMPLE_WHATSAPP_GROUP_URL = 'https://chat.whatsapp.com/BOurgzSlABs9vGatqsFbBc';
 
 function buildReceiptPdf(record) {
   if (!window.jspdf || !window.jspdf.jsPDF) throw new Error('PDF library unavailable');
@@ -179,6 +200,7 @@ function buildReceiptPdf(record) {
   pdf.text(String(record.serialNumber), pageWidth / 2, 67, { align: 'center' });
   const fields = [
     ['Donor Name', record.name],
+    ['Donation Amount', formatAmountForPdf(record.amount)],
     ['Flat Number', record.flatNumber],
     ['Mobile Number', record.mobileNumber],
     ['Donation Date', record.date],
@@ -229,22 +251,71 @@ function downloadReceipt(record) {
   }
 }
 
+function downloadPdfBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
 async function shareReceipt(record) {
   const filename = 'Temple-Donation-Receipt-' + String(record.serialNumber) + '.pdf';
+  const shareText = 'Shri Varasiddhi Vinayaka Temple donation receipt ' + String(record.serialNumber) +
+    '\nAmount: ' + formatAmount(record.amount) +
+    '\nDonor: ' + safeText(record.name) +
+    '\nFlat: ' + safeText(record.flatNumber) +
+    '\nUPI reference: ' + safeText(record.utrNumber) +
+    '\nPayment verification is subject to Temple Committee confirmation.';
   try {
     const pdf = buildReceiptPdf(record);
-    // Keep the receipt available for attachment while opening the exact group link
-    // already used by annon cements.html. Browser WhatsApp links cannot pre-attach
-    // a locally generated PDF; the donor attaches the downloaded file in the chat.
-    pdf.save(filename);
-    const groupTab = window.open(TEMPLE_WHATSAPP_GROUP_URL, '_blank', 'noopener,noreferrer');
-    $('receiptStatus').textContent = groupTab === null
-      ? 'Receipt downloaded. Your browser blocked the WhatsApp group tab; allow pop-ups or open the AO Temple Well-Wishers link from the Announcements page, then attach the downloaded PDF.'
-      : 'Receipt downloaded and the AO Temple Well-Wishers WhatsApp group opened. Attach the downloaded PDF in the group to share it.';
+    const blob = pdf.output('blob');
+    const file = typeof File === 'function' ? new File([blob], filename, { type: 'application/pdf' }) : null;
+    let canShareFile = false;
+    try { canShareFile = !!(file && navigator.share && navigator.canShare && navigator.canShare({ files: [file] })); }
+    catch (canShareError) { console.info('PDF file sharing is not supported by this browser.', canShareError); }
     $('goBackButton').disabled = false;
+
+    // On supported phones this opens Android's native share sheet with the PDF attached.
+    // The user chooses WhatsApp/the destination and confirms sending; websites cannot
+    // force a particular WhatsApp group or send without the user's confirmation.
+    if (canShareFile) {
+      try {
+        await navigator.share({ files: [file], title: 'Temple Donation Receipt ' + String(record.serialNumber), text: shareText });
+        $('receiptStatus').textContent = 'Receipt shared. Choose WhatsApp, select the intended group or contact, and tap Send.';
+      } catch (shareError) {
+        if (shareError && shareError.name === 'AbortError') {
+          $('receiptStatus').textContent = 'Sharing cancelled. Your receipt is still available to download.';
+          return;
+        }
+        console.warn('Native PDF sharing failed; downloading the receipt instead.', shareError);
+        downloadPdfBlob(blob, filename);
+        $('receiptStatus').textContent = 'The phone could not attach the PDF to the share sheet. The receipt was downloaded; attach it manually in WhatsApp.';
+      }
+      return;
+    }
+
+    // Fallback: always download the PDF, then open the native share sheet for the
+    // accompanying text if available. Some browsers do not allow PDF file sharing.
+    downloadPdfBlob(blob, filename);
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'Temple Donation Receipt ' + String(record.serialNumber), text: shareText });
+        $('receiptStatus').textContent = 'Receipt PDF downloaded. Your browser can share the message but not attach PDFs here; attach the downloaded PDF manually in WhatsApp.';
+      } catch (shareError) {
+        $('receiptStatus').textContent = shareError && shareError.name === 'AbortError'
+          ? 'Receipt PDF downloaded. Sharing was cancelled; attach the PDF manually in WhatsApp when ready.'
+          : 'Receipt PDF downloaded. Open WhatsApp and attach the downloaded PDF manually.';
+      }
+    } else {
+      $('receiptStatus').textContent = 'Receipt PDF downloaded. Your browser does not support the native share sheet; attach the PDF manually in WhatsApp or another app.';
+    }
   } catch (error) {
     console.error('Unable to create a shareable receipt PDF:', error);
-    $('receiptStatus').textContent = 'Could not create the PDF. Use Download Receipt PDF, then open the AO Temple Well-Wishers WhatsApp group and attach the receipt.';
+    $('receiptStatus').textContent = 'Could not create the PDF. Use Download Receipt PDF, then share the saved file from your phone.';
   }
 }
 
@@ -260,6 +331,17 @@ async function initializeDonationPage() {
   $('flatNumber').value = flatNumber;
   $('donorName').value = residentName || '';
   $('donationDate').value = todayInIndia();
+  refreshUpiPaymentLink();
+  $('donationAmount').addEventListener('input', refreshUpiPaymentLink);
+  $('openUpiButton').addEventListener('click', (event) => {
+    const amountText = $('donationAmount').value.trim();
+    const amount = Number(amountText);
+    if (!amountText || !Number.isFinite(amount) || amount < 1) {
+      event.preventDefault();
+      setStatus('Enter the donation amount (at least ₹1) before opening your UPI app.', true);
+      $('donationAmount').focus();
+    }
+  });
   $('utrNumber').addEventListener('input', (event) => {
     event.target.value = event.target.value.replace(/\D/g, '').slice(0, 12);
   });
@@ -290,6 +372,8 @@ async function initializeDonationPage() {
     const date = $('donationDate').value;
     const flat = localStorage.getItem('flatNumber');
     const mobileNumber = $('mobileNumber').value.trim();
+    const amountText = $('donationAmount').value.trim();
+    const amount = Number(amountText);
     const donationType = $('donationType').value;
     const utrNumber = $('utrNumber').value.trim();
 
@@ -300,6 +384,11 @@ async function initializeDonationPage() {
     if (!/^[6-9][0-9]{9}$/.test(mobileNumber)) {
       setStatus('Enter a valid 10-digit Indian mobile number.', true);
       $('mobileNumber').focus();
+      return;
+    }
+    if (!amountText || !Number.isFinite(amount) || amount < 1 || Math.abs(amount * 100 - Math.round(amount * 100)) > 0.00001) {
+      setStatus('Enter a valid donation amount of at least ₹1, with up to two decimal places.', true);
+      $('donationAmount').focus();
       return;
     }
     if (!/^[0-9]{12}$/.test(utrNumber)) {
@@ -331,6 +420,7 @@ async function initializeDonationPage() {
         const record = {
           serialNumber,
           name,
+          amount,
           date,
           flatNumber: flat,
           mobileNumber,
