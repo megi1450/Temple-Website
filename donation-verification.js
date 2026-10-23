@@ -55,7 +55,7 @@ async function requestSheetAction(action, record) {
   const requiresAdminKey = ['verify', 'delete', 'sync'].includes(action);
   const adminKey = sessionStorage.getItem('donationSheetAdminKey') || '';
   if (requiresAdminKey && !adminKey) return { sent: false, reason: 'Enter the Donation Sheet Admin Key first.' };
-  if (!endpoint || !/^https://script.google.com/macros/s/[^/]+/exec(?:?.*)?$/.test(endpoint)) {
+  if (!endpoint || !endpoint.startsWith('https://script.google.com/macros/s/') || !endpoint.endsWith('/exec')) {
     return { sent: false, reason: 'Google Sheets web app URL is not configured.' };
   }
   try {
