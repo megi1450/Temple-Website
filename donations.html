@@ -7,7 +7,7 @@
   <link rel="icon" href="assets/logos/logo.png">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
-  <script src="donations-config.js" defer></script>
+  <script src="donations-config.js?v=20261109-fix3" defer></script>
   <style>
     .donation-page { flex:1; width:100%; padding:28px 16px 42px; background:#fff8dc; }
     .donation-wrap { max-width:1000px; margin:0 auto; }
@@ -99,7 +99,7 @@
             </div>
           </div>
           <p class="donation-notice" style="margin:16px 0 20px;">Keep your UPI app's transaction confirmation. Submitting the reference number records your donation details; it does not automatically verify that the payment reached the temple account.</p>
-          <form id="donationForm" novalidate>
+          <form id="donationForm" data-local-loading="true" novalidate>
             <div class="donation-grid">
               <div class="donation-field full">
                 <label for="donationAmount">Donation Amount (₹)</label>
@@ -189,8 +189,8 @@
   <script>
     function goHome() { window.location.href = 'main.html'; }
   </script>
-  <script type="module" src="donations.js"></script>
+  <script type="module" src="donations.js?v=20261109-fix3"></script>
 
-<script src="site-shell.js"></script>
+<script src="site-shell.js?v=20261109-fix3"></script>
 </body>
 </html>

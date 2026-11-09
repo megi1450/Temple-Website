@@ -14,6 +14,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const $ = (id) => document.getElementById(id);
+function withTimeout(promise, milliseconds, label) {
+  let timer;
+  const timeout = new Promise((_, reject) => { timer = window.setTimeout(() => reject(new Error(label || 'Request timed out.')), milliseconds); });
+  return Promise.race([promise, timeout]).finally(() => window.clearTimeout(timer));
+}
 const pageLoader = $('pageLoader');
 const loaderText = $('loaderText');
 const donationForm = $('donationForm');
@@ -65,7 +70,7 @@ async function verifyResidentSession(flatNumber, residentName, email) {
   }
   const residentId = residentName.replace(/\s+/g, '_') + '_' + email;
   const residentRef = doc(db, 'users', flatNumber, 'residents', residentId);
-  const residentSnap = await getDoc(residentRef);
+  const residentSnap = await withTimeout(getDoc(residentRef), 12000, 'Resident verification timed out. Please check your connection.');
   if (!residentSnap.exists()) {
     localStorage.removeItem('input');
     window.location.replace('index.html');
@@ -80,7 +85,7 @@ async function loadHistory(flatNumber) {
   $('historyTableWrap').hidden = true;
   $('historyError').textContent = '';
   try {
-    const snapshot = await getDocs(collection(db, 'users', flatNumber, 'Donations'));
+    const snapshot = await withTimeout(getDocs(collection(db, 'users', flatNumber, 'Donations')), 12000, 'Donation history request timed out.');
     const records = [];
     snapshot.forEach((item) => records.push(item.data()));
     records.sort((a, b) => {
@@ -118,32 +123,23 @@ async function loadHistory(flatNumber) {
 
 async function requestSheetSync(record) {
   const endpoint = window.DONATION_SHEETS_WEB_APP_URL;
-  if (!endpoint || !/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/.test(endpoint)) {
-    console.info('Donation Sheet sync is not configured. Firestore donation record was saved.');
-    return;
-  }
+  if (!endpoint || !/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/.test(endpoint)) return false;
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), 8000);
   try {
     await fetch(endpoint, {
-      method: 'POST',
-      mode: 'no-cors',
+      method: 'POST', mode: 'no-cors', signal: controller.signal,
       headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify({
-        action: 'submit',
-        serialNumber: record.serialNumber,
-        name: record.name,
-        amount: record.amount,
-        flatNumber: record.flatNumber,
-        mobileNumber: record.mobileNumber,
-        donationType: record.donationType,
-        utrNumber: record.utrNumber,
-        date: record.date,
-        verificationStatus: record.verificationStatus || 'Pending manual verification',
-        verifiedAt: record.verifiedAt || ''
-      })
+      body: JSON.stringify({ action: 'submit', serialNumber: record.serialNumber, name: record.name,
+        amount: record.amount, flatNumber: record.flatNumber, mobileNumber: record.mobileNumber,
+        donationType: record.donationType, utrNumber: record.utrNumber, date: record.date,
+        verificationStatus: record.verificationStatus || 'Pending manual verification', verifiedAt: record.verifiedAt || '' })
     });
+    return true;
   } catch (error) {
-    console.error('Donation details were saved in Firestore, but the Sheets sync request could not be sent:', error);
-  }
+    console.error('Donation saved in Firestore, but the Google Sheets sync request did not complete:', error);
+    return false;
+  } finally { window.clearTimeout(timer); }
 }
 
 function showReceipt(record) {
@@ -405,7 +401,7 @@ async function initializeDonationPage() {
       const flatDonationRef = doc(db, 'users', flat, 'Donations', donationId);
       const counterRef = doc(db, 'receiptNumbers', 'donationsCounter');
 
-      const receipt = await runTransaction(db, async (transaction) => {
+      const receipt = await withTimeout(runTransaction(db, async (transaction) => {
         const duplicateSnap = await transaction.get(donationRef);
         const counterSnap = await transaction.get(counterRef);
         if (duplicateSnap.exists()) {
@@ -438,12 +434,16 @@ async function initializeDonationPage() {
           updatedAt: serverTimestamp()
         });
         return record;
-      });
+      }), 20000, 'Saving the donation timed out. Check your donation history before trying again.');
 
-      await requestSheetSync(receipt);
       setLoading(false);
       showReceipt(receipt);
-      await loadHistory(flat);
+      $('receiptStatus').textContent = 'Donation details saved. Payment verification is pending. Google Sheets sync is being attempted separately.';
+      void requestSheetSync(receipt).then((sent) => {
+        if (!sent) $('receiptStatus').textContent = 'Donation details are saved in temple records. Google Sheets sync could not be sent just now; the committee can reconcile the sheet later. Payment verification is pending.';
+        else $('receiptStatus').textContent = 'Donation details saved. A Google Sheets sync request was sent. Payment verification is pending.';
+      });
+      void loadHistory(flat);
     } catch (error) {
       console.error('Donation submission failed:', error);
       setLoading(false);
@@ -460,4 +460,4 @@ async function initializeDonationPage() {
 }
 
 setLoading(true, 'Loading donation page...');
-initializeDonationPage();
+initializeDonationPage().catch((error) => { console.error('Donation page initialization failed:', error); setStatus('The donation page could not finish loading. Please refresh and try again.', true); setLoading(false); });

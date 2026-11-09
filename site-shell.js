@@ -117,7 +117,6 @@
       const btn=event.target.closest('button,[type="submit"],input[type="submit"]');
       if(btn&&!btn.form&&(/search|refresh|load|fetch|verify|register|submit|save|export|donat|continue|view records/i.test((btn.innerText||btn.value||btn.getAttribute('aria-label')||'').trim())||btn.hasAttribute('data-loading'))){button(btn);}
     },true);
-    document.addEventListener('submit',event=>{const form=event.target;if(form&&form.tagName==='FORM'){show('Submitting securely. Please do not close this page');const submit=form.querySelector('button[type="submit"],input[type="submit"],button:not([type])');if(submit){submit.setAttribute('aria-busy','true');submit.dataset.loadingActive='true';}}},true);
     window.addEventListener('pageshow',hide);
     window.addEventListener('pagehide',()=>show('Moving to the next page'));
   }
@@ -131,7 +130,7 @@
     if(['main.html','index.html','events.html','gallery.html','annoncements.html','committee.html','terms.html','404.html'].includes(file))document.body.dataset.area='public';
     if(residentPages.has(file))document.body.dataset.area='resident';
     if(adminPages.has(file)||file==='pass.html')document.body.dataset.area='admin';
-     if(document.body.dataset.area==='admin'||file==='pass.html'){if(!document.querySelector('link[data-admin-theme]')){const adminTheme=document.createElement('link');adminTheme.rel='stylesheet';adminTheme.href='admin-theme.css';adminTheme.dataset.adminTheme='true';document.head.appendChild(adminTheme);}}
+     if(document.body.dataset.area==='admin'||file==='pass.html'){if(!document.querySelector('link[data-admin-theme]')){const adminTheme=document.createElement('link');adminTheme.rel='stylesheet';adminTheme.href='admin-theme.css?v=20261109-fix3';adminTheme.dataset.adminTheme='true';document.head.appendChild(adminTheme);}}
     // Hide old navigation/footer chrome but retain legacy elements required by existing page scripts.
     document.querySelectorAll('.hamburger2,.scrolling-container,.main-header,.main-footer,.main-footer2').forEach(el=>el.classList.add('legacy-chrome'));
     if(file==='donation-verification.html'){const h=$('body>header');const f=$('body>footer');if(h)h.classList.add('legacy-chrome');if(f)f.classList.add('legacy-chrome');}
