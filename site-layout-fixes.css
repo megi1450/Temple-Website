@@ -1,0 +1,93 @@
+/* Site-wide layout normalization. Loaded after page styles to resolve legacy cascade conflicts. */
+:root{--layout-max:1200px;--layout-gutter:clamp(18px,4vw,42px);--layout-gap:clamp(14px,2vw,22px);--layout-card-pad:clamp(20px,3vw,34px);--layout-line:#e9e1d5;--layout-shadow:0 12px 34px rgba(49,34,24,.055)}
+*,*::before,*::after{box-sizing:border-box}
+html{width:100%;overflow-x:clip;scroll-padding-top:90px}
+body{width:100%;min-width:0;min-height:100vh;overflow-x:clip}
+body:not(.auth-page){display:flex!important;flex-direction:column!important;align-items:stretch!important}
+body:not(.auth-page)>.site-header,body:not(.auth-page)>.site-footer{width:100%;flex:0 0 auto}
+body:not(.auth-page)>.site-content{flex:1 0 auto;min-width:0}
+/* A predictable centered content column for all legacy and redesigned pages. */
+main.site-content:not(.profile-page):not(.donation-page):not(.events-page):not(.registration-page){width:min(var(--layout-max),calc(100% - 2*var(--layout-gutter)))!important;max-width:var(--layout-max)!important;min-width:0!important;margin:0 auto 52px!important;padding:clamp(22px,3vw,38px) 0 48px!important;box-sizing:border-box!important}
+.site-content>.container,.site-content>.container-fluid{width:100%!important;max-width:100%!important;min-width:0!important;margin-inline:0!important;padding-inline:0!important;box-sizing:border-box!important}
+.site-content section{min-width:0;max-width:100%}
+.site-content section+section{margin-top:var(--layout-gap)}
+.site-content h1,.site-content h2,.site-content h3{overflow-wrap:anywhere}
+.site-content h1{margin:0 0 18px;line-height:1.2}
+.site-content h2{margin:0 0 16px;line-height:1.25}
+.site-content p{line-height:1.7}
+/* Reusable card surfaces: consistent internal padding and spacing. */
+.site-content .card,.site-content .panel,.site-content .stat,.site-content .stat-card,.site-content .quick-card,.site-content .dashboard-card,.site-content .announcement-card,.site-content .announcement-preview,.site-content .report-card,.site-content .member,.site-content .chart-container,.site-content .result,.site-content .donation-card,.site-content .receipt-card{min-width:0;padding:var(--layout-card-pad)!important;border:1px solid var(--layout-line);border-radius:18px;background:#fff;box-shadow:var(--layout-shadow)}
+.site-content .card>*:first-child,.site-content .panel>*:first-child,.site-content .donation-card>*:first-child{margin-top:0}
+.site-content .card>*:last-child,.site-content .panel>*:last-child,.site-content .donation-card>*:last-child{margin-bottom:0}
+.site-content .quick-grid,.site-content .stats,.site-content .filters,.site-content .committee-members,.site-content .gallery-grid,.site-content .donation-grid,.site-content .receipt-details,.site-content .dropdown-container{gap:var(--layout-gap)!important}
+.site-content .quick-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,245px),1fr))}
+.site-content .stats{grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
+.site-content .filters{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}
+.site-content .quick-card{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:190px;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.site-content .quick-card:hover{transform:translateY(-2px);border-color:#d7c4ad;box-shadow:0 16px 34px rgba(49,34,24,.09)}
+/* Profile: override the generic .site-content width rule that previously stretched the card edge-to-edge. */
+main.site-content.profile-page{display:block!important;width:min(920px,calc(100% - 2*var(--layout-gutter)))!important;max-width:920px!important;min-width:0!important;margin:clamp(24px,4vw,48px) auto 64px!important;padding:0!important;box-sizing:border-box!important}
+.profile-card{width:100%;min-width:0;padding:clamp(24px,4vw,42px)!important;border:1px solid var(--layout-line)!important;border-radius:22px!important;background:#fffdfa!important;box-shadow:var(--layout-shadow)!important}
+.profile-card__heading{display:flex;align-items:center;gap:20px!important;padding:0 0 26px!important;border-bottom:1px solid var(--layout-line)}
+.profile-card__heading>div{min-width:0}
+.profile-card__heading h2{margin:5px 0 10px!important;font-size:clamp(1.8rem,3.5vw,2.5rem)!important;line-height:1.12!important}
+.profile-card__heading p{margin:0!important;line-height:1.65}
+.profile-card__avatar{width:72px!important;height:72px!important;flex:0 0 72px!important}
+.profile-details{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px 16px!important;margin:26px 0 0!important}
+.profile-details>div{display:flex;flex-direction:column;justify-content:center;gap:7px;min-width:0;min-height:92px;padding:17px 19px!important;border:1px solid #eee7de!important;border-radius:14px!important;background:#fff!important}
+.profile-details span{margin:0!important;color:#756b63!important;font-size:12px!important;line-height:1.4}
+.profile-details strong{color:#272522!important;font-size:15px!important;line-height:1.45;overflow-wrap:anywhere;word-break:break-word}
+.profile-status{margin:22px 0 18px!important;line-height:1.6}
+.profile-actions{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;flex-wrap:wrap!important}
+.profile-actions>*{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;min-width:142px;min-height:48px!important;margin:0!important;padding:12px 18px!important;border-radius:12px!important;font-size:13px!important;font-weight:750!important;line-height:1.25;text-align:center;text-decoration:none;cursor:pointer}
+.profile-actions .btn-outline{border:1px solid #e2d7c9!important;background:#fff!important;color:#632b35!important}
+.profile-actions .resident-button{border:1px solid #632b35!important;background:#632b35!important;color:#fff!important}
+.profile-note{margin:22px 0 0!important;font-size:12px!important;line-height:1.6}
+/* Registration and other forms: clear label/input rhythm and full-width controls. */
+main.site-content.registration-page{width:min(760px,calc(100% - 2*var(--layout-gutter)))!important;max-width:760px!important;margin:clamp(20px,4vw,40px) auto 56px!important;padding:0!important}
+.registration-page #registrationForm,.site-content form.portal-form,#registrationForm.portal-form{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:15px!important;width:100%!important;max-width:100%!important;margin:0 auto!important;padding:clamp(22px,4vw,38px)!important;border:1px solid var(--layout-line)!important;border-radius:20px!important;background:#fff!important;box-shadow:var(--layout-shadow)!important;box-sizing:border-box!important}
+#registrationForm.portal-form h1,#registrationForm.portal-form h2{margin:0 0 4px!important;line-height:1.2}
+#registrationForm.portal-form label,.site-content form label{display:block;margin:0 0 6px!important;color:#542832;font-size:13px;font-weight:700;line-height:1.4}
+#registrationForm.portal-form input,#registrationForm.portal-form select,#registrationForm.portal-form textarea,.site-content form input,.site-content form select,.site-content form textarea{display:block;width:100%!important;max-width:100%!important;min-width:0!important;min-height:48px!important;margin:0!important;padding:11px 14px!important;border:1px solid #ded5ca!important;border-radius:11px!important;background:#fff!important;color:#272522!important;font:inherit!important;font-size:16px!important;box-shadow:none!important}
+#registrationForm.portal-form input:focus,#registrationForm.portal-form select:focus,.site-content form input:focus,.site-content form select:focus,.site-content form textarea:focus{outline:3px solid rgba(178,139,82,.18)!important;border-color:#b28b52!important}
+#registrationForm.portal-form button,#registrationForm.portal-form .portal-submit,.site-content form button[type=submit]{width:100%;min-height:49px;margin:4px 0 0!important;padding:12px 18px!important;border:0!important;border-radius:12px!important;background:#632b35!important;color:#fff!important;font-size:14px!important;font-weight:750!important;cursor:pointer}
+/* Tables, charts and long content must scroll inside their own frame, never the page. */
+.site-content .table-wrap,.site-content .results,.site-content .chart-container,.site-content .donation-table-wrap{width:100%;max-width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.site-content table{max-width:100%;border-collapse:separate;border-spacing:0}
+.site-content table th,.site-content table td{vertical-align:top;overflow-wrap:anywhere}
+.site-content img,.site-content video,.site-content canvas{max-width:100%}
+.site-content input,.site-content select,.site-content textarea,.site-content button{font:inherit;max-width:100%}
+.site-content button,.site-content .btn,.site-content a.btn{min-height:42px}
+.site-content .actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px!important}
+/* Prevent long labels, IDs, and URLs from breaking the viewport. */
+.site-content>*{min-width:0;max-width:100%}
+.site-content a,.site-content strong,.site-content code{overflow-wrap:anywhere}
+@media(max-width:760px){
+ :root{--layout-gutter:18px;--layout-gap:13px;--layout-card-pad:19px}
+ main.site-content:not(.profile-page):not(.donation-page):not(.events-page):not(.registration-page){margin-bottom:34px!important;padding:20px 0 34px!important}
+ main.site-content.profile-page{width:calc(100% - 32px)!important;margin:22px auto 40px!important;padding:0!important}
+ .profile-card{padding:22px 19px!important;border-radius:18px!important}
+ .profile-card__heading{gap:13px!important;padding-bottom:20px!important}
+ .profile-card__avatar{width:54px!important;height:54px!important;flex-basis:54px!important}
+ .profile-card__avatar svg{width:28px;height:28px}
+ .profile-card__heading h2{font-size:clamp(1.65rem,7vw,2rem)!important}
+ .profile-card__heading p{font-size:13px!important}
+ .profile-details{grid-template-columns:minmax(0,1fr)!important;gap:10px!important;margin-top:19px!important}
+ .profile-details>div{min-height:78px;padding:14px 16px!important}
+ .profile-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:10px!important}
+ .profile-actions>*{width:100%!important;min-width:0!important;min-height:46px!important;padding:11px 10px!important;font-size:12px!important}
+ .profile-note{margin-top:18px!important}
+ main.site-content.registration-page{width:calc(100% - 32px)!important;margin:18px auto 36px!important}
+ #registrationForm.portal-form,.site-content form.portal-form{padding:20px 16px!important;gap:13px!important;border-radius:17px!important}
+ .site-content .quick-grid,.site-content .stats,.site-content .filters,.site-content .committee-members{grid-template-columns:minmax(0,1fr)!important}
+ .site-content .chart-container{padding:15px!important}
+}
+@media(max-width:380px){
+ main.site-content.profile-page{width:calc(100% - 22px)!important}
+ .profile-card{padding:18px 14px!important}
+ .profile-card__heading{align-items:flex-start!important}
+ .profile-actions{grid-template-columns:minmax(0,1fr)!important}
+ main.site-content.registration-page{width:calc(100% - 22px)!important}
+ #registrationForm.portal-form,.site-content form.portal-form{padding:17px 13px!important}
+}
+@media(prefers-reduced-motion:reduce){.site-content .quick-card{transition:none!important}}
