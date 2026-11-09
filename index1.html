@@ -1,317 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shri Varasiddhi Vinayaka Temple -- Sign In</title>
-    <link rel="icon" href="assets/logos/logo.png">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to left, #301838, #b81736);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            height: 100vh;
-            color: #333;
-            overflow-y: auto;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        form {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            width: 100%;
-            box-sizing: border-box;
-            border-radius: 20px;
-            animation: popIn 0.5s ease;
-        }
-
-        @keyframes popIn {
-            from {
-                transform: scale(0.8);
-                opacity: 0;
-            }
-
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #007bff;
-            font-size: 1.5em;
-            text-align: center;
-        }
-
-        .greeting {
-            margin-bottom: 10px;
-            font-size: 1.5em;
-            color: #007bff;
-            text-align: center;
-            width: 100%;
-        }
-
-        .greeting h4 {
-            color: white;
-            padding-top: 10px;
-        }
-
-        input {
-            width: calc(100% - 24px);
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-            transition: border 0.3s, box-shadow 0.3s ease;
-            box-sizing: border-box;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        input:focus {
-            border-color: #007bff;
-            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5),
-                0 4px 8px rgba(0, 0, 0, 0.3);
-            outline: none;
-        }
-
-        button {
-            width: 100%;
-            background: linear-gradient(to left, #301838, #b81736);
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: #bd0000;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-            outline: none;
-        }
-
-        p {
-            font-size: 14px;
-            line-height: 1.5;
-            margin: 5px 0;
-        }
-
-        hr {
-            border: none;
-            border-top: 1px solid #ccc;
-            margin: 20px 0;
-        }
-
-        @media (max-width: 600px) {
-            h2 {
-                font-size: 1.3em;
-            }
-
-            input {
-                font-size: 14px;
-            }
-
-            button {
-                font-size: 16px;
-            }
-
-            .greeting {
-                font-size: 1.2em;
-            }
-        }
-
-        @media (max-width: 400px) {
-            h2 {
-                font-size: 1.1em;
-            }
-
-            input,
-            button {
-                padding: 10px;
-            }
-        }
-    </style>
-
-<link rel="stylesheet" href="redesign.css">
-<link rel="stylesheet" href="main-compat.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#632b35">
+  <title>Resident Registration | Shri Varasiddhi Vinayaka Temple</title>
+  <link rel="icon" href="assets/logos/logo.png">
+  <link rel="stylesheet" href="redesign.css">
 </head>
-
-<body>
-    <div class="container">
-        <div class="greeting">
-            <h4>Hello Sign In, </h4>
+<body class="auth-page" data-page="index1.html" data-auth-mode="register">
+  <main class="container auth-card" aria-labelledby="access-title">
+    <aside class="auth-visual">
+      <span class="auth-visual__eyebrow">ARVIND OASIS · BENGALURU</span>
+      <div class="auth-visual__copy">
+        <span class="auth-visual__symbol" aria-hidden="true">ॐ</span>
+        <h1>Temple services, made simpler.</h1>
+        <p>Manage your puja registrations, contributions and receipts in one convenient place.</p>
+      </div>
+      <span class="auth-visual__foot">ಶ್ರೀ ವರಸಿದ್ಧಿ ವಿನಾಯಕ ದೇವಸ್ಥಾನ</span>
+    </aside>
+    <section class="auth-panel">
+      <div class="greeting">
+        <span class="section-kicker">RESIDENT ACCOUNT</span>
+        <h2 id="access-title" data-en="Create your resident profile" data-kn="ನಿಮ್ಮ ನಿವಾಸಿ ಪ್ರೊಫೈಲ್ ರಚಿಸಿ">Create your resident profile</h2>
+        <p data-en="Enter your resident details to create your temple services account." data-kn="ದೇವಾಲಯದ ಸೇವೆಗಳ ಖಾತೆಯನ್ನು ರಚಿಸಲು ನಿಮ್ಮ ನಿವಾಸಿ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ.">Enter your resident details to create your temple services account.</p>
+      </div>
+      <form id="residentAccessForm" class="auth-form" novalidate>
+        <div class="auth-field">
+          <label for="flatNumber" data-en="Flat number" data-kn="ಫ್ಲಾಟ್ ಸಂಖ್ಯೆ">Flat number</label>
+          <input id="flatNumber" name="flatNumber" type="text" inputmode="text" maxlength="5" placeholder="e.g. A1404" data-en-placeholder="e.g. A1404" data-kn-placeholder="ಉದಾ. A1404" title="Enter your block and flat number, e.g. A1404" required autocomplete="off" autocapitalize="characters" spellcheck="false">
+          <small class="field-hint" data-en="Include your block letter, for example A1404." data-kn="ಬ್ಲಾಕ್ ಅಕ್ಷರದೊಂದಿಗೆ ನಮೂದಿಸಿ, ಉದಾಹರಣೆಗೆ A1404.">Include your block letter, for example A1404.</small>
         </div>
-        <img src="assets/loader/ld.gif"
-            style="height: 50px; width: 50px; border-radius: 75px; margin-bottom: 10px; visibility: hidden;"
-            id="loading">
-        <form id="signinForm">
-            <input type="text" id="flatNumber" placeholder="Flat Number (e.g., A001, F1904)" required maxlength="5"
-                pattern="^([A-F])?(00[1-4]|0?[1-9]0[1-4]|1[0-9]0[1-4])$"
-                title="Valid flat: 001–004 or 101–1904 (with optional A–F block prefix)">
-
-            <input type="text" id="residentName" placeholder="Your Name" required>
-            <input type="email" id="email" placeholder="Email" required>
-            <p><strong>Please enter your flat number and name carefully.</strong></p>
-            <button type="submit">Sign In</button>
-        </form>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js';
-        import { getFirestore, setDoc, doc, getDoc, collection } from 'https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBKtqm0KzMmX4cCqT3PhGI2aFcF3LSXnEk",
-            authDomain: "ao-temple.firebaseapp.com",
-            projectId: "ao-temple",
-            storageBucket: "ao-temple.appspot.com",
-            messagingSenderId: "426167530682",
-            appId: "1:426167530682:web:848a4cb0ceee2ce05cfe83"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        document.addEventListener("DOMContentLoaded", async function() {
-            if (localStorage.getItem('input') === 'true') {
-                const flatNumber = localStorage.getItem('flatNumber');
-                const residentName = localStorage.getItem('residentName');
-                const email = localStorage.getItem('email');
-                
-                if (flatNumber && residentName && email) {
-                    // Disable inputs and show loading animation
-                    document.getElementById('flatNumber').disabled = true;
-                    document.getElementById('residentName').disabled = true;
-                    document.getElementById('email').disabled = true;
-                    const loading = document.getElementById('loading');
-                    loading.style.visibility = 'visible';
-
-                    try {
-                        // Check if the flat number document exists
-                        const flatRef = doc(db, 'users', flatNumber);
-                        const flatSnap = await getDoc(flatRef);
-
-                        if (flatSnap.exists()) {
-                            // Check if the resident exists under this flat
-                            const residentDocId = `${residentName.replace(/\s+/g, '_')}_${email}`;
-                            const residentRef = doc(collection(flatRef, 'residents'), residentDocId);
-                            const residentSnap = await getDoc(residentRef);
-
-                            if (residentSnap.exists()) {
-                                window.location.href = 'main.html'; // Redirect to main.html if user exists
-                            } else {
-                                // Clear local storage if the user does not exist
-                                localStorage.clear();
-                            }
-                        } else {
-                            // Clear local storage if the flat number does not exist
-                            localStorage.clear();
-                        }
-                    } catch (error) {
-                        console.error("Error checking user: ", error);
-                    } finally {
-                        loading.style.visibility = 'hidden'; // Hide loading animation
-                        // Re-enable inputs after checking
-                        document.getElementById('flatNumber').disabled = false;
-                        document.getElementById('residentName').disabled = false;
-                        document.getElementById('email').disabled = false;
-                    }
-                }
-            }
-        });
-
-        document.getElementById('signinForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const flatNumber = document.getElementById('flatNumber').value;
-            const residentName = document.getElementById('residentName').value;
-            const email = document.getElementById('email').value;
-
-            // Validate the flat number
-// Validate the flat number
-const flatNumberPattern = /^([A-F])?(00[1-4]|0?[1-9]0[1-4]|1[0-9]0[1-4])$/;
-if (!flatNumberPattern.test(flatNumber)) {
-    alert("Please enter a valid flat number (e.g., 001, A002, F101, B1904).");
-    return;
-}
-
-
-
-
-            // Save user data in local storage
-            localStorage.setItem('flatNumber', flatNumber);
-            localStorage.setItem('residentName', residentName);
-            localStorage.setItem('email', email);
-            const loading = document.getElementById('loading');
-            loading.style.visibility = 'visible'; // Show loading animation
-
-            // Disable inputs during sign-in process
-            document.getElementById('flatNumber').disabled = true;
-            document.getElementById('residentName').disabled = true;
-            document.getElementById('email').disabled = true;
-
-            try {
-                // Check if the flat number document exists
-                const flatRef = doc(db, 'users', flatNumber);
-                const flatSnap = await getDoc(flatRef);
-
-                if (!flatSnap.exists()) {
-                    await setDoc(flatRef, {}); // Create flat number document if it doesn't exist
-                }
-
-                // Create a unique ID for the resident document based on name and email
-                const residentDocId = `${residentName.replace(/\s+/g, '_')}_${email}`;
-                const residentRef = doc(collection(flatRef, 'residents'), residentDocId);
-                const residentSnap = await getDoc(residentRef);
-
-                if (residentSnap.exists()) {
-                    window.location.href = 'login.html'; // Redirect to new login page
-                } else {
-                    // Add new resident under the flat number
-                    await setDoc(residentRef, {
-                        name: residentName,
-                        email: email,
-                        signInTime: new Date().toISOString() // Optional: Record sign-in time
-                    });
-
-                    localStorage.setItem('input', 'true'); // Mark as signed in
-                    window.location.href = 'terms.html'; // Redirect to main page
-                }
-
-            } catch (error) {
-                console.error("Error signing in: ", error);
-                alert("An error occurred while signing in. Please try again.");
-            } finally {
-                loading.style.visibility = 'hidden'; // Hide loading animation
-                // Re-enable inputs after sign-in process
-                document.getElementById('flatNumber').disabled = false;
-                document.getElementById('residentName').disabled = false;
-                document.getElementById('email').disabled = false;
-            }
-        });
-
-    </script>
+        <div class="auth-field">
+          <label for="residentName" data-en="Full name" data-kn="ಪೂರ್ಣ ಹೆಸರು">Full name</label>
+          <input id="residentName" name="residentName" type="text" placeholder="Your registered name" data-en-placeholder="Your registered name" data-kn-placeholder="ನೋಂದಾಯಿತ ಹೆಸರು" required autocomplete="name" autocapitalize="words">
+        </div>
+        <div class="auth-field">
+          <label for="email" data-en="Email address" data-kn="ಇಮೇಲ್ ವಿಳಾಸ">Email address</label>
+          <input id="email" name="email" type="email" placeholder="name@example.com" data-en-placeholder="name@example.com" data-kn-placeholder="name@example.com" required autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false">
+        </div>
+        <p class="auth-help" data-en="Please enter your name and email exactly as you would like them saved in your resident profile." data-kn="ನಿಮ್ಮ ನಿವಾಸಿ ಪ್ರೊಫೈಲ್‌ನಲ್ಲಿ ಉಳಿಸಲು ಬಯಸುವ ಹೆಸರು ಮತ್ತು ಇಮೇಲ್ ಅನ್ನು ನಮೂದಿಸಿ.">Please enter your name and email exactly as you would like them saved in your resident profile.</p>
+        <p id="authStatus" class="auth-status" role="alert" aria-live="polite"></p>
+        <button class="auth-submit" type="submit" data-en="Create account" data-kn="ಖಾತೆ ರಚಿಸಿ">Create account</button>
+      </form>
+      <p class="auth-switch"><span data-en="Already registered?" data-kn="ಈಗಾಗಲೇ ನೋಂದಾಯಿಸಿದ್ದೀರಾ?">Already registered?</span> <a href="login.html" data-en="Sign in" data-kn="ಸೈನ್ ಇನ್">Sign in</a></p>
+      <a class="auth-back" href="resident-access.html">← <span data-en="All resident access options" data-kn="ಎಲ್ಲಾ ನಿವಾಸಿ ಪ್ರವೇಶ ಆಯ್ಕೆಗಳು">All resident access options</span></a>
+    </section>
+  </main>
+  <script src="firebase-config.js"></script>
+  <script src="site-shell.js"></script>
+  <script type="module" src="auth.js"></script>
 </body>
-
 </html>

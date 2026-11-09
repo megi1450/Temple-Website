@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#632b35"><title>My Profile | Shri Varasiddhi Vinayaka Temple</title><link rel="icon" href="assets/logos/logo.png"><link rel="stylesheet" href="redesign.css"></head>
+<body data-page="profile.html" data-area="resident">
+<main class="profile-page">
+  <section class="profile-card" aria-labelledby="profileTitle">
+    <div class="profile-card__heading"><span class="profile-card__avatar" aria-hidden="true"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.5"></circle><path d="M4.5 20c.7-3.5 3.2-5.3 7.5-5.3s6.8 1.8 7.5 5.3"></path></svg></span><div><span class="section-kicker" data-en="Resident account" data-kn="ನಿವಾಸಿ ಖಾತೆ">Resident account</span><h2 id="profileTitle" data-en="Your profile" data-kn="ನಿಮ್ಮ ಪ್ರೊಫೈಲ್">Your profile</h2><p class="muted" data-en="Your registered details with Shri Varasiddhi Vinayaka Temple." data-kn="ಶ್ರೀ ವರಸಿದ್ಧಿ ವಿನಾಯಕ ದೇವಸ್ಥಾನದಲ್ಲಿ ನೋಂದಾಯಿಸಿದ ನಿಮ್ಮ ವಿವರಗಳು.">Your registered details with Shri Varasiddhi Vinayaka Temple.</p></div></div>
+    <div class="profile-details" aria-live="polite">
+      <div><span data-en="Resident name" data-kn="ನಿವಾಸಿಯ ಹೆಸರು">Resident name</span><strong id="profileName" translate="no">—</strong></div>
+      <div><span data-en="Flat number" data-kn="ಫ್ಲಾಟ್ ಸಂಖ್ಯೆ">Flat number</span><strong id="profileFlat" translate="no">—</strong></div>
+      <div><span data-en="Email address" data-kn="ಇಮೇಲ್ ವಿಳಾಸ">Email address</span><strong id="profileEmail" translate="no">—</strong></div>
+      <div id="profilePhoneRow" hidden><span data-en="Mobile number" data-kn="ಮೊಬೈಲ್ ಸಂಖ್ಯೆ">Mobile number</span><strong id="profilePhone" translate="no">—</strong></div>
+      <div id="profileDateRow" hidden><span data-en="Registration date" data-kn="ನೋಂದಣಿ ದಿನಾಂಕ">Registration date</span><strong id="profileDate" translate="no">—</strong></div>
+    </div>
+    <p class="profile-status" id="profileStatus" role="status">Loading your registered profile...</p>
+    <div class="profile-actions"><a class="btn-outline" href="resident-dashboard.html" data-en="Resident dashboard" data-kn="ನಿವಾಸಿ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್">Resident dashboard</a><button class="resident-button" type="button" data-logout data-en="Log out" data-kn="ಲಾಗ್ ಔಟ್">Log out</button></div>
+    <p class="profile-note" data-en="This profile is view-only. Profile editing will be added separately." data-kn="ಈ ಪ್ರೊಫೈಲ್ ವೀಕ್ಷಣೆಗೆ ಮಾತ್ರ. ಪ್ರೊಫೈಲ್ ಸಂಪಾದನೆಯನ್ನು ನಂತರ ಸೇರಿಸಲಾಗುತ್ತದೆ.">This profile is view-only. Profile editing will be added separately.</p>
+  </section>
+</main>
+<script src="site-shell.js"></script><script src="firebase-config.js"></script>
+<script type="module" src="profile.js"></script>
+</body></html>
