@@ -127,11 +127,11 @@
     document.body.classList.add('page-'+file.replace(/[^a-z0-9]+/g,'-'));
     if(!document.querySelector('link[data-temple-ux]')){const ux=document.createElement('link');ux.rel='stylesheet';ux.href='ux-improvements.css';ux.dataset.templeUx='true';document.head.appendChild(ux);}
     if(!document.querySelector('link[data-temple-polish]')){const polish=document.createElement('link');polish.rel='stylesheet';polish.href='site-polish.css';polish.dataset.templePolish='true';document.head.appendChild(polish);}
-    if(adminPages.has(file)){const simple=document.createElement('link');simple.rel='stylesheet';simple.href='admin-simple.css?v=20261109-1';simple.dataset.adminSimple='true';document.head.appendChild(simple);}
     if(['main.html','index.html','events.html','gallery.html','annoncements.html','committee.html','terms.html','404.html'].includes(file))document.body.dataset.area='public';
     if(residentPages.has(file))document.body.dataset.area='resident';
     if(adminPages.has(file)||file==='pass.html')document.body.dataset.area='admin';
      if(document.body.dataset.area==='admin'||file==='pass.html'){if(!document.querySelector('link[data-admin-theme]')){const adminTheme=document.createElement('link');adminTheme.rel='stylesheet';adminTheme.href='admin-theme.css?v=20261109-fix4';adminTheme.dataset.adminTheme='true';document.head.appendChild(adminTheme);}}
+    if(adminPages.has(file)){const simple=document.createElement('link');simple.rel='stylesheet';simple.href='admin-simple.css?v=20261109-2';simple.dataset.adminSimple='true';document.head.appendChild(simple);}
     // Hide old navigation/footer chrome but retain legacy elements required by existing page scripts.
     document.querySelectorAll('.hamburger2,.scrolling-container,.main-header,.main-footer,.main-footer2').forEach(el=>el.classList.add('legacy-chrome'));
     if(file==='donation-verification.html'){const h=$('body>header');const f=$('body>footer');if(h)h.classList.add('legacy-chrome');if(f)f.classList.add('legacy-chrome');}
