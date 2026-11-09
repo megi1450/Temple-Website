@@ -422,3 +422,86 @@ body>.site-header .site-header__inner{width:calc(100% - 36px)!important;max-widt
   body>.site-header .account-button,body>.site-header .nav-toggle{width:34px!important;min-width:34px!important;height:34px!important;min-height:34px!important;}
   .site-content.events-page,.site-content.registration-page{width:calc(100% - 20px)!important;}
 }
+
+
+/* Admin contrast repair — scoped to restricted administration pages only. */
+body[data-area="admin"] {
+  color: #34272a !important;
+  background: #faf7f1 !important;
+}
+body[data-area="admin"] .site-header--admin {
+  background: #2e2222 !important;
+  color: #fff8f0 !important;
+}
+body[data-area="admin"] .site-header--admin .site-nav > a,
+body[data-area="admin"] .site-header--admin .nav-dropdown > summary {
+  color: #fff8f0 !important;
+  opacity: 1 !important;
+}
+body[data-area="admin"] .site-header--admin .site-nav > a[aria-current="page"],
+body[data-area="admin"] .site-header--admin .site-nav > a.active,
+body[data-area="admin"] .site-header--admin .site-nav > a[aria-current="page"]:hover {
+  background: #f4eadd !important;
+  color: #54232e !important;
+  font-weight: 800 !important;
+}
+body[data-area="admin"] h1 {
+  background: #632b35 !important;
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+body[data-area="admin"] h2,
+body[data-area="admin"] h3,
+body[data-area="admin"] h4 {
+  color: #3d2028 !important;
+}
+body[data-area="admin"] p,
+body[data-area="admin"] label,
+body[data-area="admin"] small,
+body[data-area="admin"] li,
+body[data-area="admin"] td,
+body[data-area="admin"] th,
+body[data-area="admin"] .form-text,
+body[data-area="admin"] .muted {
+  color: #51464a;
+}
+body[data-area="admin"] .card,
+body[data-area="admin"] .panel,
+body[data-area="admin"] .stat-card,
+body[data-area="admin"] .dashboard-card,
+body[data-area="admin"] #buttonPanel > * {
+  color: #34272a !important;
+  background: #ffffff !important;
+  border-color: #e7dcd2 !important;
+}
+body[data-area="admin"] .card p,
+body[data-area="admin"] #buttonPanel p {
+  color: #51464a !important;
+}
+body[data-area="admin"] .button,
+body[data-area="admin"] button,
+body[data-area="admin"] .btn,
+body[data-area="admin"] input[type="submit"] {
+  background: #632b35 !important;
+  border-color: #632b35 !important;
+  color: #ffffff !important;
+}
+body[data-area="admin"] input,
+body[data-area="admin"] select,
+body[data-area="admin"] textarea {
+  color: #34272a !important;
+  background: #ffffff !important;
+  border-color: #cfc1b8 !important;
+}
+body[data-area="admin"] input::placeholder,
+body[data-area="admin"] textarea::placeholder {
+  color: #74676b !important;
+  opacity: 1 !important;
+}
+body[data-area="admin"] a:not(.site-nav a):not(.resident-button) {
+  color: #632b35;
+}
+body[data-area="admin"] :focus-visible {
+  outline: 3px solid #b88943 !important;
+  outline-offset: 2px !important;
+}
