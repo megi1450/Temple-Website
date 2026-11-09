@@ -98,11 +98,33 @@
     const overlay=document.createElement('div');overlay.className='temple-loading-overlay';overlay.id='templeLoadingOverlay';overlay.setAttribute('role','status');overlay.setAttribute('aria-live','polite');overlay.setAttribute('aria-hidden','true');
     overlay.innerHTML='<div class="temple-loading-card"><span class="temple-loading-mark" aria-hidden="true"></span><span class="temple-loading-copy"><strong>Just a moment</strong><span data-loading-message>Preparing your page securely</span><span class="temple-loading-bar" aria-hidden="true"></span></span></div>';
     document.body.appendChild(overlay);
-    let hideTimer;
-    const show=(message='Please wait while we load your information')=>{clearTimeout(hideTimer);const label=overlay.querySelector('[data-loading-message]');if(label)label.textContent=message;overlay.classList.add('is-visible');overlay.setAttribute('aria-hidden','false');};
-    const hide=()=>{overlay.classList.remove('is-visible');overlay.setAttribute('aria-hidden','true');};
-    const button=(el,message='Working...')=>{if(!el||el.dataset.loadingActive==='true')return;el.dataset.loadingActive='true';el.setAttribute('aria-busy','true');el.dataset.originalLoadingText=el.innerHTML;el.innerHTML='<span class="temple-button-spinner" aria-hidden="true"></span>'+message;hideTimer=setTimeout(()=>{el.innerHTML=el.dataset.originalLoadingText||el.innerHTML;el.dataset.loadingActive='false';el.removeAttribute('aria-busy');delete el.dataset.originalLoadingText;},18000);};
-    window.TempleLoading={show,hide,button};
+    let overlayHideTimer;
+    const buttonTimers=new WeakMap();
+    const restoreButton=(el)=>{
+      if(!el)return;
+      const timer=buttonTimers.get(el);
+      if(timer)clearTimeout(timer);
+      buttonTimers.delete(el);
+      if(!el.isConnected)return;
+      if(el.dataset.loadingActive==='true'){
+        el.innerHTML=el.dataset.originalLoadingText||el.innerHTML;
+        el.dataset.loadingActive='false';
+        el.removeAttribute('aria-busy');
+        delete el.dataset.originalLoadingText;
+      }
+    };
+    const show=(message='Please wait while we load your information')=>{clearTimeout(overlayHideTimer);const label=overlay.querySelector('[data-loading-message]');if(label)label.textContent=message;overlay.classList.add('is-visible');overlay.setAttribute('aria-hidden','false');};
+    const hide=()=>{clearTimeout(overlayHideTimer);overlay.classList.remove('is-visible');overlay.setAttribute('aria-hidden','true');};
+    const button=(el,message='Working...')=>{
+      if(!el||el.dataset.loadingActive==='true')return;
+      el.dataset.loadingActive='true';
+      el.setAttribute('aria-busy','true');
+      el.dataset.originalLoadingText=el.innerHTML;
+      el.innerHTML='<span class="temple-button-spinner" aria-hidden="true"></span>'+message;
+      const timer=window.setTimeout(()=>restoreButton(el),18000);
+      buttonTimers.set(el,timer);
+    };
+    window.TempleLoading={show,hide,button,restoreButton};
     show('Loading temple services...');
     if(document.readyState==='complete')hide();else window.addEventListener('load',hide,{once:true});
     document.addEventListener('click',event=>{
@@ -117,7 +139,7 @@
       const btn=event.target.closest('button,[type="submit"],input[type="submit"]');
       if(btn&&!btn.form&&(/search|refresh|load|fetch|verify|register|submit|save|export|donat|continue|view records/i.test((btn.innerText||btn.value||btn.getAttribute('aria-label')||'').trim())||btn.hasAttribute('data-loading'))){button(btn);}
     },true);
-    window.addEventListener('pageshow',hide);
+    window.addEventListener('pageshow',()=>{hide();document.querySelectorAll('[data-loading-active="true"]').forEach(restoreButton);});
     window.addEventListener('pagehide',()=>show('Moving to the next page'));
   }
   function init(){
