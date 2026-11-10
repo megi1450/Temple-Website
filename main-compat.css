@@ -3,7 +3,9 @@
 html{scroll-behavior:smooth;scroll-padding-top:24px}
 body{display:flex!important;flex-direction:column!important;min-height:100vh!important;width:100%;margin:0!important;padding:0!important;overflow-x:clip!important;background:var(--temple-paper)!important;color:var(--temple-ink)!important;font-family:'DM Sans','Noto Sans Kannada',sans-serif!important;font-size:15px!important;line-height:1.65!important}
 body,body *{box-sizing:border-box}
-body>main,body>section,body>.donation-page,body>.container{flex:1 0 auto}
+body>main,body>.donation-page,body>.container{flex:1 0 auto}
+/* The shared page title is a compact header block, never a viewport-filling section. */
+body>.site-page-intro{flex:0 0 auto!important;min-height:0!important;height:auto!important;}
 img,video,iframe{max-width:100%}
 button,input,select,textarea{font:inherit}
 button,a,input,select,textarea{ -webkit-tap-highlight-color:transparent }
