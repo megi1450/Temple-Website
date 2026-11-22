@@ -49,6 +49,9 @@
         <input type="text" id="name" placeholder="Name" required>
         <input type="date" id="date" placeholder="Select Date" required>
         <input type="text" id="mobileNumber" placeholder="Mobile Number" required>
+        <label for="upiTransactionId">UPI Transaction ID / UTR</label>
+        <input type="text" id="upiTransactionId" readonly required>
+        <small>Payment reference submitted before registration. Verification is pending with the Temple Committee.</small>
         
         <select id="event" required>
             <option value="" disabled selected>Event...</option>
@@ -88,6 +91,9 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const flatNumber = localStorage.getItem('flatNumber');
+        const sevaPayment = JSON.parse(sessionStorage.getItem('templeSevaPayment') || 'null');
+        const upiTransactionId = new URLSearchParams(window.location.search).get('upiTransactionId') || (sevaPayment && sevaPayment.transactionReference) || '';
+        document.getElementById('upiTransactionId').value = upiTransactionId;
     
         // Flag to track if the registration exists
         let registrationExists = false;
@@ -112,6 +118,8 @@
             const name = document.getElementById('name').value;
             const date = document.getElementById('date').value;
             const mobileNumber = document.getElementById('mobileNumber').value;
+            const upiTransactionId = document.getElementById('upiTransactionId').value.trim();
+            if (!/^(?:[0-9]{12}|[A-Za-z0-9]{12,35})$/.test(upiTransactionId) || /^(.)\1+$/.test(upiTransactionId)) { alert('Please complete the UPI payment step and enter a valid transaction ID / UTR.'); return; }
             const event = document.getElementById('event').value;
             const occasion = document.getElementById('occasion').value;
             const otherOccasion = document.getElementById('otherOccasion').value || "";
@@ -166,6 +174,9 @@
                 date,
                 flatNumber,
                 mobileNumber,
+                upiTransactionId,
+                paymentMethod: "UPI",
+                paymentVerificationStatus: "Pending manual verification",
                 event,
                 occasion: occasion === "Others" ? otherOccasion : occasion,
                 registrationId,
@@ -183,7 +194,7 @@
             await setDoc(receiptDoc, { lastReceiptNumber: receiptNumber });
         
             // Redirect to the receipt page with the necessary details
-            window.location.href = `receipt.html?receiptNumber=${receiptNumber}&name=${name}&date=${date}&flatNumber=${flatNumber}&mobileNumber=${mobileNumber}&event=${event}&occasion=${occasion === "Others" ? otherOccasion : occasion}&registrationId=${registrationId}`;
+            window.location.href = `receipt.html?receiptNumber=${receiptNumber}&name=${name}&date=${date}&flatNumber=${flatNumber}&mobileNumber=${mobileNumber}&event=${event}&occasion=${occasion === "Others" ? otherOccasion : occasion}&registrationId=${registrationId}&upiTransactionId=${encodeURIComponent(upiTransactionId)}`;
         });
     </script>
     
