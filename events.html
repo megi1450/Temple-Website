@@ -9,6 +9,16 @@
   <link rel="icon" href="assets/logos/logo.png">
   <link rel="stylesheet" href="redesign.css">
   <link rel="stylesheet" href="main-compat.css">
+
+  <style>
+    .seva-actions{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:12px}
+    .events-table .seva-actions .seva-pay-button,.events-table .seva-actions .seva-register-button{display:inline-flex!important;align-items:center;justify-content:center;min-height:42px!important;margin:0!important;padding:10px 13px!important;border-radius:9px!important;font-size:12px!important;font-weight:700!important;line-height:1.2!important;text-decoration:none!important;white-space:nowrap}
+    .events-table .seva-actions .seva-pay-button{background:#ead8b5!important;color:#4a2630!important;border:1px solid #d6bd8d!important}
+    .events-table .seva-actions .seva-register-button{background:#fff!important;color:#632b35!important;border:1px solid #632b35!important}
+    .events-table .seva-actions .seva-pay-button:hover{background:#dfc89d!important}
+    .events-table .seva-actions .seva-register-button:hover{background:#f7f0e8!important}
+    .seva-payment-note{margin:16px 0 0;padding:12px 14px;border-left:3px solid #c9a96e;background:#fbf6ed;color:#5d5148;font-size:13px;line-height:1.6;border-radius:0 8px 8px 0}
+  </style>
 </head>
 <body>
   <main class="site-content events-page">
@@ -27,31 +37,32 @@
           </thead>
           <tbody>
             <tr>
-              <td>ಪಂಚಾಮೃತ ಅಭಿಷೇಕ<br>PANCHAMRIT ABHISHEKA<br><button type="button" onclick="link()">Register Here</button></td>
+              <td>ಪಂಚಾಮೃತ ಅಭಿಷೇಕ<br>PANCHAMRIT ABHISHEKA<br><div class="seva-actions"><a class="seva-pay-button" href="upi://pay?pa=0798062a0170493.bqr%40kotak&amp;pn=ARVIND%20OASIS%20APARTMENTS%20OWNERS%20ASSOCIATION%20TEMPLE&amp;am=351&amp;cu=INR&amp;tn=Panchamrit%20Abhisheka">Pay using UPI</a><button class="seva-register-button" type="button" onclick="link()">Register Here</button></div></td>
               <td>₹351</td>
             </tr>
             <tr>
-              <td>ನಿರಂತರ ಅಭಿಷೇಕ (ಶಾಶ್ವತ ಪೂಜೆ)<br>NIRANTARA ABHISHEKA (SASHWATA PUJE)<br>Note: This seva is performed in your name on special days, such as birthdays or anniversaries, with lifetime payment.<br><button type="button" onclick="link()">Register Here</button></td>
+              <td>ನಿರಂತರ ಅಭಿಷೇಕ (ಶಾಶ್ವತ ಪೂಜೆ)<br>NIRANTARA ABHISHEKA (SASHWATA PUJE)<br>Note: This seva is performed in your name on special days, such as birthdays or anniversaries, with lifetime payment.<br><div class="seva-actions"><a class="seva-pay-button" href="upi://pay?pa=0798062a0170493.bqr%40kotak&amp;pn=ARVIND%20OASIS%20APARTMENTS%20OWNERS%20ASSOCIATION%20TEMPLE&amp;am=1501&amp;cu=INR&amp;tn=Nirantara%20Abhisheka">Pay using UPI</a><button class="seva-register-button" type="button" onclick="link()">Register Here</button></div></td>
               <td>₹1,501</td>
             </tr>
             <tr>
-              <td>ಸಂಕಷ್ಟಹರ ಚತುರ್ಥೀ<br>SANKASHTAHARA CHATURTHI<br><button type="button" onclick="link3()">Register Here</button></td>
+              <td>ಸಂಕಷ್ಟಹರ ಚತುರ್ಥೀ<br>SANKASHTAHARA CHATURTHI<br><div class="seva-actions"><a class="seva-pay-button" href="upi://pay?pa=0798062a0170493.bqr%40kotak&amp;pn=ARVIND%20OASIS%20APARTMENTS%20OWNERS%20ASSOCIATION%20TEMPLE&amp;am=101&amp;cu=INR&amp;tn=Sankashtahara%20Chaturthi">Pay using UPI</a><button class="seva-register-button" type="button" onclick="link3()">Register Here</button></div></td>
               <td>₹101</td>
             </tr>
             <tr>
-              <td>ಶ್ರೀ ಸತ್ಯನಾರಾಯಣ ಪೂಜೆ ಸಾಮೂಹಿಕ<br>SHRI SATYANARAYANA PUJA GROUP CEREMONY<br>Note: This Seva is performed on the Poornima (full moon day) of every month.<br><button type="button" onclick="link2()">Register Here</button></td>
+              <td>ಶ್ರೀ ಸತ್ಯನಾರಾಯಣ ಪೂಜೆ ಸಾಮೂಹಿಕ<br>SHRI SATYANARAYANA PUJA GROUP CEREMONY<br>Note: This Seva is performed on the Poornima (full moon day) of every month.<br><div class="seva-actions"><a class="seva-pay-button" href="upi://pay?pa=0798062a0170493.bqr%40kotak&amp;pn=ARVIND%20OASIS%20APARTMENTS%20OWNERS%20ASSOCIATION%20TEMPLE&amp;am=201&amp;cu=INR&amp;tn=Satyanarayana%20Puja%20Group">Pay using UPI</a><button class="seva-register-button" type="button" onclick="link2()">Register Here</button></div></td>
               <td>₹201</td>
             </tr>
             <tr>
-              <td>ವಾಹನ ಪೂಜೆ (ದ್ವಿಚಕ್ರ)<br>VEHICLE PUJA (TWO-WHEELER)<br><button type="button" onclick="link()">Register Here</button></td>
+              <td>ವಾಹನ ಪೂಜೆ (ದ್ವಿಚಕ್ರ)<br>VEHICLE PUJA (TWO-WHEELER)<br><div class="seva-actions"><a class="seva-pay-button" href="upi://pay?pa=0798062a0170493.bqr%40kotak&amp;pn=ARVIND%20OASIS%20APARTMENTS%20OWNERS%20ASSOCIATION%20TEMPLE&amp;am=101&amp;cu=INR&amp;tn=Vehicle%20Puja%20Two%20Wheeler">Pay using UPI</a><button class="seva-register-button" type="button" onclick="link()">Register Here</button></div></td>
               <td>₹101</td>
             </tr>
             <tr>
-              <td>ವಾಹನ ಪೂಜೆ (ನಾಲ್ಕು ಚಕ್ರ)<br>VEHICLE PUJA (FOUR-WHEELER)<br><button type="button" onclick="link()">Register Here</button></td>
+              <td>ವಾಹನ ಪೂಜೆ (ನಾಲ್ಕು ಚಕ್ರ)<br>VEHICLE PUJA (FOUR-WHEELER)<br><div class="seva-actions"><a class="seva-pay-button" href="upi://pay?pa=0798062a0170493.bqr%40kotak&amp;pn=ARVIND%20OASIS%20APARTMENTS%20OWNERS%20ASSOCIATION%20TEMPLE&amp;am=201&amp;cu=INR&amp;tn=Vehicle%20Puja%20Four%20Wheeler">Pay using UPI</a><button class="seva-register-button" type="button" onclick="link()">Register Here</button></div></td>
               <td>₹201</td>
             </tr>
           </tbody>
         </table>
+        <p class="seva-payment-note">After completing your UPI payment, return to this page and select <strong>Register Here</strong> to finish your seva registration. Please keep your UPI transaction reference. Payment is made through your UPI app; registration is a separate step.</p>
       </div>
     </section>
   </main>
