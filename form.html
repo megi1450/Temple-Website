@@ -94,6 +94,9 @@
         const sevaPayment = JSON.parse(sessionStorage.getItem('templeSevaPayment') || 'null');
         const upiTransactionId = new URLSearchParams(window.location.search).get('upiTransactionId') || (sevaPayment && sevaPayment.transactionReference) || '';
         document.getElementById('upiTransactionId').value = upiTransactionId;
+        const requestedSeva = new URLSearchParams(window.location.search).get('seva') || '';
+        const sevaEventMap = { 'Panchamrit Abhisheka':'PANCHAMRIT ABHISHEKA', 'Nirantara Abhisheka':'NIRANTARA ABHISHEKA', 'Sankashtahara Chaturthi':'SANKASHTAHARA CHATURTHI', 'Satyanarayana Puja Group Ceremony':'SHRI SATYANARAYANA PUJA GROUP CEREMONY', 'Vehicle Puja Two Wheeler':'VEHICLE PUJA (TWO-WHEELER)', 'Vehicle Puja Four Wheeler':'VEHICLE PUJA (FOUR-WHEELER)' };
+        if (sevaEventMap[requestedSeva]) document.getElementById('event').value = sevaEventMap[requestedSeva];
     
         // Flag to track if the registration exists
         let registrationExists = false;
